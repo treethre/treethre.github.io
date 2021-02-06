@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="注解是JDK1.5版本开始引入的一个特性，用于对代码进行说明，可以对包、类、接口、字段、方法参数、局部变量等进行注解。它是框架学习和设计者必须掌握的基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础之注解">
+<meta property="og:url" content="http://example.com/posts/7f462002/index.html">
+<meta property="og:site_name" content="Rick Blog">
+<meta property="og:description" content="注解是JDK1.5版本开始引入的一个特性，用于对代码进行说明，可以对包、类、接口、字段、方法参数、局部变量等进行注解。它是框架学习和设计者必须掌握的基础">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-30T01:07:54.000Z">
+<meta property="article:modified_time" content="2021-01-30T01:48:24.983Z">
+<meta property="article:author" content="Rick">
+<meta property="article:tag" content="注解">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/posts/7f462002/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Java基础之注解 | Rick Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Rick Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/7f462002/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Rick">
+      <meta itemprop="description" content="一个瞎折腾的博客，不知道能坚持几天">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rick Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java基础之注解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-30 09:07:54 / 修改时间：09:48:24" itemprop="dateCreated datePublished" datetime="2021-01-30T09:07:54+08:00">2021-01-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">Java基础</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+<p>注解是JDK1.5版本开始引入的一个特性，用于对代码进行说明，可以对包、类、接口、字段、方法参数、局部变量等进行注解。它是框架学习和设计者必须掌握的基础</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="注解基础"><a href="#注解基础" class="headerlink" title="注解基础"></a>注解基础</h1><p>注解是JDK1.5版本开始引入的一个特性，用于对代码进行说明，可以对包、类、接口、字段、方法参数、局部变量等进行注解。它主要的作用有以下四方面：</p>
+<ul>
+<li>生成文档，通过代码里标识的元数据生成javadoc文档。</li>
+<li>编译检查，通过代码里标识的元数据让编译器在编译期间进行检查验证。</li>
+<li>编译时动态处理，编译时通过代码里标识的元数据动态处理，例如动态生成代码。</li>
+<li>运行时动态处理，运行时通过代码里标识的元数据动态处理，例如使用反射注入实例。</li>
+</ul>
+<p>这么来说是比较抽象的，我们具体看下注解的常见分类：</p>
+<ul>
+<li><strong>Java自带的标准注解</strong>，包括<code>@Override</code>、<code>@Deprecated</code>和<code>@SuppressWarnings</code>，分别用于标明重写某个方法、标明某个类或方法过时、标明要忽略的警告，用这些注解标明后编译器就会进行检查。</li>
+<li><strong>元注解</strong>，元注解是用于定义注解的注解，包括<code>@Retention</code>、<code>@Target</code>、<code>@Inherited</code>、<code>@Documented</code>，<code>@Retention</code>用于标明注解被保留的阶段，<code>@Target</code>用于标明注解使用的范围，<code>@Inherited</code>用于标明注解可继承，<code>@Documented</code>用于标明是否生成javadoc文档。</li>
+<li><strong>自定义注解</strong>，可以根据自己的需求定义注解，并可用元注解对自定义注解进行注解。</li>
+</ul>
+<p>接下来我们通过这个分类角度来理解注解。</p>
+<h2 id="Java内置注解"><a href="#Java内置注解" class="headerlink" title="Java内置注解"></a>Java内置注解</h2><p>我们从最为常见的Java内置的注解开始说起，先看下下面的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">        * 重载父类的test方法</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">        * 被弃用的方法</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">oldMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">        * 忽略告警</span></span><br><span class="line"><span class="comment">        * </span></span><br><span class="line"><span class="comment">        * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;rawtypes&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">processList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        List list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>Java 1.5开始自带的标准注解，包括<code>@Override</code>、<code>@Deprecated</code>和<code>@SuppressWarnings</code>：</p>
+<ul>
+<li><code>@Override</code>：表示当前的方法定义将覆盖父类中的方法</li>
+<li><code>@Deprecated</code>：表示代码被弃用，如果使用了被@Deprecated注解的代码则编译器将发出警告</li>
+<li><code>@SuppressWarnings</code>：表示关闭编译器警告信息</li>
+</ul>
+<p>我们再具体看下这几个内置注解，同时通过这几个内置注解中的元注解的定义来引出元注解。</p>
+<h3 id="内置注解-Override"><a href="#内置注解-Override" class="headerlink" title="内置注解 - @Override"></a>内置注解 - @Override</h3><p>我们先来看一下这个注解类型的定义：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(ElementType.METHOD)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.SOURCE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Override &#123;</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>从它的定义我们可以看到，这个注解可以被用来修饰方法，并且它只在编译时有效，在编译后的class文件中便不再存在。这个注解的作用我们大家都不陌生，那就是告诉编译器被修饰的方法是重写的父类的中的相同签名的方法，编译器会对此做出检查，若发现父类中不存在这个方法或是存在的方法签名不同，则会报错。</p>
+<h3 id="内置注解-Deprecated"><a href="#内置注解-Deprecated" class="headerlink" title="内置注解 - @Deprecated"></a>内置注解 - @Deprecated</h3><p>这个注解的定义如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(value=&#123;CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Deprecated &#123;</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>从它的定义我们可以知道，它会被文档化，能够保留到运行时，能够修饰构造方法、属性、局部变量、方法、包、参数、类型。这个注解的作用是告诉编译器被修饰的程序元素已被“废弃”，不再建议用户使用。</p>
+<h3 id="内置注解-SuppressWarnings"><a href="#内置注解-SuppressWarnings" class="headerlink" title="内置注解 - @SuppressWarnings"></a>内置注解 - @SuppressWarnings</h3><p>这个注解我们也比较常用到，先来看下它的定义：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.SOURCE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SuppressWarnings &#123;</span><br><span class="line">    String[] value();</span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure>
+<p>它能够修饰的程序元素包括类型、属性、方法、参数、构造器、局部变量，只能存活在源码时，取值为String[]。它的作用是告诉编译器忽略指定的警告信息，它可以取的值如下所示：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+<th>原描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>all</td>
+<td>抑制所有警告</td>
+<td>to suppress all warnings</td>
+</tr>
+<tr>
+<td>boxing</td>
+<td>抑制装箱、拆箱操作时候的警告</td>
+<td>to suppress warnings relative to boxing/unboxing operations</td>
+</tr>
+<tr>
+<td>cast</td>
+<td>抑制映射相关的警告</td>
+<td>to suppress warnings relative to cast operations</td>
+</tr>
+<tr>
+<td>dep-ann</td>
+<td>抑制启用注释的警告</td>
+<td>to suppress warnings relative to deprecated annotation</td>
+</tr>
+<tr>
+<td>deprecation</td>
+<td>抑制过期方法警告</td>
+<td>to suppress warnings relative to deprecation</td>
+</tr>
+<tr>
+<td>fallthrough</td>
+<td>抑制确在switch中缺失breaks的警告</td>
+<td>to suppress warnings relative to missing breaks in switch statements</td>
+</tr>
+<tr>
+<td>finally</td>
+<td>抑制finally模块没有返回的警告</td>
+<td>to suppress warnings relative to finally block that don’t return</td>
+</tr>
+<tr>
+<td>hiding</td>
+<td>抑制与隐藏变数的区域变数相关的警告</td>
+<td>to suppress warnings relative to locals that hide variable（）</td>
+</tr>
+<tr>
+<td>incomplete-switch</td>
+<td>忽略没有完整的switch语句</td>
+<td>to suppress warnings relative to missing entries in a switch statement (enum case)</td>
+</tr>
+<tr>
+<td>nls</td>
+<td>忽略非nls格式的字符</td>
+<td>to suppress warnings relative to non-nls string literals</td>
+</tr>
+<tr>
+<td>null</td>
+<td>忽略对null的操作</td>
+<td>to suppress warnings relative to null analysis</td>
+</tr>
+<tr>
+<td>rawtype</td>
+<td>使用generics时忽略没有指定相应的类型</td>
+<td>to suppress warnings relative to un-specific types when using</td>
+</tr>
+<tr>
+<td>restriction</td>
+<td>抑制与使用不建议或禁止参照相关的警告</td>
+<td>to suppress warnings relative to usage of discouraged or</td>
+</tr>
+<tr>
+<td>serial</td>
+<td>忽略在serializable类中没有声明serialVersionUID变量</td>
+<td>to suppress warnings relative to missing serialVersionUID field for a serializable class</td>
+</tr>
+<tr>
+<td>static-access</td>
+<td>抑制不正确的静态访问方式警告</td>
+<td>to suppress warnings relative to incorrect static access</td>
+</tr>
+<tr>
+<td>synthetic-access</td>
+<td>抑制子类没有按最优方法访问内部类的警告</td>
+<td>to suppress warnings relative to unoptimized access from inner classes</td>
+</tr>
+<tr>
+<td>unchecked</td>
+<td>抑制没有进行类型检查操作的警告</td>
+<td>to suppress warnings relative to unchecked operations</td>
+</tr>
+<tr>
+<td>unqualified-field-access</td>
+<td>抑制没有权限访问的域的警告</td>
+<td>to suppress warnings relative to field access unqualified</td>
+</tr>
+<tr>
+<td>unused</td>
+<td>抑制没被使用过的代码的警告</td>
+<td>to suppress warnings relative to unused code</td>
+</tr>
+</tbody></table>
+<h2 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h2><p>上述内置注解的定义中使用了一些元注解（注解类型进行注解的注解类），在JDK 1.5中提供了4个标准的元注解：<code>@Target</code>，<code>@Retention</code>，<code>@Documented</code>，<code>@Inherited</code>, 在JDK 1.8中提供了两个元注解 <code>@Repeatable</code>和<code>@Native</code>。</p>
+<h3 id="元注解-Target"><a href="#元注解-Target" class="headerlink" title="元注解 - @Target"></a>元注解 - @Target</h3><blockquote>
+<p>Target注解的作用是：描述注解的使用范围（即：被修饰的注解可以用在什么地方） 。</p>
+</blockquote>
+<p>Target注解用来说明那些被它所注解的注解类可修饰的对象范围：注解可以用于修饰 packages、types（类、接口、枚举、注解类）、类成员（方法、构造方法、成员变量、枚举值）、方法参数和本地变量（如循环变量、catch参数），在定义注解类时使用了@Target 能够更加清晰的知道它能够被用来修饰哪些对象，它的取值范围定义在ElementType 枚举中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">ElementType</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    TYPE, <span class="comment">// 类、接口、枚举类</span></span><br><span class="line"> </span><br><span class="line">    FIELD, <span class="comment">// 成员变量（包括：枚举常量）</span></span><br><span class="line"> </span><br><span class="line">    METHOD, <span class="comment">// 成员方法</span></span><br><span class="line"> </span><br><span class="line">    PARAMETER, <span class="comment">// 方法参数</span></span><br><span class="line"> </span><br><span class="line">    CONSTRUCTOR, <span class="comment">// 构造方法</span></span><br><span class="line"> </span><br><span class="line">    LOCAL_VARIABLE, <span class="comment">// 局部变量</span></span><br><span class="line"> </span><br><span class="line">    ANNOTATION_TYPE, <span class="comment">// 注解类</span></span><br><span class="line"> </span><br><span class="line">    PACKAGE, <span class="comment">// 可用于修饰：包</span></span><br><span class="line"> </span><br><span class="line">    TYPE_PARAMETER, <span class="comment">// 类型参数，JDK 1.8 新增</span></span><br><span class="line"> </span><br><span class="line">    TYPE_USE <span class="comment">// 使用类型的任何地方，JDK 1.8 新增</span></span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="元注解-Retention-amp-RetentionTarget"><a href="#元注解-Retention-amp-RetentionTarget" class="headerlink" title="元注解 - @Retention &amp; @RetentionTarget"></a>元注解 - @Retention &amp; @RetentionTarget</h3><blockquote>
+<p>Reteniton注解的作用是：描述注解保留的时间范围（即：被描述的注解在它所修饰的类中可以被保留到何时） 。</p>
+</blockquote>
+<p>Reteniton注解用来限定那些被它所注解的注解类在注解到其他类上以后，可被保留到何时，一共有三种策略，定义在RetentionPolicy枚举中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">RetentionPolicy</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    SOURCE,    <span class="comment">// 源文件保留</span></span><br><span class="line">    CLASS,       <span class="comment">// 编译期保留，默认值</span></span><br><span class="line">    RUNTIME   <span class="comment">// 运行期保留，可通过反射去获取注解信息</span></span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>为了验证应用了这三种策略的注解类有何区别，分别使用三种策略各定义一个注解类做测试。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention(RetentionPolicy.SOURCE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SourcePolicy &#123;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.CLASS)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> ClassPolicy &#123;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> RuntimePolicy &#123;</span><br><span class="line"> </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>用定义好的三个注解类分别去注解一个方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RetentionTest</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">	<span class="meta">@SourcePolicy</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sourcePolicy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="meta">@ClassPolicy</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">classPolicy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="meta">@RuntimePolicy</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">runtimePolicy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>通过执行 <code>javap -verbose RetentionTest</code>命令获取到的RetentionTest 的 class 字节码内容如下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">public</span> retention.RetentionTest();</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">1</span>, locals=<span class="number">1</span>, args_size=<span class="number">1</span></span><br><span class="line">         <span class="number">0</span>: aload_0</span><br><span class="line">         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">         <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">3</span>: <span class="number">0</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sourcePolicy</span><span class="params">()</span></span>;</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">0</span>, locals=<span class="number">1</span>, args_size=<span class="number">1</span></span><br><span class="line">         <span class="number">0</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">7</span>: <span class="number">0</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">classPolicy</span><span class="params">()</span></span>;</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">0</span>, locals=<span class="number">1</span>, args_size=<span class="number">1</span></span><br><span class="line">         <span class="number">0</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">11</span>: <span class="number">0</span></span><br><span class="line">    RuntimeInvisibleAnnotations:</span><br><span class="line">      0: #11()</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">runtimePolicy</span><span class="params">()</span></span>;</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">0</span>, locals=<span class="number">1</span>, args_size=<span class="number">1</span></span><br><span class="line">         <span class="number">0</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">15</span>: <span class="number">0</span></span><br><span class="line">    RuntimeVisibleAnnotations:</span><br><span class="line">      0: #14()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从 RetentionTest 的字节码内容我们可以得出以下两点结论：</p>
+<ul>
+<li>编译器并没有记录下 sourcePolicy() 方法的注解信息；</li>
+<li>编译器分别使用了 <code>RuntimeInvisibleAnnotations</code> 和 <code>RuntimeVisibleAnnotations</code> 属性去记录了<code>classPolicy()</code>方法 和 <code>runtimePolicy()</code>方法 的注解信息；</li>
+</ul>
+<h3 id="元注解-Documented"><a href="#元注解-Documented" class="headerlink" title="元注解 - @Documented"></a>元注解 - @Documented</h3><blockquote>
+<p>Documented注解的作用是：描述在使用 javadoc 工具为类生成帮助文档时是否要保留其注解信息。</p>
+</blockquote>
+<p>以下代码在使用Javadoc工具可以生成<code>@TestDocAnnotation</code>注解信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.annotation.Documented;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"> </span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE,ElementType.METHOD&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> TestDocAnnotation &#123;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> &quot;<span class="keyword">default</span>&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@TestDocAnnotation(&quot;myMethodDoc&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDoc</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure>
+<h3 id="元注解-Inherited"><a href="#元注解-Inherited" class="headerlink" title="元注解 - @Inherited"></a>元注解 - @Inherited</h3><blockquote>
+<p>Inherited注解的作用：被它修饰的Annotation将具有继承性。如果某个类使用了被@Inherited修饰的Annotation，则其子类将自动具有该注解。</p>
+</blockquote>
+<p>我们来测试下这个注解：</p>
+<p>定义<code>@Inherited</code>注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE,ElementType.METHOD&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> TestInheritedAnnotation &#123;</span><br><span class="line">    String [] values();</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">number</span><span class="params">()</span></span>;</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>使用这个注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@TestInheritedAnnotation(values = &#123;&quot;value&quot;&#125;, number = 10)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">extends</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Class clazz = Student.class;</span><br><span class="line">        Annotation[] annotations = clazz.getAnnotations();</span><br><span class="line">        <span class="keyword">for</span> (Annotation annotation : annotations) &#123;</span><br><span class="line">            System.out.println(annotation.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxxxxxx.TestInheritedAnnotation(values=[value], number=<span class="number">10</span>)   </span><br></pre></td></tr></table></figure>
+<p>即使Student类没有显示地被注解<code>@TestInheritedAnnotation</code>，但是它的父类Person被注解，而且<code>@TestInheritedAnnotation</code>被<code>@Inherited</code>注解，因此Student类自动有了该注解。</p>
+<h3 id="元注解-Repeatable-Java8"><a href="#元注解-Repeatable-Java8" class="headerlink" title="元注解 - @Repeatable (Java8)"></a>元注解 - @Repeatable (Java8)</h3><p><code>@Repeatable</code>允许在同一申明类型(类，属性，或方法)的多次使用同一个注解</p>
+<h3 id="元注解-Native-Java8"><a href="#元注解-Native-Java8" class="headerlink" title="元注解 - @Native (Java8)"></a>元注解 - @Native (Java8)</h3><p>使用 @Native 注解修饰成员变量，则表示这个变量可以被本地代码引用，常常被代码生成工具使用。对于 @Native 注解不常使用，了解即可</p>
+<h2 id="注解与反射接口"><a href="#注解与反射接口" class="headerlink" title="注解与反射接口"></a>注解与反射接口</h2><blockquote>
+<p>定义注解后，如何获取注解中的内容呢？反射包java.lang.reflect下的AnnotatedElement接口提供这些方法。这里注意：只有注解被定义为RUNTIME后，该注解才能是运行时可见，当class文件被装载时被保存在class文件中的Annotation才会被虚拟机读取。</p>
+</blockquote>
+<p>AnnotatedElement 接口是所有程序元素（Class、Method和Constructor）的父接口，所以程序通过反射获取了某个类的AnnotatedElement对象之后，程序就可以调用该对象的方法来访问Annotation信息。我们看下具体的先关接口</p>
+<ul>
+<li><code>boolean isAnnotationPresent(Class&lt;?extends Annotation&gt; annotationClass)</code></li>
+</ul>
+<p>判断该程序元素上是否包含指定类型的注解，存在则返回true，否则返回false。注意：此方法会忽略注解对应的注解容器。</p>
+<ul>
+<li><code>&lt;T extends Annotation&gt; T getAnnotation(Class&lt;T&gt; annotationClass)</code></li>
+</ul>
+<p>返回该程序元素上存在的、指定类型的注解，如果该类型注解不存在，则返回null。</p>
+<ul>
+<li><code>Annotation[] getAnnotations()</code></li>
+</ul>
+<p>返回该程序元素上存在的所有注解，若没有注解，返回长度为0的数组。</p>
+<ul>
+<li><code>&lt;T extends Annotation&gt; T[] getAnnotationsByType(Class&lt;T&gt; annotationClass)</code></li>
+</ul>
+<p>返回该程序元素上存在的、指定类型的注解数组。没有注解对应类型的注解时，返回长度为0的数组。该方法的调用者可以随意修改返回的数组，而不会对其他调用者返回的数组产生任何影响。<code>getAnnotationsByType</code>方法与 <code>getAnnotation</code>的区别在于，<code>getAnnotationsByType</code>会检测注解对应的重复注解容器。若程序元素为类，当前类上找不到注解，且该注解为可继承的，则会去父类上检测对应的注解。</p>
+<ul>
+<li><code>&lt;T extends Annotation&gt; T getDeclaredAnnotation(Class&lt;T&gt; annotationClass)</code></li>
+</ul>
+<p>返回直接存在于此元素上的所有注解。与此接口中的其他方法不同，该方法将忽略继承的注释。如果没有注释直接存在于此元素上，则返回null</p>
+<ul>
+<li><code>&lt;T extends Annotation&gt; T[] getDeclaredAnnotationsByType(Class&lt;T&gt; annotationClass)</code></li>
+</ul>
+<p>返回直接存在于此元素上的所有注解。与此接口中的其他方法不同，该方法将忽略继承的注释</p>
+<ul>
+<li><code>Annotation[] getDeclaredAnnotations()</code></li>
+</ul>
+<p>返回直接存在于此元素上的所有注解及注解对应的重复注解容器。与此接口中的其他方法不同，该方法将忽略继承的注解。如果没有注释直接存在于此元素上，则返回长度为零的一个数组。该方法的调用者可以随意修改返回的数组，而不会对其他调用者返回的数组产生任何影响。</p>
+<h2 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h2><blockquote>
+<p>当我们理解了内置注解, 元注解和获取注解的反射接口后，我们便可以开始自定义注解了。这个例子我把上述的知识点全部融入进来, 代码很简单：</p>
+</blockquote>
+<p>定义自己的注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.pdai.java.annotation;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(ElementType.METHOD)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyMethodAnnotation &#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">title</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">description</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>使用注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.pdai.java.annotation;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Annotation;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestMethodAnnotation</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="meta">@MyMethodAnnotation(title = &quot;toStringMethod&quot;, description = &quot;override toString method&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Override toString method&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    <span class="meta">@MyMethodAnnotation(title = &quot;old static method&quot;, description = &quot;deprecated old static method&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">oldMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;old method, don&#x27;t use it.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings(&#123;&quot;unchecked&quot;, &quot;deprecation&quot;&#125;)</span></span><br><span class="line">    <span class="meta">@MyMethodAnnotation(title = &quot;test method&quot;, description = &quot;suppress warning static method&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">genericsTest</span><span class="params">()</span> <span class="keyword">throws</span> FileNotFoundException </span>&#123;</span><br><span class="line">        List l = <span class="keyword">new</span> ArrayList();</span><br><span class="line">        l.add(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line">        oldMethod();</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>用反射接口获取注解信息</p>
+<p>在TestMethodAnnotation中添加Main方法进行测试：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 获取所有methods</span></span><br><span class="line">        Method[] methods = TestMethodAnnotation.class.getClassLoader()</span><br><span class="line">                .loadClass((<span class="string">&quot;com.pdai.java.annotation.TestMethodAnnotation&quot;</span>))</span><br><span class="line">                .getMethods();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 遍历</span></span><br><span class="line">        <span class="keyword">for</span> (Method method : methods) &#123;</span><br><span class="line">            <span class="comment">// 方法上是否有MyMethodAnnotation注解</span></span><br><span class="line">            <span class="keyword">if</span> (method.isAnnotationPresent(MyMethodAnnotation.class)) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">// 获取并遍历方法上的所有注解</span></span><br><span class="line">                    <span class="keyword">for</span> (Annotation anno : method.getDeclaredAnnotations()) &#123;</span><br><span class="line">                        System.out.println(<span class="string">&quot;Annotation in Method &#x27;&quot;</span></span><br><span class="line">                                + method + <span class="string">&quot;&#x27; : &quot;</span> + anno);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// 获取MyMethodAnnotation对象信息</span></span><br><span class="line">                    MyMethodAnnotation methodAnno = method</span><br><span class="line">                            .getAnnotation(MyMethodAnnotation.class);</span><br><span class="line"></span><br><span class="line">                    System.out.println(methodAnno.title());</span><br><span class="line"></span><br><span class="line">                &#125; <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">                    ex.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (SecurityException | ClassNotFoundException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>测试的输出</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Annotation in Method <span class="string">&#x27;public static void com.pdai.java.annotation.TestMethodAnnotation.oldMethod()&#x27;</span> : <span class="meta">@java</span>.lang.Deprecated()</span><br><span class="line">Annotation in Method <span class="string">&#x27;public static void com.pdai.java.annotation.TestMethodAnnotation.oldMethod()&#x27;</span> : <span class="meta">@com</span>.pdai.java.annotation.MyMethodAnnotation(title=old <span class="keyword">static</span> method, description=deprecated old <span class="keyword">static</span> method)</span><br><span class="line">old <span class="keyword">static</span> method</span><br><span class="line">Annotation in Method <span class="string">&#x27;public static void com.pdai.java.annotation.TestMethodAnnotation.genericsTest() throws java.io.FileNotFoundException&#x27;</span> : <span class="meta">@com</span>.pdai.java.annotation.MyMethodAnnotation(title=test method, description=suppress warning <span class="keyword">static</span> method)</span><br><span class="line">test method</span><br><span class="line">Annotation in Method <span class="string">&#x27;public java.lang.String com.pdai.java.annotation.TestMethodAnnotation.toString()&#x27;</span> : <span class="meta">@com</span>.pdai.java.annotation.MyMethodAnnotation(title=toStringMethod, description=override toString method)</span><br><span class="line">toStringMethod</span><br></pre></td></tr></table></figure>
+<h1 id="深入理解注解"><a href="#深入理解注解" class="headerlink" title="深入理解注解"></a>深入理解注解</h1><h2 id="Java8提供了哪些新的注解？"><a href="#Java8提供了哪些新的注解？" class="headerlink" title="Java8提供了哪些新的注解？"></a>Java8提供了哪些新的注解？</h2><ul>
+<li><p><code>@Repeatable</code></p>
+</li>
+<li><p><code>ElementType.TYPE_USE</code></p>
+</li>
+<li><p><code>ElementType.TYPE_PARAMETER</code></p>
+</li>
+</ul>
+<p><code>ElementType.TYPE_USE</code>(此类型包括类型声明和类型参数声明，是为了方便设计者进行类型检查)包含了<code>ElementType.TYPE</code>(类、接口（包括注解类型）和枚举的声明)和<code>ElementType.TYPE_PARAMETER</code>(类型参数声明), 不妨再看个例子</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自定义ElementType.TYPE_PARAMETER注解</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE_PARAMETER)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyNotEmpty &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义ElementType.TYPE_USE注解</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE_USE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyNotNull &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TypeParameterAndTypeUseAnnotation</span>&lt;@<span class="title">MyNotEmpty</span> <span class="title">T</span>&gt;</span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//使用TYPE_PARAMETER类型，会编译不通过</span></span><br><span class="line"><span class="comment">//		public @MyNotEmpty T test(@MyNotEmpty T a)&#123;</span></span><br><span class="line"><span class="comment">//			new ArrayList&lt;@MyNotEmpty String&gt;();</span></span><br><span class="line"><span class="comment">//				return a;</span></span><br><span class="line"><span class="comment">//		&#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">//使用TYPE_USE类型，编译通过</span></span><br><span class="line">  <span class="keyword">public</span> <span class="meta">@MyNotNull</span> <span class="function">T <span class="title">test2</span><span class="params">(<span class="meta">@MyNotNull</span> T a)</span></span>&#123;</span><br><span class="line">    <span class="keyword">new</span> ArrayList&lt;<span class="meta">@MyNotNull</span> String&gt;();</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="注解支持继承吗？"><a href="#注解支持继承吗？" class="headerlink" title="注解支持继承吗？"></a>注解支持继承吗？</h2><blockquote>
+<p>注解是不支持继承的</p>
+</blockquote>
+<p>不能使用关键字extends来继承某个@interface，但注解在编译后，编译器会自动继承java.lang.annotation.Annotation接口.</p>
+<p>虽然反编译后发现注解继承了Annotation接口，请记住，即使Java的接口可以实现多继承，但定义注解时依然无法使用extends关键字继承@interface。</p>
+<p>区别于注解的继承，被注解的子类继承父类注解可以用@Inherited： 如果某个类使用了被@Inherited修饰的Annotation，则其子类将自动具有该注解。</p>
+<h2 id="注解实现的原理？"><a href="#注解实现的原理？" class="headerlink" title="注解实现的原理？"></a>注解实现的原理？</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_20009015/article/details/106038023">https://blog.csdn.net/qq_20009015/article/details/106038023</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.race604.com/annotation-processing/">https://www.race604.com/annotation-processing/</a></li>
+</ul>
+<h1 id="注解的应用场景"><a href="#注解的应用场景" class="headerlink" title="注解的应用场景"></a>注解的应用场景</h1><h2 id="配置化到注解化-框架的演进"><a href="#配置化到注解化-框架的演进" class="headerlink" title="配置化到注解化 - 框架的演进"></a>配置化到注解化 - 框架的演进</h2><p>Spring 框架 配置化到注解化的转变。</p>
+<h2 id="继承实现到注解实现-Junit3到Junit4"><a href="#继承实现到注解实现-Junit3到Junit4" class="headerlink" title="继承实现到注解实现 - Junit3到Junit4"></a>继承实现到注解实现 - Junit3到Junit4</h2><blockquote>
+<p>一个模块的封装大多数人都是通过继承和组合等模式来实现的，但是如果结合注解将可以极大程度提高实现的优雅度（降低耦合度）。而Junit3 到Junit4的演化就是最好的一个例子。</p>
+</blockquote>
+<p>被测试类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line"> 	</span><br><span class="line"> 	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span></span>&#123;</span><br><span class="line"> 		System.out.println(<span class="string">&quot;hello....&quot;</span>);</span><br><span class="line"> 		<span class="keyword">throw</span> <span class="keyword">new</span> NumberFormatException();</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	</span><br><span class="line"> 	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayWorld</span><span class="params">()</span></span>&#123;</span><br><span class="line"> 		System.out.println(<span class="string">&quot;world....&quot;</span>);</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	</span><br><span class="line"> 	<span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;</span><br><span class="line"> 		<span class="keyword">return</span> <span class="string">&quot;hello world!&quot;</span>;</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>Junit 3 实现UT</p>
+<p>通过继承 TestCase来实现，初始化是通过Override父类方法来进行，测试方式通过test的前缀方法获取。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorldTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span>&#123;</span><br><span class="line"> 	<span class="keyword">private</span> HelloWorld hw;</span><br><span class="line"> 	</span><br><span class="line"> 	<span class="meta">@Override</span></span><br><span class="line"> 	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">setUp</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"> 		<span class="keyword">super</span>.setUp();</span><br><span class="line"> 		hw=<span class="keyword">new</span> HelloWorld();</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	</span><br><span class="line"> 	<span class="comment">//1.测试没有返回值</span></span><br><span class="line"> 	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHello</span><span class="params">()</span></span>&#123;</span><br><span class="line"> 		<span class="keyword">try</span> &#123;</span><br><span class="line"> 			hw.sayHello();</span><br><span class="line"> 		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line"> 			System.out.println(<span class="string">&quot;发生异常.....&quot;</span>);</span><br><span class="line"> 		&#125;</span><br><span class="line"> 		</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testWorld</span><span class="params">()</span></span>&#123;</span><br><span class="line"> 		hw.sayWorld();</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	<span class="comment">//2.测试有返回值的方法</span></span><br><span class="line"> 	<span class="comment">// 返回字符串</span></span><br><span class="line"> 	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testSay</span><span class="params">()</span></span>&#123;</span><br><span class="line"> 		assertEquals(<span class="string">&quot;测试失败&quot;</span>, hw.say(), <span class="string">&quot;hello world!&quot;</span>);</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	<span class="comment">//返回对象</span></span><br><span class="line"> 	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testObj</span><span class="params">()</span></span>&#123;</span><br><span class="line"> 		assertNull(<span class="string">&quot;测试对象不为空&quot;</span>, <span class="keyword">null</span>);</span><br><span class="line"> 		assertNotNull(<span class="string">&quot;测试对象为空&quot;</span>,<span class="keyword">new</span> String());</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	<span class="meta">@Override</span></span><br><span class="line"> 	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">tearDown</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"> 		<span class="keyword">super</span>.tearDown();</span><br><span class="line"> 		hw=<span class="keyword">null</span>;</span><br><span class="line"> 	&#125;	</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>Junit 4 实现UT</p>
+<p>通过定义@Before，@Test，@After等等注解来实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorldTest</span> </span>&#123;</span><br><span class="line"> 	<span class="keyword">private</span> HelloWorld hw;</span><br><span class="line"> </span><br><span class="line"> 	<span class="meta">@Before</span></span><br><span class="line"> 	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUp</span><span class="params">()</span> </span>&#123;</span><br><span class="line"> 		hw = <span class="keyword">new</span> HelloWorld();</span><br><span class="line"> 	&#125;</span><br><span class="line"> </span><br><span class="line"> 	<span class="meta">@Test(expected=NumberFormatException.class)</span></span><br><span class="line"> 	<span class="comment">// 1.测试没有返回值,有别于junit3的使用，更加方便</span></span><br><span class="line"> 	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line"> 		hw.sayHello();</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	<span class="meta">@Test</span></span><br><span class="line"> 	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testWorld</span><span class="params">()</span> </span>&#123;</span><br><span class="line"> 		hw.sayWorld();</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	</span><br><span class="line"> 	<span class="meta">@Test</span></span><br><span class="line"> 	<span class="comment">// 2.测试有返回值的方法</span></span><br><span class="line"> 	<span class="comment">// 返回字符串</span></span><br><span class="line"> 	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testSay</span><span class="params">()</span> </span>&#123;</span><br><span class="line"> 		assertEquals(<span class="string">&quot;测试失败&quot;</span>, hw.say(), <span class="string">&quot;hello world!&quot;</span>);</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	</span><br><span class="line"> 	<span class="meta">@Test</span></span><br><span class="line"> 	<span class="comment">// 返回对象</span></span><br><span class="line"> 	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testObj</span><span class="params">()</span> </span>&#123;</span><br><span class="line"> 		assertNull(<span class="string">&quot;测试对象不为空&quot;</span>, <span class="keyword">null</span>);</span><br><span class="line"> 		assertNotNull(<span class="string">&quot;测试对象为空&quot;</span>, <span class="keyword">new</span> String());</span><br><span class="line"> 	&#125;</span><br><span class="line"> </span><br><span class="line"> 	<span class="meta">@After</span></span><br><span class="line"> 	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">tearDown</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"> 		hw = <span class="keyword">null</span>;</span><br><span class="line"> 	&#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我们发现通过注解的方式，我们实现单元测试时将更为优雅。如果你还期望了解Junit4是如何实现运行的呢？可以看这篇文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_34043301/article/details/91799261">JUnit4源码分析运行原理 (opens new window)</a>。</p>
+<h2 id="自定义注解和AOP-通过切面实现解耦"><a href="#自定义注解和AOP-通过切面实现解耦" class="headerlink" title="自定义注解和AOP - 通过切面实现解耦"></a>自定义注解和AOP - 通过切面实现解耦</h2><blockquote>
+<p>最为常见的就是使用Spring AOP切面实现<strong>统一的操作日志管理</strong>，我这里找了一个开源项目中的例子（只展示主要代码），给你展示下如何通过注解实现解耦的。</p>
+</blockquote>
+<p>自定义Log注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123; ElementType.PARAMETER, ElementType.METHOD &#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Log &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 模块 </span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">title</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 功能</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> BusinessType <span class="title">businessType</span><span class="params">()</span> <span class="keyword">default</span> BusinessType.OTHER</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 操作人类别</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> OperatorType <span class="title">operatorType</span><span class="params">()</span> <span class="keyword">default</span> OperatorType.MANAGE</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 是否保存请求的参数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSaveRequestData</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">true</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现日志的切面, 对自定义注解Log作切点进行拦截</p>
+<p>即对注解了@Log的方法进行切点拦截，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogAspect</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(LogAspect.class);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 配置织入点 - 自定义注解的包路径</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Pointcut(&quot;@annotation(com.xxx.aspectj.lang.annotation.Log)&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">logPointCut</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理完请求后执行</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> joinPoint 切点</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@AfterReturning(pointcut = &quot;logPointCut()&quot;, returning = &quot;jsonResult&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAfterReturning</span><span class="params">(JoinPoint joinPoint, Object jsonResult)</span> </span>&#123;</span><br><span class="line">        handleLog(joinPoint, <span class="keyword">null</span>, jsonResult);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 拦截异常操作</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> joinPoint 切点</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> e 异常</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@AfterThrowing(value = &quot;logPointCut()&quot;, throwing = &quot;e&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAfterThrowing</span><span class="params">(JoinPoint joinPoint, Exception e)</span> </span>&#123;</span><br><span class="line">        handleLog(joinPoint, e, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">handleLog</span><span class="params">(<span class="keyword">final</span> JoinPoint joinPoint, <span class="keyword">final</span> Exception e, Object jsonResult)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 获得注解</span></span><br><span class="line">            Log controllerLog = getAnnotationLog(joinPoint);</span><br><span class="line">            <span class="keyword">if</span> (controllerLog == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 获取当前的用户</span></span><br><span class="line">            User currentUser = ShiroUtils.getSysUser();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// *========数据库日志=========*//</span></span><br><span class="line">            OperLog operLog = <span class="keyword">new</span> OperLog();</span><br><span class="line">            operLog.setStatus(BusinessStatus.SUCCESS.ordinal());</span><br><span class="line">            <span class="comment">// 请求的地址</span></span><br><span class="line">            String ip = ShiroUtils.getIp();</span><br><span class="line">            operLog.setOperIp(ip);</span><br><span class="line">            <span class="comment">// 返回参数</span></span><br><span class="line">            operLog.setJsonResult(JSONObject.toJSONString(jsonResult));</span><br><span class="line"></span><br><span class="line">            operLog.setOperUrl(ServletUtils.getRequest().getRequestURI());</span><br><span class="line">            <span class="keyword">if</span> (currentUser != <span class="keyword">null</span>) &#123;</span><br><span class="line">                operLog.setOperName(currentUser.getLoginName());</span><br><span class="line">                <span class="keyword">if</span> (StringUtils.isNotNull(currentUser.getDept())</span><br><span class="line">                        &amp;&amp; StringUtils.isNotEmpty(currentUser.getDept().getDeptName())) &#123;</span><br><span class="line">                    operLog.setDeptName(currentUser.getDept().getDeptName());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;</span><br><span class="line">                operLog.setStatus(BusinessStatus.FAIL.ordinal());</span><br><span class="line">                operLog.setErrorMsg(StringUtils.substring(e.getMessage(), <span class="number">0</span>, <span class="number">2000</span>));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 设置方法名称</span></span><br><span class="line">            String className = joinPoint.getTarget().getClass().getName();</span><br><span class="line">            String methodName = joinPoint.getSignature().getName();</span><br><span class="line">            operLog.setMethod(className + <span class="string">&quot;.&quot;</span> + methodName + <span class="string">&quot;()&quot;</span>);</span><br><span class="line">            <span class="comment">// 设置请求方式</span></span><br><span class="line">            operLog.setRequestMethod(ServletUtils.getRequest().getMethod());</span><br><span class="line">            <span class="comment">// 处理设置注解上的参数</span></span><br><span class="line">            getControllerMethodDescription(controllerLog, operLog);</span><br><span class="line">            <span class="comment">// 保存数据库</span></span><br><span class="line">            AsyncManager.me().execute(AsyncFactory.recordOper(operLog));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception exp) &#123;</span><br><span class="line">            <span class="comment">// 记录本地异常日志</span></span><br><span class="line">            log.error(<span class="string">&quot;==前置通知异常==&quot;</span>);</span><br><span class="line">            log.error(<span class="string">&quot;异常信息:&#123;&#125;&quot;</span>, exp.getMessage());</span><br><span class="line">            exp.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取注解中对方法的描述信息 用于Controller层注解</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> log 日志</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> operLog 操作日志</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getControllerMethodDescription</span><span class="params">(Log log, OperLog operLog)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 设置action动作</span></span><br><span class="line">        operLog.setBusinessType(log.businessType().ordinal());</span><br><span class="line">        <span class="comment">// 设置标题</span></span><br><span class="line">        operLog.setTitle(log.title());</span><br><span class="line">        <span class="comment">// 设置操作人类别</span></span><br><span class="line">        operLog.setOperatorType(log.operatorType().ordinal());</span><br><span class="line">        <span class="comment">// 是否需要保存request，参数和值</span></span><br><span class="line">        <span class="keyword">if</span> (log.isSaveRequestData()) &#123;</span><br><span class="line">            <span class="comment">// 获取参数的信息，传入到数据库中。</span></span><br><span class="line">            setRequestValue(operLog);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取请求的参数，放到log中</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> operLog</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> request</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">setRequestValue</span><span class="params">(OperLog operLog)</span> </span>&#123;</span><br><span class="line">        Map&lt;String, String[]&gt; map = ServletUtils.getRequest().getParameterMap();</span><br><span class="line">        String params = JSONObject.toJSONString(map);</span><br><span class="line">        operLog.setOperParam(StringUtils.substring(params, <span class="number">0</span>, <span class="number">2000</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 是否存在注解，如果存在就获取</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Log <span class="title">getAnnotationLog</span><span class="params">(JoinPoint joinPoint)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Signature signature = joinPoint.getSignature();</span><br><span class="line">        MethodSignature methodSignature = (MethodSignature) signature;</span><br><span class="line">        Method method = methodSignature.getMethod();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (method != <span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> method.getAnnotation(Log.class);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用@Log注解</p>
+<p>以一个简单的CRUD操作为例, 这里展示部分代码：每对“部门”进行操作就会产生一条操作日志存入数据库。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/system/dept&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DeptController</span> <span class="keyword">extends</span> <span class="title">BaseController</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String prefix = <span class="string">&quot;system/dept&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> IDeptService deptService;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 新增保存部门</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Log(title = &quot;部门管理&quot;, businessType = BusinessType.INSERT)</span></span><br><span class="line">    <span class="meta">@RequiresPermissions(&quot;system:dept:add&quot;)</span></span><br><span class="line">    <span class="meta">@PostMapping(&quot;/add&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AjaxResult <span class="title">addSave</span><span class="params">(<span class="meta">@Validated</span> Dept dept)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (UserConstants.DEPT_NAME_NOT_UNIQUE.equals(deptService.checkDeptNameUnique(dept))) &#123;</span><br><span class="line">            <span class="keyword">return</span> error(<span class="string">&quot;新增部门&#x27;&quot;</span> + dept.getDeptName() + <span class="string">&quot;&#x27;失败，部门名称已存在&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> toAjax(deptService.insertDept(dept));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 保存</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Log(title = &quot;部门管理&quot;, businessType = BusinessType.UPDATE)</span></span><br><span class="line">    <span class="meta">@RequiresPermissions(&quot;system:dept:edit&quot;)</span></span><br><span class="line">    <span class="meta">@PostMapping(&quot;/edit&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AjaxResult <span class="title">editSave</span><span class="params">(<span class="meta">@Validated</span> Dept dept)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (UserConstants.DEPT_NAME_NOT_UNIQUE.equals(deptService.checkDeptNameUnique(dept))) &#123;</span><br><span class="line">            <span class="keyword">return</span> error(<span class="string">&quot;修改部门&#x27;&quot;</span> + dept.getDeptName() + <span class="string">&quot;&#x27;失败，部门名称已存在&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(dept.getParentId().equals(dept.getDeptId())) &#123;</span><br><span class="line">            <span class="keyword">return</span> error(<span class="string">&quot;修改部门&#x27;&quot;</span> + dept.getDeptName() + <span class="string">&quot;&#x27;失败，上级部门不能是自己&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> toAjax(deptService.updateDept(dept));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 删除</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Log(title = &quot;部门管理&quot;, businessType = BusinessType.DELETE)</span></span><br><span class="line">    <span class="meta">@RequiresPermissions(&quot;system:dept:remove&quot;)</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/remove/&#123;deptId&#125;&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AjaxResult <span class="title">remove</span><span class="params">(<span class="meta">@PathVariable(&quot;deptId&quot;)</span> Long deptId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (deptService.selectDeptCount(deptId) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> AjaxResult.warn(<span class="string">&quot;存在下级部门,不允许删除&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (deptService.checkDeptExistUser(deptId)) &#123;</span><br><span class="line">            <span class="keyword">return</span> AjaxResult.warn(<span class="string">&quot;部门存在用户,不允许删除&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> toAjax(deptService.deleteDeptById(deptId));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>同样的，你也可以看到权限管理也是通过类似的注解（<code>@RequiresPermissions</code>）机制来实现的。所以我们可以看到，通过注解+AOP最终的目标是为了实现模块的解耦。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    <div>
+  <div class="end-slogan" style="text-align:center;font-size:22px;letter-spacing:10px;user-seclect:none;color:#bbb">----------- 本文结束啦<i class="fa fa-star"></i>感谢您阅读-----------</div>		
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Rick
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/posts/7f462002/" title="Java基础之注解">http://example.com/posts/7f462002/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag"><i class="fa fa-tag"></i> 注解</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/ae31c15e/" rel="prev" title="Java基础之泛型">
+      <i class="fa fa-chevron-left"></i> Java基础之泛型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/fbeade06/" rel="next" title="Java基础之异常">
+      Java基础之异常 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E5%9F%BA%E7%A1%80"><span class="nav-text">注解基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E5%86%85%E7%BD%AE%E6%B3%A8%E8%A7%A3"><span class="nav-text">Java内置注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E6%B3%A8%E8%A7%A3-Override"><span class="nav-text">内置注解 - @Override</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E6%B3%A8%E8%A7%A3-Deprecated"><span class="nav-text">内置注解 - @Deprecated</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E6%B3%A8%E8%A7%A3-SuppressWarnings"><span class="nav-text">内置注解 - @SuppressWarnings</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E6%B3%A8%E8%A7%A3"><span class="nav-text">元注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E6%B3%A8%E8%A7%A3-Target"><span class="nav-text">元注解 - @Target</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E6%B3%A8%E8%A7%A3-Retention-amp-RetentionTarget"><span class="nav-text">元注解 - @Retention &amp; @RetentionTarget</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E6%B3%A8%E8%A7%A3-Documented"><span class="nav-text">元注解 - @Documented</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E6%B3%A8%E8%A7%A3-Inherited"><span class="nav-text">元注解 - @Inherited</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E6%B3%A8%E8%A7%A3-Repeatable-Java8"><span class="nav-text">元注解 - @Repeatable (Java8)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E6%B3%A8%E8%A7%A3-Native-Java8"><span class="nav-text">元注解 - @Native (Java8)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84%E6%8E%A5%E5%8F%A3"><span class="nav-text">注解与反射接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3"><span class="nav-text">自定义注解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E6%B3%A8%E8%A7%A3"><span class="nav-text">深入理解注解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java8%E6%8F%90%E4%BE%9B%E4%BA%86%E5%93%AA%E4%BA%9B%E6%96%B0%E7%9A%84%E6%B3%A8%E8%A7%A3%EF%BC%9F"><span class="nav-text">Java8提供了哪些新的注解？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E6%94%AF%E6%8C%81%E7%BB%A7%E6%89%BF%E5%90%97%EF%BC%9F"><span class="nav-text">注解支持继承吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%9F"><span class="nav-text">注解实现的原理？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">注解的应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%8C%96%E5%88%B0%E6%B3%A8%E8%A7%A3%E5%8C%96-%E6%A1%86%E6%9E%B6%E7%9A%84%E6%BC%94%E8%BF%9B"><span class="nav-text">配置化到注解化 - 框架的演进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF%E5%AE%9E%E7%8E%B0%E5%88%B0%E6%B3%A8%E8%A7%A3%E5%AE%9E%E7%8E%B0-Junit3%E5%88%B0Junit4"><span class="nav-text">继承实现到注解实现 - Junit3到Junit4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3%E5%92%8CAOP-%E9%80%9A%E8%BF%87%E5%88%87%E9%9D%A2%E5%AE%9E%E7%8E%B0%E8%A7%A3%E8%80%A6"><span class="nav-text">自定义注解和AOP - 通过切面实现解耦</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Rick"
+      src="/images/avatar.jpg">
+  </a>
+  <p class="site-author-name" itemprop="name">Rick</p>
+  <div class="site-description" itemprop="description">一个瞎折腾的博客，不知道能坚持几天</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-sun"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rick</span>
+</div>
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+<!-- 不蒜字统计 -->
+<div>
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_uv">
+    访问人数：<span id="busuanzi_value_site_uv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    总访问量：<span id="busuanzi_value_site_pv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <!-- 添加博客全站总字数统计-->
+  <i class="fa fa-pencil"></i>
+  <span class="post-count">博客全站共 280.7k 字</span>
+</div>
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '',
+      clientSecret: '',
+      repo        : '',
+      owner       : '',
+      admin       : [''],
+      id          : 'bcac2b06dba136e3ee401470d2c13f18',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Git的一些使用方法的记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="工具篇之Git">
+<meta property="og:url" content="http://example.com/posts/4d47980d/index.html">
+<meta property="og:site_name" content="Rick Blog">
+<meta property="og:description" content="Git的一些使用方法的记录">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0a0c1295e9e8453e85233e416d0a4658~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c0e4e154ed494a7b92b12b7ab5d86964~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3621506bd103447398db100834b1ba27~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8b4befdd164f4dbcb86022e50e5ec37b~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/64ba35333f604dd8994c5c92247633b1~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/584649574c77464d866af3a6bf075633~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6de3ff360abd4116a97db4730fc7197e~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e6f99bc8895a4934b8f3868e75d5c289~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/35da1553d4884d33a7d333b7f7a57fc0~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f526e014a1714eaeb6cbe5402de38ce2~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cab7791dcf7542ebb7af444164a6f5f4~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/05d4e475969e4db7ad751622eab2750b~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ca711e3dd55847a882e0649fd485c228~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4064394-badc6aa178c1173b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/509/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4064394-275d48bd7cb63cf5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/600/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4064394-e995a51e49888cd6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/711/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4064394-79cd18224d3a27c6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/757/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4064394-1606a08db48f4591.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/772/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4064394-16fdfb94c4019404.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/727/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4064394-07a2a92a3756b47e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1031/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4064394-9e9acb7734a49193.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1053/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4064394-f6e14f77bb04a117.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1049/format/webp">
+<meta property="article:published_time" content="2021-01-30T13:37:17.000Z">
+<meta property="article:modified_time" content="2021-02-04T13:02:33.815Z">
+<meta property="article:author" content="Rick">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0a0c1295e9e8453e85233e416d0a4658~tplv-k3u1fbpfcp-zoom-1.image">
+
+<link rel="canonical" href="http://example.com/posts/4d47980d/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>工具篇之Git | Rick Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Rick Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/4d47980d/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Rick">
+      <meta itemprop="description" content="一个瞎折腾的博客，不知道能坚持几天">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rick Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          工具篇之Git
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-30 21:37:17" itemprop="dateCreated datePublished" datetime="2021-01-30T21:37:17+08:00">2021-01-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-04 21:02:33" itemprop="dateModified" datetime="2021-02-04T21:02:33+08:00">2021-02-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+<p>Git的一些使用方法的记录</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="第一部分-Git"><a href="#第一部分-Git" class="headerlink" title="第一部分 Git"></a>第一部分 Git</h1><h2 id="Git安装"><a href="#Git安装" class="headerlink" title="Git安装"></a>Git安装</h2><p>✨Git官网下载地址：<a target="_blank" rel="noopener" href="https://git-scm.com/downloads">https://git-scm.com/downloads</a></p>
+<p>官网选择系统对应的版本下载并按<code>默认安装</code>即可。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0a0c1295e9e8453e85233e416d0a4658~tplv-k3u1fbpfcp-zoom-1.image" alt="Dowload"></p>
+<h2 id="Git仓库"><a href="#Git仓库" class="headerlink" title="Git仓库"></a>Git仓库</h2><h3 id="git-init（初始化仓库）"><a href="#git-init（初始化仓库）" class="headerlink" title="git init（初始化仓库）"></a>git init（初始化仓库）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit</span><br><span class="line">$ git init</span><br><span class="line">Initialized empty Git repository <span class="keyword">in</span> C:/Users/Administrator/Desktop/LearnGit/.git/</span><br></pre></td></tr></table></figure>
+<p>打开GitBash，切换到目标文件夹。执行git初始化命令。</p>
+<p>执行后提示<code>初始化了一个空目录</code>，并且在目录下生成一个隐藏文件夹<code>.git</code>。</p>
+<p>这时，我们目标文件夹就是一个仓库（Repository），这个目录里的所有文件都可以被版本控制系统管理。</p>
+<p>有了仓库，我们需要创建我们的文件，然后对其进行版本管理。</p>
+<p>首先，我们在仓库中新建一个文本文档，命名为“Readme.txt”，并向其写入如下内容：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">This is the first line in the Readme.txt</span><br><span class="line">We will learn how to use Git.</span><br></pre></td></tr></table></figure>
+<p>这时，我们可以认为仓库中的文件<code>被修改</code>了，我们需要将它<code>提交以创建新的版本</code>，下面将介绍用到的命令：</p>
+<h3 id="git-add（添加到暂存区）"><a href="#git-add（添加到暂存区）" class="headerlink" title="git add（添加到暂存区）"></a>git add（添加到暂存区）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git add Readme.txt</span><br></pre></td></tr></table></figure>
+<p>执行后，我们将Readme.txt添加到了<code>暂存区</code>，便于修改后选择<code>丢弃修改、临时存储或提交</code>。</p>
+<p>我们在将文件提交新版本<code>之前</code>必须将文件保存到<code>暂存区</code>。</p>
+<h3 id="git-status（查看仓库当前状态）"><a href="#git-status（查看仓库当前状态）" class="headerlink" title="git status（查看仓库当前状态）"></a>git status（查看仓库当前状态）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64</span><br><span class="line">~/Desktop/LearnGit (master)</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">No commits yet</span><br><span class="line"></span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">&quot;git rm --cached &lt;file&gt;...&quot;</span> to unstage)</span><br><span class="line">        new file:   Readme.txt</span><br></pre></td></tr></table></figure>
+<p>执行后，发现new file，即有了新文件。</p>
+<p>这时，我们可以继续执行 <code>git commit -m 命令</code>提交</p>
+<h3 id="git-commit（提交新版本）"><a href="#git-commit（提交新版本）" class="headerlink" title="git commit（提交新版本）"></a>git commit（提交新版本）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git commit -m <span class="string">&quot;Creat a new file&quot;</span></span><br><span class="line">[master (root-commit) ebec5bf] Creat a new file</span><br><span class="line"> 1 file changed, 2 insertions(+)</span><br><span class="line"> create mode 100644 Readme.txt</span><br></pre></td></tr></table></figure>
+<p>-m 参数后面是<code>版本说明</code>，即注释。我们这里是 Creat a new file，即创建新文件。</p>
+<p>这样就提交成功了，git为我们的文件<code>创建了个新版本</code>，版本号ebec5bf，修改了1个文件，插入了2行文本。</p>
+<h2 id="工作区和暂存区"><a href="#工作区和暂存区" class="headerlink" title="工作区和暂存区"></a>工作区和暂存区</h2><p>工作区：<code>仓库文件夹</code>即一个工作区，也就是我们<code>直接修改文件并保存</code>的地方。</p>
+<p>暂存区：使用<code>add命令</code>后，git会为文件在.git文件夹<code>创建副本</code>，用于<code>暂存</code>我们对文件的更改。（便于后续丢弃更改、临时存储或提交）</p>
+<p>⚠PS：</p>
+<p>1.我们在使用commit命令时是提交的<code>暂存区</code>的文件，也就是说，我们在commit之前一定要使用<code>add命令</code>将文件存到暂存区。</p>
+<p>2.在实际使用中，我们可以每写一部分代码就使用一次add命令，使用add命令后将在暂存区修改。若代码出现问题，我们可以从暂存区恢复文件到使用add命令之前的状态。</p>
+<h2 id="Git版本说明"><a href="#Git版本说明" class="headerlink" title="Git版本说明"></a>Git版本说明</h2><p>完成以上所有流程后，我们创建了一个<code>新的版本</code>：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c0e4e154ed494a7b92b12b7ab5d86964~tplv-k3u1fbpfcp-zoom-1.image" alt="Creat"></p>
+<p>对之前的操作进行简单的复习：</p>
+<p>git init —— git add <filename> —— git commit -m “说明”</p>
+<p>首先对仓库进行<code>初始化</code>，确定当作仓库的目录。</p>
+<p>然后把待修改文件<code>加入到暂存区</code>。</p>
+<p>最后使用<code>commit提交更改</code>，创建新版本。</p>
+<h3 id="再次创建新版本"><a href="#再次创建新版本" class="headerlink" title="再次创建新版本"></a>再次创建新版本</h3><p>我们再来创建一个新的版本：</p>
+<p>对刚才的txt文件随机删除几个字符，然后使用<code>git status</code>查看状态：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes not staged <span class="keyword">for</span> commit:</span><br><span class="line">  (use <span class="string">&quot;git add &lt;file&gt;...&quot;</span> to update what will be committed)</span><br><span class="line">  (use <span class="string">&quot;git restore &lt;file&gt;...&quot;</span> to discard changes <span class="keyword">in</span> working directory)</span><br><span class="line">        modified:   Readme.txt</span><br><span class="line"></span><br><span class="line">no changes added to commit (use <span class="string">&quot;git add&quot;</span> and/or <span class="string">&quot;git commit -a&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p><code>modified: Readme.txt</code>，即检测到了Readme.txt修改，但还<code>没有加到暂存区</code>。</p>
+<p>（实际显示效果，modified：Readme.txt 为红色，上文还提示 use git add，表明已修改但为添加到暂存区）</p>
+<p>我们使用 <code>add 命令</code>将它加入<code>暂存区</code>，再次使用<code>git status命令</code>查看。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">&quot;git restore --staged &lt;file&gt;...&quot;</span> to unstage)</span><br><span class="line">        modified:   Readme.txt</span><br></pre></td></tr></table></figure>
+<p>这时候可以看到，状态变成了<code>等待commit</code>。</p>
+<p>（实际显示效果，modified：Readme.txt 为绿色，上文提示消失，表明修改已经添加到暂存区）</p>
+<p>我们继续使用commit命令提交新的版本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git commit -m <span class="string">&quot;change a text&quot;</span></span><br><span class="line">[master 1a1f981] change a text</span><br><span class="line"> 1 file changed, 1 insertion(+), 1 deletion(-)</span><br></pre></td></tr></table></figure>
+<p>提交成功，一个文件被修改，修改了一行。</p>
+<p>新的版本id为1a1f981。</p>
+<p>这时，我们有了两个版本：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3621506bd103447398db100834b1ba27~tplv-k3u1fbpfcp-zoom-1.image" alt="change"></p>
+<h3 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h3><p><code>创建版本</code>有什么用呢？怎么进行<code>版本控制</code>？现在我们来看一下Git怎么进行<code>版本回退</code>。</p>
+<p>顾名思义，版本回退就是<code>还原</code>到之前的某一个时间点的文件。</p>
+<p>比如：腾讯QQ发布了个新版本，却发现不稳定，存在漏洞，需要紧急恢复老版本，这时候就用到<code>版本回退</code>了。</p>
+<p>首先，我们使用 git log 命令查看提交日志：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git <span class="built_in">log</span></span><br><span class="line">commit 1a1f98115f5c31ceae7e52d4600b220d38fbc24b (HEAD -&gt; master)</span><br><span class="line">Author: Simplicity &lt;290255@qq.com&gt;</span><br><span class="line">Date:   Fri Dec 25 10:45:47 2020 +0800</span><br><span class="line"></span><br><span class="line">    change a text</span><br><span class="line"></span><br><span class="line">commit ebec5bfe1c45b35a48c24c718c89f09e55a214bc</span><br><span class="line">Author: Simplicity &lt;290255@qq.com&gt;</span><br><span class="line">Date:   Fri Dec 25 10:30:46 2020 +0800</span><br><span class="line"></span><br><span class="line">    Creat a new file</span><br></pre></td></tr></table></figure>
+<p>可以看到，我们提交了两个版本。最新的版本右边标有<code>（HEAD -&gt; master）</code>。</p>
+<h4 id="git-reset"><a href="#git-reset" class="headerlink" title="git reset"></a>git reset</h4><p>假设，我们想回退上一个版本，我们可以使用 git reset –hard HEAD^ 命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git reset --hard HEAD^</span><br><span class="line">HEAD is now at ebec5bf Creat a new file</span><br></pre></td></tr></table></figure>
+<p>现在，我们的Readme.txt就回到了上一个版本，也就是刚创建时候的状态。</p>
+<p>当前仓库中版本示意图：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8b4befdd164f4dbcb86022e50e5ec37b~tplv-k3u1fbpfcp-zoom-1.image" alt="return"></p>
+<p>再次使用git log查看版本记录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git <span class="built_in">log</span></span><br><span class="line">commit ebec5bfe1c45b35a48c24c718c89f09e55a214bc (HEAD -&gt; master)</span><br><span class="line">Author: Simplicity &lt;290255@qq.com&gt;</span><br><span class="line">Date:   Fri Dec 25 10:30:46 2020 +0800</span><br><span class="line"></span><br><span class="line">    Creat a new file</span><br></pre></td></tr></table></figure>
+<h4 id="git-reflog"><a href="#git-reflog" class="headerlink" title="git reflog"></a>git reflog</h4><p>如果我们想再回到最新版本，也就是修改文件后的版本，又该如何操作？</p>
+<p>回退版本后git log不再显示最新版本，我们可以使用git reflog查看版本变更记录。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git reflog</span><br><span class="line">ebec5bf (HEAD -&gt; master) HEAD@&#123;0&#125;: reset: moving to HEAD^</span><br><span class="line">1a1f981 HEAD@&#123;1&#125;: commit: change a text</span><br><span class="line">ebec5bf (HEAD -&gt; master) HEAD@&#123;2&#125;: commit (initial): Creat a new file</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，最新版本，也就是修改文件后的版本id是1a1f981。</p>
+<p>我们可以使用下面的命令回到任意版本（只需知道版本ID）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git reset --hard 1a1f981</span><br><span class="line">HEAD is now at 1a1f981 change a text</span><br></pre></td></tr></table></figure>
+<p>现在， 文件再次回到了修改后的状态，使用git log查看下目前的版本信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git <span class="built_in">log</span></span><br><span class="line">commit 1a1f98115f5c31ceae7e52d4600b220d38fbc24b (HEAD -&gt; master)</span><br><span class="line">Author: Simplicity &lt;290255@qq.com&gt;</span><br><span class="line">Date:   Fri Dec 25 10:45:47 2020 +0800</span><br><span class="line"></span><br><span class="line">    change a text</span><br><span class="line"></span><br><span class="line">commit ebec5bfe1c45b35a48c24c718c89f09e55a214bc</span><br><span class="line">Author: Simplicity &lt;290255@qq.com&gt;</span><br><span class="line">Date:   Fri Dec 25 10:30:46 2020 +0800</span><br><span class="line"></span><br><span class="line">    Creat a new file</span><br></pre></td></tr></table></figure>
+<p>目前的版本状态：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/64ba35333f604dd8994c5c92247633b1~tplv-k3u1fbpfcp-zoom-1.image" alt="change"></p>
+<h3 id="撤销修改"><a href="#撤销修改" class="headerlink" title="撤销修改"></a>撤销修改</h3><p>暂存区和工作区到底有什么作用？为什么不能直接把工作区的修改直接commit到仓库？</p>
+<p>下面，就来看一下，Git的<code>优势</code>所在：</p>
+<h4 id="git-checkout"><a href="#git-checkout" class="headerlink" title="git checkout"></a>git checkout</h4><p>还记得add命令吗，我们使用add命令可以将目前的文件<code>添加到暂存区</code>。</p>
+<p>添加到暂存区，相等于在暂存区<code>创建了一份备份</code>。</p>
+<p>当我们在工作区修改文件出错想<code>撤回</code>的时候，我们可以直接让暂存区的文件<code>覆盖</code>当前文件。</p>
+<p>我们先打开Readme.txt文件查看其中的内容：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/584649574c77464d866af3a6bf075633~tplv-k3u1fbpfcp-zoom-1.image" alt="old"></p>
+<p>然后使用git add命令添加到暂存区：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git add Readme.txt</span><br></pre></td></tr></table></figure>
+<p>添加成功后，我们随意修改Readme.txt中的内容：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6de3ff360abd4116a97db4730fc7197e~tplv-k3u1fbpfcp-zoom-1.image" alt="new"></p>
+<p>然后可以使用如下命令，让文件回到使用add添加到暂存区时的状态：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git checkout -- Readme.txt</span><br></pre></td></tr></table></figure>
+<p>执行命令后，发现文件已经回退到了添加到暂存区时的状态：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e6f99bc8895a4934b8f3868e75d5c289~tplv-k3u1fbpfcp-zoom-1.image" alt="old"></p>
+<p>git checkout命令有两种情况：</p>
+<p>1.若已经使用add添加文件到暂存区，执行命令会使文件回退到add命令时的状态。</p>
+<p>2.若未使用add添加文件到暂存区，执行命令会使文件回退到版本库中的状态。</p>
+<h4 id="git-reset-1"><a href="#git-reset-1" class="headerlink" title="git reset"></a>git reset</h4><p>若文件被修改乱了，并且已经把改乱后的文件添加到了暂存区，又该怎么办呢？</p>
+<p>这时候，我们可以使用下面的命令从<code>版本仓库</code>中获取文件<code>覆盖</code>当前文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git reset HEAD Readme.txt</span><br></pre></td></tr></table></figure>
+<p>执行完命令后，<code>暂存区</code>的文件将被版本库<code>覆盖</code>。</p>
+<p>然后使用 git checkout命令将暂存区的文件覆盖到工作区即可。</p>
+<h2 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h2><p>现在我们在工作区删除某一个文件。</p>
+<p>使用git status命令查看工作区状态：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes not staged <span class="keyword">for</span> commit:</span><br><span class="line">  (use <span class="string">&quot;git add/rm &lt;file&gt;...&quot;</span> to update what will be committed)</span><br><span class="line">  (use <span class="string">&quot;git restore &lt;file&gt;...&quot;</span> to discard changes <span class="keyword">in</span> working directory)</span><br><span class="line">        deleted:    Readme.txt</span><br><span class="line"></span><br><span class="line">no changes added to commit (use <span class="string">&quot;git add&quot;</span> and/or <span class="string">&quot;git commit -a&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>它告诉我们 Readme.txt 文件被删除了。</p>
+<p>如果是误删，我们想恢复文件，可以使用撤销修改命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~&#x2F;Desktop&#x2F;LearnGit (master)</span><br><span class="line">$ git checkout Readme.txt</span><br><span class="line">Updated 1 path from the index</span><br></pre></td></tr></table></figure>
+<p>这样，Readme.txt便从暂存区或版本库中恢复了。</p>
+<p>如果我们确实想删除这个文件，并且在版本库中删除：</p>
+<p>我们可以使用 <code>git add</code> 命令 或 <code>git rm</code> 命令，下面介绍两个目录的不同。</p>
+<h3 id="git-add"><a href="#git-add" class="headerlink" title="git add"></a>git add</h3><p>手动删除文件后，使用git add将变动告诉暂存区，然后使用commit命令提交这次变动，即可成功删除。</p>
+<h3 id="git-rm"><a href="#git-rm" class="headerlink" title="git rm"></a>git rm</h3><p>git rm = rm + git add，使用git rm可以将工作区文件删除并将变动告诉暂存区，然后使用commit命令提交这次变动，即可成功删除。</p>
+<h2 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h2><p>以前我们在学习Git的时候没有提到<code>分支</code>的概念，我们始终在使用一个分支，即<code>Master分支</code>。</p>
+<p>当多人协同开发时，我们需要完成自己的任务同时不耽误它人开发，每个人都需要有自己的分支。</p>
+<p>当我们Debug、实验开发时，我们需要单独一个分支用来修改并测试，稳定后再推送至主分支。</p>
+<p>根据以往的流程图，Head即当前版本，它实际指向Master分支，而Master分支指向最新提交的版本：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/35da1553d4884d33a7d333b7f7a57fc0~tplv-k3u1fbpfcp-zoom-1.image" alt="master"></p>
+<h3 id="git-switch-c"><a href="#git-switch-c" class="headerlink" title="git switch -c"></a>git switch -c</h3><p>现在，我们使用<code>git switch -c</code>命令<code>创建</code>并<code>切换</code>到dev分支：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git switch -c dev</span><br><span class="line">Switched to a new branch <span class="string">&#x27;dev&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f526e014a1714eaeb6cbe5402de38ce2~tplv-k3u1fbpfcp-zoom-1.image" alt="dev"></p>
+<p>（Head即当前版本指向dev指针，dev指针指向最新版本。）</p>
+<h3 id="git-branch"><a href="#git-branch" class="headerlink" title="git branch"></a>git branch</h3><p>我们可以使用 <code>git branch</code> 命令<code>查看分支</code>（<code>星号</code>后的是当前分支）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (dev)</span><br><span class="line">$ git branch</span><br><span class="line">* dev</span><br><span class="line">  master</span><br></pre></td></tr></table></figure>
+<h3 id="git-switch"><a href="#git-switch" class="headerlink" title="git switch"></a>git switch</h3><p>还可以使用git switch命令<code>切换分支</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (dev)</span><br><span class="line">$ git switch master</span><br><span class="line">Switched to branch <span class="string">&#x27;master&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>我们<code>切回dev分支</code>并<code>创建</code>新的版本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git switch dev</span><br><span class="line">Switched to branch <span class="string">&#x27;dev&#x27;</span></span><br><span class="line"></span><br><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (dev)</span><br><span class="line">$ git add Readme.txt</span><br><span class="line"></span><br><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (dev)</span><br><span class="line">$ git commit -m <span class="string">&quot;updata&quot;</span></span><br><span class="line">[dev b20a57f] updata</span><br><span class="line"> 1 file changed, 1 insertion(+), 1 deletion(-)</span><br></pre></td></tr></table></figure>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cab7791dcf7542ebb7af444164a6f5f4~tplv-k3u1fbpfcp-zoom-1.image" alt="dev"></p>
+<p>创建新版本后，Head依旧指向dev，dev指向<code>最新的版本</code>。而Master由于是另外一个分支并<code>没有变动</code>。</p>
+<h3 id="git-merge"><a href="#git-merge" class="headerlink" title="git merge"></a>git merge</h3><p>在dev分支更新版本后，我们切回master会发现文件还是老版本，这是因为master分支并没有更新。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/05d4e475969e4db7ad751622eab2750b~tplv-k3u1fbpfcp-zoom-1.image" alt="dev"></p>
+<p>（切换版本实际是修改Head指针，令他指向Master指针。）</p>
+<p>如果经过我们测试，dev分支没问题，我们可以将它<code>合并</code>到Master分支：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git merge dev</span><br><span class="line">Updating 1a1f981..b20a57f</span><br><span class="line">Fast-forward</span><br><span class="line"> Readme.txt | 2 +-</span><br><span class="line"> 1 file changed, 1 insertion(+), 1 deletion(-)</span><br></pre></td></tr></table></figure>
+<p><code>Fast-forward</code>：<code>快进模式</code>，这里是将master版本指针指向dev指针指向的版本。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ca711e3dd55847a882e0649fd485c228~tplv-k3u1fbpfcp-zoom-1.image" alt="dev"></p>
+<h3 id="git-branch-d"><a href="#git-branch-d" class="headerlink" title="git branch -d"></a>git branch -d</h3><p>如上图所示，Master和dev指向了同一个版本，如果我们不再需要dev，可以将其<code>删除</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator@LAPTOP-89OP7KJM MINGW64 ~/Desktop/LearnGit (master)</span><br><span class="line">$ git branch -d dev</span><br><span class="line">Deleted branch dev (was b20a57f).</span><br></pre></td></tr></table></figure>
+<h2 id="标签管理"><a href="#标签管理" class="headerlink" title="标签管理"></a>标签管理</h2><p>使用git tag [标签名]命令即可打标签：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag [标签名]</span><br></pre></td></tr></table></figure>
+<p>使用git tag命令可以查看所有标签：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag</span><br></pre></td></tr></table></figure>
+<p>使用git tag [标签名] [id]可以给指定版本打标签：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag [标签名]  [id]</span><br></pre></td></tr></table></figure>
+<p>使用git show [标签名]可以查看标签详细信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git show [标签名]</span><br></pre></td></tr></table></figure>
+<h1 id="第二部分-GitHub"><a href="#第二部分-GitHub" class="headerlink" title="第二部分 GitHub"></a>第二部分 GitHub</h1><p><img src="https://upload-images.jianshu.io/upload_images/4064394-badc6aa178c1173b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/509/format/webp" alt="img"></p>
+<h2 id="为什么用GitHub"><a href="#为什么用GitHub" class="headerlink" title="为什么用GitHub?"></a>为什么用GitHub?</h2><p>学会使用Git后我们的团队合作能力大大提升，我们可以设置一台代码仓库服务器，本地提交完成（commit）后将代码与仓库同步，就能实现分布式版本控制了。</p>
+<p>然而，为一个小项目单独设立仓库服务器成本有些高，另外，自己搭建的物理主机服务器难免会有故障，我们也很难保障网络（独立ip很贵），于是，大胆的想法就出现了！</p>
+<p>没错！就是上云啦！GitHub就是这样一家提供免费代码仓库的公司，它是由Git之父、linux之父linus成立的（git其实是linus为了维护linux开发的）为广大程序员提供远程代码仓库的伟大公司～～</p>
+<p>前不久被微软收购了。</p>
+<p>页面大概是这样：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4064394-275d48bd7cb63cf5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/600/format/webp" alt="img"></p>
+<p>github个人主页</p>
+<p>每个用户有一个类似博客的主页，和很多仓库（一个项目一个仓库），程序员把自己写的代码上传到GitHub来托管，因为是大公司在管，你不必担心它的服务器会挂掉，在全球任何有网络的地方你都可以开始工作！<br>没错，很多公司也使用GitHub管理他们的项目</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4064394-e995a51e49888cd6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/711/format/webp" alt="img"></p>
+<p>大概有三种用途：</p>
+<p><strong>合作开发</strong></p>
+<p>如果有多个人一起开发某项目，把仓库设在GitHub，大家在各自笔记本写代码、修改使用git上传、同步，避免了复制粘贴代码，而且还能实现版本控制，谁修改了什么内容一清二楚，连谁写了多少行改了多少行代码都能统计清楚。摸鱼是不可能的。</p>
+<p><strong>软件仓库</strong></p>
+<p>GitHub提供两种仓库私有仓库和公开仓库。</p>
+<p>GitHub免费为所有用户提供公开仓库空间，公开仓库向网络公开，所有人都能访问，但只有所有者和授权用户才能修改。</p>
+<p>私有仓库不对外公开，但要向GitHub付费。</p>
+<p><strong>代码公开</strong></p>
+<p>这一条应该是最有用的了，你可以在这里找到全世界程序员的劳动成果，上到各种算法实现、下到各种app源码。只要遵循开源协议，你都可以copy下来用。</p>
+<h2 id="使用GitHub"><a href="#使用GitHub" class="headerlink" title="使用GitHub"></a>使用GitHub</h2><p>第一步：注册账号<a target="_blank" rel="noopener" href="https://github.com/">GitHub官网</a></p>
+<p>第二步：创建SSH Key。在用户主目录下，看看有没有.ssh目录，如果有，再看看这个目录下有没有id_rsa和id_rsa.pub这两个文件，如果已经有了，可直接跳到下一步。如果没有，打开Shell（Windows下打开Git Bash），创建SSH Key：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ssh-keygen</span> <span class="selector-tag">-t</span> <span class="selector-tag">rsa</span> <span class="selector-tag">-C</span> &quot;<span class="selector-tag">youremail</span><span class="keyword">@example</span>.com&quot;</span><br></pre></td></tr></table></figure>
+<p>你需要把邮件地址换成你自己的邮件地址，然后一路回车，使用默认值即可，由于这个Key也不是用于军事目的，所以也无需设置密码。</p>
+<p>如果一切顺利的话，可以在用户主目录里找到.ssh目录，里面有<code>id_rsa</code>和<code>id_rsa.pub</code>两个文件，这两个就是SSH Key的秘钥对，<code>id_rsa</code>是私钥，不能泄露出去，<code>id_rsa.pub</code>是公钥，可以放心地告诉任何人。<br>打开id_rsa.pub,复制里面的内容。<br>第三步，登陆GitHub，打开“Account settings”，“SSH Keys and GPG keys”页面：</p>
+<p>然后，点“New SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容即可。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4064394-79cd18224d3a27c6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/757/format/webp" alt="img"></p>
+<p>添加sshkey</p>
+<p>点“Add Key”，你就应该看到已经添加的Key。</p>
+<p>为什么GitHub需要SSH Key呢？因为GitHub需要识别出你推送的提交确实是你推送的，而不是别人冒充的，而Git支持SSH协议，所以，GitHub只要知道了你的公钥，就可以确认只有你自己才能推送。</p>
+<p>当然，GitHub允许你添加多个Key。假定你有若干电脑，你一会儿在公司提交，一会儿在家里提交，只要把每台电脑的Key都添加到GitHub，就可以在每台电脑上往GitHub推送了。</p>
+<p>最后友情提示，在GitHub上免费托管的Git仓库，任何人都可以看到喔（但只有你自己才能改）。所以，不要把敏感信息放进去。</p>
+<h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>然后你可以创建仓库了<br>首先，登陆GitHub，然后，在右上角找到“Create a new repo”按钮，创建一个新的仓库</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4064394-1606a08db48f4591.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/772/format/webp" alt="img"><br>然后起一个项目名</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4064394-16fdfb94c4019404.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/727/format/webp" alt="img"><br>来到这个项目的主页</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4064394-07a2a92a3756b47e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1031/format/webp" alt="img"></p>
+<p>可以看到主页提供了两种和本地仓库关联起来的方式<br><strong>方法一：</strong><br>把本地已有的同名Git仓库和GitHub上的仓库关联起来<br>我们在本地新建了一个名为Gittest的文件夹</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="keyword">init</span></span><br></pre></td></tr></table></figure>
+<p>将Gittest文件夹设置为Git仓库<br>添加文件,比如我们新写了一个hello.txt：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="keyword">add</span> hello.txt</span><br><span class="line">git commit -m <span class="string">&quot;first commit&quot;</span></span><br></pre></td></tr></table></figure>
+<p>到此为止已经提交到了本地仓库<br>接下来我们把本地仓库和远程仓库联系起来</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote <span class="keyword">add</span> origin git@github.com:MachinePlay/Gittest.git</span><br></pre></td></tr></table></figure>
+<p>请千万注意，把上面的MachinePlay替换成你自己的GitHub账户名，否则，你在本地关联的就是我的远程库，关联没有问题，但是你以后推送是推不上去的，因为你的SSH Key公钥不在我的账户列表中。</p>
+<p>添加后，远程库的名字就是origin，这是Git默认的叫法，也可以改成别的，但是origin这个名字一看就知道是远程库<br>下一步，就可以把本地库的所有内容推送到远程库上</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+<p>由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。</p>
+<p>此后<code>git add</code> <code>git commit-m</code>之后 就可以使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+<p>就可以把自己的代码上传到远程仓库了。</p>
+<p><strong>方法二：</strong></p>
+<p>使用<code>Git clone</code>直接从远程仓库克隆下来</p>
+<p>前面我们讲了先有本地库，后有远程库的时候，如何关联远程库。</p>
+<p>现在，假设我们从零开发，那么最好的方式是先创建远程库，然后，从远程库克隆。</p>
+<p>首先，登陆GitHub，创建一个新的仓库，名字叫Gittest</p>
+<p>每个仓库都有一个地址：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4064394-9e9acb7734a49193.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1053/format/webp" alt="img"></p>
+<p>我们在本地使用<code>git clone</code>直接把远程仓库克隆下来。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git<span class="meta">@github</span>.com:MachinePlay/Gittest.git</span><br></pre></td></tr></table></figure>
+<p>看到这里大家就懂了，不仅仅是自己的仓库可以克隆，也可以克隆其他用户的公开仓库。</p>
+<p>例如现在随便找一个安卓阅读app的仓库</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4064394-f6e14f77bb04a117.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1049/format/webp" alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git@github.com:smuyyh/BookReader.git</span><br></pre></td></tr></table></figure>
+<p>就把这位用户仓库里一个完整的阅读app源码全部下载到本地了。</p>
+<h2 id="如何上传更新"><a href="#如何上传更新" class="headerlink" title="如何上传更新"></a>如何上传更新</h2><p>你在本地目录有任何变动，只需按照以下顺序就能上传：</p>
+<ol>
+<li>git add 文件路径</li>
+<li>git commit -m “信息”</li>
+<li>git pull （相信我，你一定会忘记这一个命令）</li>
+<li>git push</li>
+</ol>
+<p>下面是例子</p>
+<ol>
+<li><code>cd git-demo-1</code></li>
+<li><code>touch index2.html</code></li>
+<li><code>git add index2.html</code></li>
+<li><code>git commit -m &quot;新建 index2.html&quot;</code></li>
+<li><code>git pull</code></li>
+<li><code>git push</code></li>
+</ol>
+<h2 id="git-ignore"><a href="#git-ignore" class="headerlink" title="git ignore"></a>git ignore</h2><p>在项目目录创建 .gitignore 文件就可以指定「哪些文件不上传到远程仓库」，比如</p>
+<p>.gitignroe</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/node_modules/</span><br><span class="line">/.vscode/</span><br></pre></td></tr></table></figure>
+<p>这样就可以避免 node_modules/ 和 .vscode/ 目录被上传到 github 了。</p>
+<h2 id="记住一句话：永远都不要上传-node-modules-到-github。"><a href="#记住一句话：永远都不要上传-node-modules-到-github。" class="headerlink" title="记住一句话：永远都不要上传 node_modules 到 github。"></a>记住一句话：永远都不要上传 node_modules 到 github。</h2><p>如果你想防止自己手贱上传 node_modules 到 github ，可以：</p>
+<ol>
+<li>在项目根目录 touch .gitignore</li>
+<li>在 .gitignore 里添加一行 <code>/node_modules/</code></li>
+<li>git add .gitignore; git commit -m ‘ignore’</li>
+</ol>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>还有一些有用的命令</p>
+<ul>
+<li><code>git remote add origin git@github.com:xxxxxxx.git</code> 将本地仓库与远程仓库关联</li>
+<li><code>git remote set-url origin git@github.com:xxxxx.git</code> 上一步手抖了，可以用这个命令来挽回</li>
+<li><code>git branch</code> 新建分支</li>
+<li><code>git merge</code> 合并分支</li>
+<li><code>git stash</code> 通灵术</li>
+<li><code>git stash pop</code> 反转通灵术</li>
+<li><code>git revert</code> 后悔了</li>
+<li><code>git reset</code> 另一种后悔了</li>
+<li><code>git diff</code> 查看详细变化</li>
+</ul>
+
+    </div>
+
+    
+    
+    <div>
+  <div class="end-slogan" style="text-align:center;font-size:22px;letter-spacing:10px;user-seclect:none;color:#bbb">----------- 本文结束啦<i class="fa fa-star"></i>感谢您阅读-----------</div>		
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Rick
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/posts/4d47980d/" title="工具篇之Git">http://example.com/posts/4d47980d/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Git/" rel="tag"><i class="fa fa-tag"></i> Git</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/a2befa89/" rel="prev" title="Java基础之反射">
+      <i class="fa fa-chevron-left"></i> Java基础之反射
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/5c7898df/" rel="next" title="Java基础之BigDecimal">
+      Java基础之BigDecimal <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86-Git"><span class="nav-text">第一部分 Git</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git%E5%AE%89%E8%A3%85"><span class="nav-text">Git安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git%E4%BB%93%E5%BA%93"><span class="nav-text">Git仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#git-init%EF%BC%88%E5%88%9D%E5%A7%8B%E5%8C%96%E4%BB%93%E5%BA%93%EF%BC%89"><span class="nav-text">git init（初始化仓库）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-add%EF%BC%88%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9A%82%E5%AD%98%E5%8C%BA%EF%BC%89"><span class="nav-text">git add（添加到暂存区）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-status%EF%BC%88%E6%9F%A5%E7%9C%8B%E4%BB%93%E5%BA%93%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81%EF%BC%89"><span class="nav-text">git status（查看仓库当前状态）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-commit%EF%BC%88%E6%8F%90%E4%BA%A4%E6%96%B0%E7%89%88%E6%9C%AC%EF%BC%89"><span class="nav-text">git commit（提交新版本）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E6%9A%82%E5%AD%98%E5%8C%BA"><span class="nav-text">工作区和暂存区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E"><span class="nav-text">Git版本说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%8D%E6%AC%A1%E5%88%9B%E5%BB%BA%E6%96%B0%E7%89%88%E6%9C%AC"><span class="nav-text">再次创建新版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80"><span class="nav-text">版本回退</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#git-reset"><span class="nav-text">git reset</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#git-reflog"><span class="nav-text">git reflog</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%92%A4%E9%94%80%E4%BF%AE%E6%94%B9"><span class="nav-text">撤销修改</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#git-checkout"><span class="nav-text">git checkout</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#git-reset-1"><span class="nav-text">git reset</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6"><span class="nav-text">删除文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#git-add"><span class="nav-text">git add</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-rm"><span class="nav-text">git rm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86"><span class="nav-text">分支管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#git-switch-c"><span class="nav-text">git switch -c</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-branch"><span class="nav-text">git branch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-switch"><span class="nav-text">git switch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-merge"><span class="nav-text">git merge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-branch-d"><span class="nav-text">git branch -d</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE%E7%AE%A1%E7%90%86"><span class="nav-text">标签管理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86-GitHub"><span class="nav-text">第二部分 GitHub</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8GitHub"><span class="nav-text">为什么用GitHub?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8GitHub"><span class="nav-text">使用GitHub</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%BB%93%E5%BA%93"><span class="nav-text">创建仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%B8%8A%E4%BC%A0%E6%9B%B4%E6%96%B0"><span class="nav-text">如何上传更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-ignore"><span class="nav-text">git ignore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%B0%E4%BD%8F%E4%B8%80%E5%8F%A5%E8%AF%9D%EF%BC%9A%E6%B0%B8%E8%BF%9C%E9%83%BD%E4%B8%8D%E8%A6%81%E4%B8%8A%E4%BC%A0-node-modules-%E5%88%B0-github%E3%80%82"><span class="nav-text">记住一句话：永远都不要上传 node_modules 到 github。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Rick"
+      src="/images/avatar.jpg">
+  </a>
+  <p class="site-author-name" itemprop="name">Rick</p>
+  <div class="site-description" itemprop="description">一个瞎折腾的博客，不知道能坚持几天</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-sun"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rick</span>
+</div>
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+<!-- 不蒜字统计 -->
+<div>
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_uv">
+    访问人数：<span id="busuanzi_value_site_uv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    总访问量：<span id="busuanzi_value_site_pv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <!-- 添加博客全站总字数统计-->
+  <i class="fa fa-pencil"></i>
+  <span class="post-count">博客全站共 280.7k 字</span>
+</div>
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '',
+      clientSecret: '',
+      repo        : '',
+      owner       : '',
+      admin       : [''],
+      id          : '74325743c91289e02c21d3cd4794af4e',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
