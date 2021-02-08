@@ -6592,6 +6592,7 @@
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
 
 <blockquote>
+<p>IO流的基础知识 </p>
 </blockquote>
 <a id="more"></a>
 
@@ -6612,12 +6613,12 @@
 <p>　　键盘：<code>System.in</code></p>
 <p>　　网络：<code>Socket</code></p>
 <p>对应目的设备：　</p>
-<pre><code>     硬盘：文件 `File`开头</code></pre>
+<p>​        硬盘：文件 <code>File</code>开头</p>
 <p>　　内存：数组，字符串</p>
 <p>　　屏幕：<code>System.out</code></p>
 <p>　　网络：<code>Socket</code></p>
 <p><strong>明确是否需要额外功能</strong></p>
-<p>需要转换—— 转换流 <strong>InputStreamReader 、OutputStreamWriter</strong></p>
+<p>​        需要转换—— 转换流 <strong>InputStreamReader 、OutputStreamWriter</strong></p>
 <p>　　需要高效—— 缓冲流<strong>Bufferedxxx</strong></p>
 <p>　　多个源—— 序列流 <strong>SequenceInputStream</strong></p>
 <p>　　对象序列化—— <strong>ObjectInputStream、ObjectOutputStream</strong></p>
@@ -6720,7 +6721,7 @@
 <td>字符输出流 <strong>Writer</strong></td>
 </tr>
 </tbody></table>
-<p><strong>注</strong>：<br><strong>由这四个类的子类名称基本都是以其父类名作为子类名的后缀</strong>。<br>如：InputStream的子类FileInputStream。<br>如：Reader的子类FileReader。<br><img src="https://img-blog.csdnimg.cn/20191013212051298.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ0NTQzNTA4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>注</strong>：<strong>由这四个类的子类名称基本都是以其父类名作为子类名的后缀</strong>。<br>如：InputStream的子类FileInputStream。<br>如：Reader的子类FileReader。<br><img src="https://img-blog.csdnimg.cn/20191013212051298.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ0NTQzNTA4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h2 id="关于IO的分流向说明"><a href="#关于IO的分流向说明" class="headerlink" title="关于IO的分流向说明"></a>关于IO的分流向说明</h2><p><img src="https://img-blog.csdnimg.cn/20191013151622369.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ0NTQzNTA4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20191015144401127.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ0NTQzNTA4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h2 id="字节流OutputStream与InputStream"><a href="#字节流OutputStream与InputStream" class="headerlink" title="字节流OutputStream与InputStream"></a>字节流OutputStream与InputStream</h2><p>OutputStream与InputStream的继承关系<br><img src="https://img-blog.csdnimg.cn/20191015145625281.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ0NTQzNTA4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h3 id="文件的世界里一切皆为字节"><a href="#文件的世界里一切皆为字节" class="headerlink" title="文件的世界里一切皆为字节"></a>文件的世界里一切皆为字节</h3><p>我们必须明确一点的是，一切文件数据(文本、图片、视频等)在存储时，都是以二进制数字的形式保存，都一个一个的字节，那么传输时一样如此。所以，字节流可以传输任意文件数据。在操作流的时候，我们要时刻明确，无论使用什么样的流对象，底层传输的始终为二进制数据。</p>
@@ -9162,6 +9163,623 @@
       </categories>
       <tags>
         <tag>SpringMVC</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机科学技术之电子计算机</title>
+    <url>/posts/e554ef1e/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+<p>简单了解一下组成电子计算机大脑的电子元件（<strong>控制电子流动的开关</strong>）的概念及其发展：</p>
+</blockquote>
+<a id="more"></a>
+
+<blockquote>
+<p>组成电子计算机大脑的电子元件（<strong>控制电子流动的开关</strong>）的发展：</p>
+<p>​        继电器  –&gt;  真空管  –&gt;  晶体管</p>
+</blockquote>
+<h1 id="继电器"><a href="#继电器" class="headerlink" title="继电器"></a>继电器</h1><blockquote>
+<p><strong>定义</strong>：用电控制的<strong>机械开关。</strong>继电器里，有根”控制线路”，控制电路是开还是关。</p>
+<p>控制线路用于控制电路的开关，它连接着一个线圈，当线圈通电时，会产生感应磁场，由此能够吸引上方的金属臂，从而闭合电路，得到高电平。</p>
+</blockquote>
+<p>1937年最大的机电计算机之一是哈佛的马克一号，是IBM在1944年给二战同盟国建造的。该机器的大脑是由<strong>继电器（relay）</strong>构成的，存在大约3500个继电器。</p>
+<p>继电器采用<strong>机械结构</strong>，机械臂本身有质量，无法快速开关。</p>
+<p><strong>代表</strong>：1937年最大的机电计算机之一是<strong>哈佛</strong>的<strong>马克一号</strong>，是<strong>IBM</strong>在<strong>1944</strong>年给二战同盟国建造的。</p>
+<p><strong>性能：</strong>1940年一个好的继电器1秒能翻转50次。哈佛马克一号1秒能做3次加减法运算，一次乘法需要6秒，除法需要15秒，三角函数需要一分钟以上。</p>
+<p><strong>限制</strong>：</p>
+<ul>
+<li><strong>速度慢</strong></li>
+<li>齿轮<strong>易磨损</strong></li>
+<li>吸引昆虫——&gt;<strong>BUG</strong></li>
+</ul>
+<h1 id="三极真空管"><a href="#三极真空管" class="headerlink" title="三极真空管"></a>三极真空管</h1><p>1904 年，英国物理学家John Ambrose Fleming开发了新的电子组件——<strong>热电子管</strong>，是世界上第一个<strong>真空管</strong>。</p>
+<blockquote>
+<p><strong>热电子管：</strong>把两个电极装在一个气密的真空玻璃灯泡中。其中一个电极A可以加热，从而发射电子，称为<strong>热电子发射（Thermionic emission）</strong>；另一个电极B会吸引电子，来形成电流。但只有当电极B带正电时才能吸引电子，否则当电极B带负电荷或者中性电荷时，电子就无法跨越真空区域。</p>
+<p><strong>真空管</strong>定义：和继电器一样，也是<strong>开关</strong>，控制电路开闭。向”控制”电极施加正电荷，则允许电子流动；施加负电荷，则组织电子流动。</p>
+</blockquote>
+<p>1906年，美国发明家Lee de Forest在此基础上加入了第三个控制电极。通过向控制电极施加正电荷，就能吸引电子，从而闭合电路；而通过施加负电荷，就能闭合电路。</p>
+<p><strong>二极管</strong>（电流只能单向流动的电子部件）改进为<strong>三极管</strong>（加入了第三个 “控制” 电极）。</p>
+<p><strong>性能：</strong>每秒可开闭数千次。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li><strong>更少的磨损</strong>：真空管内部没有运动的机械部件</li>
+<li><strong>每秒可以开闭数千次</strong></li>
+</ul>
+<p><strong>限制</strong>：</p>
+<ul>
+<li>真空管有点<strong>脆弱</strong>，容易故障（玻璃制成，易碎，且像灯泡一样会烧坏</li>
+</ul>
+<p><strong>真空管的出现，</strong>==<strong>标志着计算机从机电转向电子</strong>==</p>
+<p><strong>代表1：</strong>第一个大规模使用真空管的计算机是<strong>巨人1号</strong>，由工程师Tommy Flowers设计并于<strong>1943</strong>年12月完工。</p>
+<ul>
+<li>诞生于英国的”布莱切利园”, 用于破解纳粹通信</li>
+<li><strong>第一个可编程的电子计算机</strong>。但是编程的方法是把几百根电线插入插板，有点像老电话交换机</li>
+<li><strong>编程麻烦，还要配置</strong>。</li>
+</ul>
+<p><strong>代表2：</strong> <strong>电子数值积分计算机ENIAC</strong>，在<strong>1946</strong>年于<strong>宾夕法尼亚大学</strong>设计制造</p>
+<ul>
+<li><strong>第一个真正的通用，可编程，电子计算机</strong></li>
+<li>每秒可执行 5000 次十位数加减法</li>
+</ul>
+<h1 id="晶体管"><a href="#晶体管" class="headerlink" title="晶体管"></a>晶体管</h1><p>1947 年，发明于<strong>贝尔实验室</strong>，标志着一个全新的计算机时代的诞生</p>
+<p>涉及量子力学</p>
+<blockquote>
+<p><strong>晶体管</strong>：类似于继电器和真空管，晶体管也是一个用于控制电路闭合断开的开关。晶体管有两个电极，这两个电极之间通过半导体材料隔开。这里通过控制连接到半导体的电极电荷数，可以控制半导体的导电性，由此来控制电流是否流动。当控制线路通电时，两个电极接通，否则两个电极断开。</p>
+</blockquote>
+<p>晶体管两极之间有一种材料隔开它们，这种材料有时候导电，有时候不导电，称为<strong>半导体</strong>。</p>
+<p><strong>通过控制半导体材料的导电性，来控制电流的流动。</strong></p>
+<p><strong>性能：</strong>每秒可开关10000次。</p>
+<p><strong>优势：</strong></p>
+<ul>
+<li><strong>速度快：每秒可以开关 10,000 次，现在**</strong>每秒可以切换上百万次**</li>
+<li><strong>可靠性高</strong>：晶体管是固态的，比起玻璃的真空管更可靠，能工作几十年</li>
+<li><strong>降低了成本和大小</strong>：晶体管可以远远小于继电器或真空管，导致更小更便宜的计算机</li>
+</ul>
+<p><strong>代表</strong>：第一个消费者可购买的，完全由晶体管构成的计算机是<strong>1957</strong>年发布的<strong>IBM</strong> <strong>608</strong></p>
+<ul>
+<li>有 3000 个晶体管，每秒执行 4500 次加法</li>
+<li>每秒能执行 80 次左右的乘除法</li>
+</ul>
+<p><strong>硅谷</strong>：很多晶体管和半导体开发在圣克拉拉谷，位于旧金山和圣河西之间，由于制造半导体最常见的材料是硅，由此这个地方被称为“硅谷”。并且William Shockley搬过去创建了<strong>肖克利半导体</strong>，里面的员工后来成立了<strong>仙童半导体</strong>，而这里面的员工后来创立了<strong>英特尔</strong>。</p>
+]]></content>
+      <categories>
+        <category>算机科学技术</category>
+      </categories>
+      <tags>
+        <tag>继电器</tag>
+        <tag>真空管</tag>
+        <tag>晶体管</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机科学技术之计算机早期历史</title>
+    <url>/posts/18730745/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+<p>简单了解一下计算机的演变历史</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="计算机早期历史-Early-Computing"><a href="#计算机早期历史-Early-Computing" class="headerlink" title="计算机早期历史 Early Computing"></a><strong>计算机早期历史 Early Computing</strong></h1><p>按时间顺序：</p>
+<p><strong>算盘</strong></p>
+<ul>
+<li>约公元前 2500 年，发明于”美索不达米亚”</li>
+<li>公认<strong>最早的计算设备</strong></li>
+<li>基础版算盘只是<strong>存储</strong>着当前的<strong>计算状态</strong>，类似于如今的硬盘</li>
+<li>每行代表 10 的不同次方（<strong>十进制</strong>）</li>
+</ul>
+<p>各种巧妙的<strong>计算设备 computing devices</strong></p>
+<ul>
+<li>星盘：让船只可以在海上计算纬度</li>
+</ul>
+<p>计算尺：帮助计算乘法和除法</p>
+<ul>
+<li>时钟：算日出，潮汐，天体的位置，或纯粹拿来计时</li>
+</ul>
+<p><strong>computer</strong></p>
+<ul>
+<li>最早使用 “computer” 一词指计算者，即负责计算的人，指代职业</li>
+</ul>
+<p><strong>步进计算器</strong></p>
+<ul>
+<li><strong>第一台能完成 加减乘除 全部四种运算的机器</strong></li>
+</ul>
+<p><strong>计算表</strong></p>
+<ul>
+<li>类似于查字典找答案</li>
+</ul>
+<p><strong>差分机</strong></p>
+<ul>
+<li><strong>能近似多项式</strong></li>
+<li>多项式描述了几个变量之间的关系，比如射程和大气压力，或者 Carrie Anne 要吃多少披萨才开心</li>
+<li>多项式也可以用于近似对数和三角函数</li>
+</ul>
+<p><strong>分析机</strong></p>
+<ul>
+<li><strong>通用计算机</strong> general purpose computer（以往设备只能做特定运算）</li>
+<li> 提出”<strong>自动计算机</strong>“ 的概念，计算机可以自动完成一系列操作，<strong>预示着计算机程序的诞生</strong></li>
+<li>过于超前，没有建成</li>
+</ul>
+<p><strong>打孔卡片制表机</strong> </p>
+<ul>
+<li>解决美国政府在 1890 年的人口普查中面临的问题：10年一次的人口普查却要13年才要完成。</li>
+<li>缩短为2年完成。</li>
+<li>纸卡打孔→针穿过孔→针泡入汞→电路连通→驱动电机→齿轮使计数+1</li>
+<li><strong>IBM</strong> 前身</li>
+</ul>
+]]></content>
+      <categories>
+        <category>计算机科学技术</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>计算机科学技术之从二进制到CPU</title>
+    <url>/posts/a6e7dd8e/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+<p>让我们从“0”开始完成一个CPU吧</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="二进制"><a href="#二进制" class="headerlink" title="二进制"></a>二进制</h1><blockquote>
+<p>二进制，即只用 <strong>开/关</strong> 两种状态也可以代表信息。只需要表示 true 和 false，两个值就够了。电路闭合，电流流过，代表 “真”；电路断开，无电流流过，代表”假”。</p>
+</blockquote>
+<p>计算机最早的是机电设备，一般使用十进制计数，比如用齿轮数来代表十进制。但是其实只用开/关两种状态已经足够表示信息了，将其称为<strong>二进制（Binary）</strong>。</p>
+<p>计算机使用二进制的原因：</p>
+<ul>
+<li>状态越多，越难<strong>区分信号</strong>，且容易受电噪音干扰。每秒百万次变化的晶体管会让这个问题变得更糟。 只用”开”和”关”两种状态，可以尽可能减少这类问题。</li>
+<li>有<strong>布尔代数</strong>这一数学分支存在，专门处理”真”和”假”，已经解决了所有法则和运算。</li>
+</ul>
+<h2 id="二进制原理"><a href="#二进制原理" class="headerlink" title="二进制原理"></a>二进制原理</h2><p>eg. 十进制的183，用二进制表示是10110111</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596442241118-00e3ce1a-8ca0-44ef-b39e-87670d987ebf.png" alt="image.png"></p>
+<h2 id="二进制加法"><a href="#二进制加法" class="headerlink" title="二进制加法"></a>二进制加法</h2><p>eg. 十进制数183和19相加，即二进制数10110111和10011相加</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596442411028-3ebaedf5-2007-4c99-aa7d-e7b8f2e9c1b1.png" alt="image.png"></p>
+<h2 id="存储单位"><a href="#存储单位" class="headerlink" title="存储单位"></a>存储单位</h2><p>二进制中，一个1或0称为一个<strong>位（bit）</strong>。对于8位二进制数，最小为0，最大为255。由于8位二进制数太过常见，因此将其称为<strong>字节（byte）</strong>。而32位和64位操作系统，指的是操作系统是一块块处理数据的，而每块大小是32位或者64位。</p>
+<table>
+<thead>
+<tr>
+<th>位 <strong>bit</strong></th>
+<th>字节 <strong>byte</strong></th>
+<th>千字节 <strong>KB</strong></th>
+<th>兆字节/百万字节 <strong>MB</strong></th>
+<th>千兆字节/十亿字节 <strong>GB</strong></th>
+<th>太字节 <strong>TB</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>1 byte = <strong>8</strong> bits</td>
+<td>1 KB = <strong>1024</strong> bytes</td>
+<td>1 MB = 1024 KB</td>
+<td>1 GB = 1024 MB</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="负数的表示"><a href="#负数的表示" class="headerlink" title="负数的表示"></a>负数的表示</h2><p>大部分计算机用第一位表示正负，1 是负，0 是正，剩下的位数表示数字（32位数就是31位，64位数就是63位）</p>
+<h2 id="浮点数的表示"><a href="#浮点数的表示" class="headerlink" title="浮点数的表示"></a>浮点数的表示</h2><p>除了负数和正数，计算机也要处理非整数，这些称为<strong>浮点数（Floating Point Numbers）</strong>，因为小数点可以在数字间浮动。有好几种表示浮点数的方法，最常见的是<strong>IEEE 754标准</strong>，它使用类似科学计数法的方法来存十进制数，比如625.9可以写成 <img src="https://www.zhihu.com/equation?tex=0.6259%5Ctimes10%5E3" alt="[公式]"> ，其中0.6259称为<strong>有效位数（Significand）</strong>，3称为<strong>指数（Exponent）</strong>。在32位浮点数中，第一位表示数字的正负，接下来的8位存储指数，剩下的23位存储有效位数</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596443948036-2aef5e7c-873b-4d8c-9b4d-6059b581aab4.png" alt="image.png"></p>
+<h2 id="ASCII码——美国信息交换标准代码"><a href="#ASCII码——美国信息交换标准代码" class="headerlink" title="ASCII码——美国信息交换标准代码"></a>ASCII码——美国信息交换标准代码</h2><p>1963年发明了<strong>ASCII（美国信息交换标准代码）</strong>，当时为7位二进制数，能够存放128个不同的值，可以用来表示大小写字母、数字、标点符号等等，并且其中存储了特殊字符，比如换行符、制表符等等。</p>
+<p>但是ASCII有个限制，它是为英语设计的。但是幸运的是一个字节有8位。之前的ASCII只编码了0-127中表示的字符，而128-255的字符是空着的，这些值可以给每个国家保留使用。在美国，这些额外的数字主要用于编码附加符号；在俄罗斯，他们用这些额外的字符表示西里尔字符等等。但是这种方法也存在<strong>缺点：</strong>1. 如果在土耳其电脑上打开拉脱维亚语写的电子邮件，就会出现乱码；2. 像中文和日语这种包含数千字符的语言，根本无法使用8位二进制数来表示所有字符。为了解决这个问题，每个国家发明了<strong>多字节编码方案</strong>，可以使用多个字节来编码字符，但各个国建之间的编码方案不互相兼容。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结:"></a><strong>总结</strong>:</h3><p><strong>7 位代码，可存 128 个不同值</strong></p>
+<p>可以表示大、小写字母，数字，特殊符号等</p>
+<p>限制：为英语设计，表示其他文字存在问题</p>
+<ul>
+<li><p>问题：</p>
+</li>
+<li><ul>
+<li><ul>
+<li>各个国家的标准不同，如果在 土耳其 电脑上打开 拉脱维亚语 写的电子邮件就会乱码<ul>
+<li>中文和日文这样的语言有数千个字符，根本没办法用 8 位来表示所有字符</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>不完全解决办法：一个字节有8位，而不是7位，128 到 255 的字符给各个国家保留使用</p>
+<h2 id="UNICODE-统一码"><a href="#UNICODE-统一码" class="headerlink" title="UNICODE 统一码"></a>UNICODE 统一码</h2><p>由此出现了<strong>Unicode</strong>来统一所有编码的标准，设计于1992年，解决了不同国家不同标准的问题。最常见的Unicode是16位的，有超过一百万个位置来编码字符，编码所有语言的所有字符都足够了，并且还有位置放数学符号、Emoji等等。</p>
+<h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a><strong>总结：</strong></h3><ul>
+<li>是<strong>字符编码标准</strong>，最常见的 Unicode 是 16 位的，有超过一百万个位置，对所有语言的每个字符都够了。</li>
+<li><strong>解决了ASCII码不够表达所有语言的问题</strong></li>
+</ul>
+<h1 id="布尔逻辑和逻辑门-Boolean-Logic-amp-Logic-Gates"><a href="#布尔逻辑和逻辑门-Boolean-Logic-amp-Logic-Gates" class="headerlink" title="布尔逻辑和逻辑门 Boolean Logic &amp; Logic Gates"></a>布尔逻辑和逻辑门 Boolean Logic &amp; Logic Gates</h1><p>使用晶体管实现门控时，可以将控制线作为<strong>输入</strong>，将底部的电极当做<strong>输出</strong>，而上端电极始终保持高电平状态。这样当输入开启时，就会使得两个电极接通，使得输出也会开启；如果输入关闭时，两个电极是断开状态，就会使得输出还是保持关闭状态。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-aa8e4afbad76c864b8faf94d756a1043_1440w.png" alt="img"></p>
+<h2 id="布尔代数三个基本操作"><a href="#布尔代数三个基本操作" class="headerlink" title="布尔代数三个基本操作"></a>布尔代数三个基本操作</h2><h3 id="NOT"><a href="#NOT" class="headerlink" title="NOT"></a>NOT</h3><blockquote>
+<p>NOT 操作把布尔值反转</p>
+</blockquote>
+<p>NOT 操作<strong>真值表</strong>：</p>
+<table>
+<thead>
+<tr>
+<th><strong>INPUT</strong></th>
+<th><strong>OUTPUT</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>TRUE</strong></td>
+<td>FALSE</td>
+</tr>
+<tr>
+<td>FALSE</td>
+<td><strong>TRUE</strong></td>
+</tr>
+</tbody></table>
+<p><strong>符号：</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596101654320-98cb03e0-b3a9-4946-831a-bb7d835ccea9.png" alt="image.png"></p>
+<p><strong>实现：</strong></p>
+<p><img src="https://pic3.zhimg.com/80/v2-98e01f6c43dba82989235c181dbadef6_1440w.jpg" alt="img"></p>
+<p>上方电极接通电源，下方电极接地。当输入开启时，两个电极接通，所有电流都会流向接地，所以使得输出还是关闭状态；当输入关闭时，两个电极还是断开状态，所有电流就会流向输出，使得输出为开启状态。由此就通过晶体管实现了<strong>NOT GATE</strong>。</p>
+<h3 id="AND"><a href="#AND" class="headerlink" title="AND"></a>AND</h3><blockquote>
+<p>如果 2 个输入都是 true，输出才是 true</p>
+</blockquote>
+<p>AND 操作<strong>真值表</strong>：</p>
+<table>
+<thead>
+<tr>
+<th><strong>INPUT A</strong></th>
+<th><strong>INPUT B</strong></th>
+<th><strong>OUTPUT</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>TRUE</strong></td>
+<td><strong>TRUE</strong></td>
+<td><strong>TRUE</strong></td>
+</tr>
+<tr>
+<td><strong>TRUE</strong></td>
+<td>FALSE</td>
+<td>FALSE</td>
+</tr>
+<tr>
+<td>FALSE</td>
+<td><strong>TRUE</strong></td>
+<td>FALSE</td>
+</tr>
+<tr>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+</tr>
+</tbody></table>
+<p><strong>符号：</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596101717846-654480f6-e0e6-4dc2-872d-e188187fbce0.png?x-oss-process=image/resize,w_248" alt="image.png"></p>
+<p><strong>实现：</strong></p>
+<p>这里需要使用两个晶体管来实现<strong>AND GATE</strong></p>
+<p><img src="https://pic3.zhimg.com/80/v2-52ce8f7c558649dfb96615003acf7ca6_1440w.jpg" alt="img">AND GATE</p>
+<p>下方两个电极分别为两个输入，左侧电极接通电源，右侧电极为输出。当两个输入都开启时，电源和输出就会接通，使得输出开启；当任意输入关闭时，电源就不会和输出接通，使得输出保持关闭。</p>
+<h3 id="OR"><a href="#OR" class="headerlink" title="OR"></a>OR</h3><blockquote>
+<p>只有 2 个输入都是 false，OR 的结果才是 false</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th><strong>INPUT A</strong></th>
+<th><strong>INPUT B</strong></th>
+<th><strong>OUTPUT</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>TRUE</strong></td>
+<td><strong>TRUE</strong></td>
+<td><strong>TRUE</strong></td>
+</tr>
+<tr>
+<td><strong>TRUE</strong></td>
+<td>FALSE</td>
+<td><strong>TRUE</strong></td>
+</tr>
+<tr>
+<td>FALSE</td>
+<td><strong>TRUE</strong></td>
+<td><strong>TRUE</strong></td>
+</tr>
+<tr>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+</tr>
+</tbody></table>
+<p><strong>符号：</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596101754326-effed64c-3176-4e58-ba75-886dbe60dc72.png?x-oss-process=image/resize,w_258" alt="image.png"></p>
+<p><strong>实现：</strong></p>
+<p>同样使用两个晶体管实现<strong>OR GATE</strong></p>
+<p><img src="https://pic2.zhimg.com/80/v2-fda2d5cd50eb2f760f0a2ac72eb5efe5_1440w.jpg" alt="img"></p>
+<h2 id="XOR-异或"><a href="#XOR-异或" class="headerlink" title="XOR 异或"></a>XOR 异或</h2><blockquote>
+<p>想要 XOR 输出 true ，一个输入必须是 true，另一个必须是 false</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th><strong>INPUT A</strong></th>
+<th><strong>INPUT B</strong></th>
+<th><strong>OUTPUT</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>TRUE</strong></td>
+<td><strong>TRUE</strong></td>
+<td>FALSE</td>
+</tr>
+<tr>
+<td><strong>TRUE</strong></td>
+<td>FALSE</td>
+<td><strong>TRUE</strong></td>
+</tr>
+<tr>
+<td>FALSE</td>
+<td><strong>TRUE</strong></td>
+<td><strong>TRUE</strong></td>
+</tr>
+<tr>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+</tr>
+</tbody></table>
+<p><strong>符号：</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596101899904-a8a7496e-c86d-4855-b031-865172644ba2.png" alt="image.png"></p>
+<p><strong>实现：</strong></p>
+<p>XOR 可由 与或非门组合而成：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596101882037-c12f65f0-6f1a-4fba-8893-50401821162d.png" alt="image.png"></p>
+<h1 id="算术逻辑单元-ALU"><a href="#算术逻辑单元-ALU" class="headerlink" title="算术逻辑单元 ALU"></a>算术逻辑单元 ALU</h1><p>我们知道了如何在计算机中用二进制来表示数字，<strong>表示</strong>和<strong>存储</strong>数字是计算机的重要功能，但真正的目标是<strong>计算</strong>、有意义地处理数字，这些操作由计算机的<strong>算术逻辑单元（Arithmetic and Logic Unit，ALU）</strong>处理。ALU是计算机的数学大脑，是计算机里负责所有运算的组件，所以基本其他所有部件都会用到它。</p>
+<p><strong>典型的 ALU 设备：</strong> <strong>英特尔 74181</strong>，1970年发布时，它是<strong>第一个封装在单个芯片内的完整ALU</strong>，能够处理4位输入，使用了70个逻辑门，但不能执行乘除法。</p>
+<h2 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h2><p><strong>ALU 有 2 个单元：1 个算术单元和 1 个逻辑单元</strong></p>
+<h3 id="算术单元"><a href="#算术单元" class="headerlink" title="算术单元"></a>算术单元</h3><ul>
+<li><p><strong>负责计算机里的所有数字操作</strong>（eg. 加减法、增量运算/+1）</p>
+</li>
+<li><p><strong>8个基础功能</strong>：加法 ADD、带进位的加法 ADD WITH CARRY 、减法 SUBTRACT、带借位的减法 SUBTRACT WITH BORROW、取反 NEGATE、增量（+1） INCREMENT、减量（-1） DECREMENT、数字无改变通过 PASS THROUGH</p>
+</li>
+<li><p>简单处理器通过多次ALU（加法）实现乘法</p>
+</li>
+<li><p>更好的处理器有专门做乘法的算术单元</p>
+</li>
+</ul>
+<h4 id="半加器（处理1个bit的加法，2个输入）"><a href="#半加器（处理1个bit的加法，2个输入）" class="headerlink" title="半加器（处理1个bit的加法，2个输入）"></a>半加器（处理1个bit的加法，2个输入）</h4><blockquote>
+<p>半加器用来处理两个输入的加法运算，输出<code>进位(CARRY)</code>与<code>和(SUM)</code></p>
+</blockquote>
+<p>最简单的加法电路，就是拿2个bit加在一起。这里有两个输入A和B，以及一个输出就是这两个数字的和。<strong>注意：</strong>A、B和输出都是单个bit的。将这个结果用真值表表示</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596459312165-7c6fbde6-7ddf-4908-8da2-465f98a5be34.png" alt="image.png"></p>
+<p>可以发现和XOR操作的真值表相同，所以可以把XOR门用作<strong>1位加法器（1-bit adder）。</strong></p>
+<p>但其中一个特殊的结果是 <img src="https://www.zhihu.com/equation?tex=1+1=10" alt="[公式]"> ，其中存在进位，而使用XOR门的输出只能表示加法的结果，还需要另一个电路表示进位的结果，可以发现其真值表和ADN门真值表相同，所以可以使用AND门来表示进位，称为<strong>半加器（Half adder）</strong>。</p>
+<p>用 AND，OR，NOT 和 XOR 逻辑门构建半加器电路：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596459338587-1d558cc2-2033-4f3a-aa5b-25d9525f9aaf.png" alt="image.png"></p>
+<p>由于半加器是比较基础的部件，所以可以将其抽象成一个单独部件，其中有两个输入，并且输出相加后的总和和进位。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596459545541-62496618-6ea6-43a9-9e55-d2f761c5a27a.png" alt="image.png"></p>
+<h4 id="全加器（处理1个bit的加法，3个输入）"><a href="#全加器（处理1个bit的加法，3个输入）" class="headerlink" title="全加器（处理1个bit的加法，3个输入）"></a>全加器（处理1个bit的加法，3个输入）</h4><blockquote>
+<p>全加器用来处理3个输入的加法运算（两个加数 + 上一级传过来的进位）</p>
+</blockquote>
+<p>如果想要处理多位二进制数加法时，就需要<strong>全加器（Full Adder）</strong>，因为半加器计算完当前位的结果后，会输出进位，意味着计算下一位的结果时，要将两个输入以及前一位的进位相加。我们可以得到全加器的真值表</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596459784121-b5f7e598-882c-47ec-b2c6-18101d9fa98c.png?x-oss-process=image/resize,w_610" alt="image.png"></p>
+<p>我们这里可以使用半加器来实现全加器。我们可以将一个半加器结果当做是INPUT A 和INPUT B相加后的结果，然后将SUM当做是新的INPUT A，而PRE CARRY当做是新的INPUT B输入到新的半加器中，可以发现其SUM结果和全加器SUM结果相同。而全加器的CARRY只要对这两个半加器的CARRY进行OR运算就可以了。（<strong>注意：</strong>这两个半加器不会同时出现进位）</p>
+<p>用半加器和逻辑门构建全加器：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596459891787-24d6064c-0e50-42df-8beb-40a8a68cd679.png?x-oss-process=image/resize,w_778" alt="image.png"></p>
+<p>同样我们也可以对全加器进行抽象，得到一个包含三个输入和两个输出的独立部件：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596460061870-a082aded-a73e-4eaf-a6b7-db3f19ab7e51.png" alt="image.png"></p>
+<p>由此我们可以进行两个8位数字相加，表示为A和B</p>
+<ol>
+<li>对A和B的第一位进行相加时，由于不存在进位，所以值使用一个半加器就能实现，这个半加器的SUM就为该位的结果，CARRY就为进位。</li>
+<li>后续的7位二进制相加，由于每一个都涉及了上一位的进位，所以后续需要7个全加器，并且每个全加器的CARRY要连接到下一个全加器的输入，而每个全加器的SUM就为该位的结果。</li>
+<li>最后一个全加器有CARRY的输出，如果该CARRY为1，就表示相加结果太大了，超出了8位，所以出现了<strong>溢出（overflow）</strong>。</li>
+</ol>
+<blockquote>
+<p><strong>溢出：</strong>一般来说 “溢出” 的意思是, 两个数字的和太大了，超过了用来表示的位数，这会导致错误和不可预期的结果。</p>
+</blockquote>
+<h4 id="由此，我们就构建出了一个8位加法器（8-bit-adder）（处理8bit加法，1个半加器-7个全加器）"><a href="#由此，我们就构建出了一个8位加法器（8-bit-adder）（处理8bit加法，1个半加器-7个全加器）" class="headerlink" title="由此，我们就构建出了一个8位加法器（8-bit adder）（处理8bit加法，1个半加器 + 7个全加器）"></a>由此，我们就构建出了一个<strong>8位加法器（8-bit adder）</strong>（处理8bit加法，1个半加器 + 7个全加器）</h4><p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596460359723-0a114112-c769-429d-b00b-6f3e6556566c.png?x-oss-process=image/resize,w_1492" alt="image.png"></p>
+<p>通过连接1个半加器和n-1个全加器，就能构建n位加法器。通过叠加更多的加法器，能够避免溢出的出现，但是会出现更多的逻辑门，而且每次进位都要一些时间，而计算是串行的，所以消耗的时间也越长，到如今的每秒几十亿次运算时就会造成影响，所以现代计算机用的加法电路有所不同，称为<strong>超前进位加法器（Carry-Look-Ahead Adder）。</strong></p>
+<p><strong>ALU通常支持以下操作：</strong>加法、带进位的加法、减法、带借位的减法、取反、增1、减1、数字无改变通过。这些操作也是由逻辑门构成的。<strong>注意：</strong>简单的ALU并不支持乘法，而是把乘法用多次加法来实现，而更好的处理器有专门做乘法的算数单元。</p>
+<h3 id="逻辑单元"><a href="#逻辑单元" class="headerlink" title="逻辑单元"></a>逻辑单元</h3><ul>
+<li>逻辑单元<strong>执行逻辑操作</strong>，eg. AND，OR 和 NOT 操作；做简单的数值测试，比如判断一个数字是不是负数</li>
+<li>example：检测数字是否为0的电路：</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596461230955-35c5bc84-07cb-44ab-bd8a-3f9d5828ffe0.png" alt="image.png"></p>
+<h2 id="ALU-符号"><a href="#ALU-符号" class="headerlink" title="ALU 符号"></a>ALU 符号</h2><p>对整个8位ALU进行抽象，用一个特殊的V形符号进行表示。其中有两个<strong>8位输入</strong>，并且有一个4位<strong>操作码（Operation Code）</strong>来告诉ALU对输入执行什么操作，比如1000表示加法命令，1100表示减法命令，然后有一个<strong>8位输出</strong>。同时ALU会输出一系列1位<strong>标志（FLAG）</strong>，来表示特定状态，比如我们可以计算A-B，然后通过ZERO来判断结果是否为零来判断A与B是否相等，通过NEGATIVE来判断A是否小于B；然后OVERFLOW连接到加法器的进位，来判断是否出现溢出。</p>
+<p><strong><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596461447760-4e30373e-c5b4-418d-a96a-fe34e47788b1.png?x-oss-process=image/resize,w_838" alt="image.png"></strong></p>
+<p>利用ALU输出的flag，可以用来检测是否溢出、是否相等、是否小于等</p>
+<h1 id="随机存储器（RAM，即内存）"><a href="#随机存储器（RAM，即内存）" class="headerlink" title="随机存储器（RAM，即内存）"></a>随机存储器（RAM，即内存）</h1><p><strong>存储（memory）</strong>分为<strong>随机存储器（RAM，即内存）</strong>和<strong>持久存储（persistent memory）</strong>，前者只能在有电的情况下存储东西，后者则在电源关闭时也不会丢失数据。</p>
+<p>接下来我们将从实现 只能存储 1 位的电路开始，逐步扩大（抽象、套娃），最后制作出<strong>内存</strong>模块。</p>
+<h2 id="锁存器-Gated-Latch-存-1-位"><a href="#锁存器-Gated-Latch-存-1-位" class="headerlink" title="锁存器 Gated Latch - 存 1 位"></a>锁存器 Gated Latch - 存 1 位</h2><h3 id="OR-门-记录‘1’的电路"><a href="#OR-门-记录‘1’的电路" class="headerlink" title="OR 门 - 记录‘1’的电路"></a>OR 门 - 记录‘1’的电路</h3><p>之前构建的都是单向电路，我们同样可以构建回向电路，把输出连回输入。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596542718222-7034a5e8-616b-41f9-90fe-daa249a2ad46.png?x-oss-process=image/resize,w_726" alt="image.png"></p>
+<p>当将OR门构建成回向电路时，可以分析其电路特性</p>
+<ol>
+<li>A和B初始为0时，输出结果为0</li>
+<li>将A修改为1时，输出结果为1，此时B的输入就变为了1。随后输出始终保持为1，不论A如何变化。</li>
+</ol>
+<p>所以这个电路能够<strong>永久记录1</strong>，并且无法将1变回0。</p>
+<h3 id="AND-门-记录‘0’的电路"><a href="#AND-门-记录‘0’的电路" class="headerlink" title="AND 门 - 记录‘0’的电路"></a>AND 门 - 记录‘0’的电路</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596542813502-59371aab-a73a-4758-97d1-62902864cf1b.png" alt="image.png"></p>
+<p>当将OR门构建成回向电路时，可以分析其电路特性</p>
+<ol>
+<li>A和B初始为0时，输出结果为0</li>
+<li>将A修改为1时，输出结果为1，此时B的输入就变为了1。随后输出始终保持为1，不论A如何变化。</li>
+</ol>
+<p>所以这个电路能够永久记录1，并且无法将1变回0。</p>
+<h3 id="AND-OR-锁存器"><a href="#AND-OR-锁存器" class="headerlink" title="AND-OR 锁存器"></a>AND-OR 锁存器</h3><p>所以我们就得到了能够存储1和0的电路，为了得到有用的Memory，需要将两个电路结合起来，可以得到<strong>AND-OR锁存器（AND-OR Latch）</strong>，上方的是SET输入，下方的是RESET输入，当SET=1、RESET=0，就能将输出设置为1，当RESET=1，就能将输出设置为0，当SET=0、RESET=0，则输出最后放入的内容。由此能够存储1位的信息（该信息存储在OR门上方的输入电极中）！</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596542983455-40ecffa7-5d01-46bb-ad1c-df01fb0c0de6.png" alt="image.png"></p>
+<table>
+<thead>
+<tr>
+<th><strong>设置 SET</strong></th>
+<th><strong>复位 RESET</strong></th>
+<th><strong>输出 OUTPUT</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td><strong>0</strong></td>
+<td><strong>0</strong></td>
+<td><strong>输出最后放入的内容，即存储了 1 位内容</strong></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>技巧：</strong>当OR门其中一个输入为0，或AND门其中一个输入为1，则相当于另一个输入直接穿过这个门。当OR门其中一个输入为1，则直接输出1；当AND门其中一个门为0，则直接输出0。</p>
+</blockquote>
+<p>这叫”锁存”, 因为它”锁定”了一个值，放入数据的动作叫 “写入” ，拿出数据的动作叫 “读取”。</p>
+<h3 id="门锁-GATED-LATCH"><a href="#门锁-GATED-LATCH" class="headerlink" title="门锁 GATED LATCH"></a>门锁 GATED LATCH</h3><p>为了更易用，将 SET 和 RESET 两条输入线合为一条<strong>数据输入线</strong>（将锁存器设为0 或 1来存储值），另外增加一条<strong>允许写入线</strong>来启用内存，启用时允许写入，不启用则锁定。修改后电路图如下：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596543687157-aa4df334-5fc9-403b-a7ad-694c434e77e9.png" alt="image.png"></p>
+<p>其中DATE INPUT表示数据输入，WRITE ENABLE表示允许写入线，用来控制是否保存当前输入的数据。对这个电路进行分析。</p>
+<ol>
+<li><p>当WRITE ENABLE=1时，电路可以化简为以下形式。当数据输入为0时，AND门可以忽略OR门的输出，直接输出0，并且OR门上方电极也将保存0。当数据输入为1时，相当于忽略了AND门，OR门的输出直接和OUTPUT相连，OR门输出1，并且OR门上方电极也将保存1。所以，<strong>当WRITE ENABLE=1时，数据输入会直接传到输出，而且数据输入会保存在OR门的上方电极，进行数据存储。</strong></p>
+</li>
+<li><p>当WRITE ENABLE=0时，电路可化简为以下形式。此时能够忽略AND门，直接将OR门的输出当做OUTPUT，而OR门的输出其实就是上方电极的数据，由于上方电极就是当前OUTPUT的数据，所以会保持OUTPUT不变。所以，<strong>当WRITE ENABLE=0时，会忽略数据输入，保持OUTPUT不变。</strong></p>
+</li>
+</ol>
+<p>可以将门锁进行<strong>抽象</strong>，得到一个能够存储一个bit的部件。当允许写入线为0时，输出保持不变，当允许写入线为1时，输出就是数据输入，并且能够将数据输入进行存储。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596544119899-efb3ebb3-8f91-46b7-b596-47e6743a12df.png" alt="image.png"></p>
+<h2 id="寄存器-Register-存-N-位"><a href="#寄存器-Register-存-N-位" class="headerlink" title="寄存器 Register - 存 N 位"></a>寄存器 Register - 存 N 位</h2><p><strong>定义</strong>：将 N 个锁存器组合，即可存储 N 位信息，这样一组锁存器称为<strong>寄存器</strong>。</p>
+<p>寄存器能存一个数字，这个数字有多少位，叫 <strong>位宽</strong>。</p>
+<p>早期电脑用 8 位寄存器，然后是 16 位，32 位，而现在许多计算机都有 64 位宽的寄存器。</p>
+<h3 id="并排排放"><a href="#并排排放" class="headerlink" title="并排排放"></a>并排排放</h3><p>写入寄存器之前，要先启动里面所有的锁存器，可以将所有锁存器的允许写入线都连接在一起，把它设为1，然后用8条数据线发送数据，然后将允许写入线设回0，就能将8位数据存储在寄存器中。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596544679422-5a19f2f6-0cd7-4538-9935-060ac677ee6b.png" alt="image.png"></p>
+<h3 id="矩阵"><a href="#矩阵" class="headerlink" title="矩阵"></a>矩阵</h3><p>如果使用并排排放锁存器的方式，要存储 256 位，寄存器就需要连接 513 根线（256条输入，256条输出，1条启用写入线），过于庞大。解决办法就是使用<strong>矩阵</strong>。</p>
+<p>在<strong>矩阵</strong>中，不再并列排放锁存器，而是以网格的形式排放。</p>
+<p>如下图所示是一个 16 × 16 的矩阵，能存储256位，但一共只需要连接 35 条线（16条行线、16条列线用于选择相应的锁存器，还有 1 条数据线， 1 条公用的启用写入线，1 条允许读取线）</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596545502440-4bcd5a96-49af-45ac-839c-5e44ac42789a.png" alt="image.png"></p>
+<p>要启用某个锁存器十就打开相应的行线和列线</p>
+<h4 id="多路复用器"><a href="#多路复用器" class="headerlink" title="多路复用器"></a>多路复用器</h4><p>使用矩阵，我们需要指定行和列。针对以上 16 ×16 的门锁矩阵，需要 4bits 表示行地址，4bits 表示列地址。</p>
+<p>eg. 12 行 8 列表示为：1100 1000。</p>
+<p>为了将地址转化为行和列，要用到 <strong>2 个多路复用器，一个用于处理行，一个用于处理列</strong>。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596546284888-df300797-d236-4200-8fe1-e6b57a21d831.png" alt="image.png"></p>
+<p>将以上 256 位内存看作一个整体，提升一层<strong>抽象</strong>，如下图所示。输入一个 8 位地址：4 位代表列，4 位代表行。还有 1 条数据线， 1 条允许写入线，1 条允许读取线。（<strong>注意：每次只能选择一个锁存器，所以数据线只能读写1bit数据</strong>）</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596546701434-f1ef5677-dc1f-4275-b168-fb7514b4ab77.png" alt="image.png"></p>
+<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><p>对其再进步一扩展，可以将8个256位内存拼在一起，这样就<strong>能一次读写8bit数据</strong>，也就是一个字节数据。由于每个256位内存都使用相同的8位数据线，因此8位数据会存在每个256位内存的相同地址中，并且第一个256位内存存放第一位，第二个256位内存存放第二位，以此类推。这个模块可以在256个地址中存储256个字节。<strong>（由于这种设计，所以计算机中以一个字节为寻址的最小单位）</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596546937449-4a59346f-d273-4a61-8ab4-33afeb8e1bd7.png" alt="image.png"></p>
+<p>可以对其进行抽象，看成一个整体的<strong>可寻址内存</strong>，其中有256个地址，每个地址能读写一个字节的值。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596547304699-7f0bfcd4-321e-4372-998b-12a407488c0f.png" alt="image.png"></p>
+<p><strong>内存的一个重要特性是：可以随时访问任何位置，因此叫 “随机存取存储器” ，简称 RAM。</strong></p>
+<blockquote>
+<p>RAM中存储的数据是保存在OR门其中一个电极上，所以断电后就无法保存。</p>
+</blockquote>
+<p>通过一层层的抽象（俄罗斯套娃），可以把内存打包到更大规模</p>
+<p>我们用锁存器做了一块<strong>静态随机存取存储器（Static Random-Access Memory，SRAM）</strong>，还有很多其他类型的RAM，比如DRAM、闪存和NVRAM，它们的功能和SRAM相似，但是使用不同的电路存放单个位。但是根本上，这些技术都是矩阵层层嵌套来存储大量信息。</p>
+<p>现代计算机可以在此基础上将内存扩展到MB和GB级别。我们这里使用8个16x16门锁矩阵可以得到256字节的内存，然后可以用4位表示行4位表示列来进行寻址，由此可以将门锁矩阵扩展到更大范围，但是需要更多位来表示地址。所以对于nxn门锁矩阵，存储空间为 <img src="https://www.zhihu.com/equation?tex=n%5E2" alt="[公式]"> 字节，需要的寻址空间为 <img src="https://www.zhihu.com/equation?tex=n%5E2" alt="[公式]">。比如要给千兆字节的内存寻址，就需要32位的地址。</p>
+<h1 id="中央处理器-CPU-The-Central-Processing-Unit-CPU"><a href="#中央处理器-CPU-The-Central-Processing-Unit-CPU" class="headerlink" title="中央处理器(CPU) The Central Processing Unit(CPU)"></a>中央处理器(CPU) The Central Processing Unit(CPU)</h1><p>将我们之前实现好的ALU和RAM组合在一起，就能组建计算机的心脏——<strong>中央处理单元（Central Processing Unit，CPU）</strong></p>
+<p>CPU负责执行程序，而程序由一个个操作组成，这些操作称为<strong>指令（Instruction）</strong>，用来指示计算机要做什么。如果是数学指令，比如加减，CPU就会让ALU进行数学运算；如果是内存指令，CPU就会和内存通信，然后读写值。</p>
+<h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><ul>
+<li><p><strong>程序</strong>：由一条条<strong>指令</strong>组成。程序存储在内存中。</p>
+</li>
+<li><p><strong>指令</strong>：指示计算机要做什么。</p>
+</li>
+<li><p>如下图所示是一张<strong>指令表</strong>，假设 8 位指令，前 4 位代表操作码，指向相应的指令；后 4 位代表数据来自哪里，可以是寄存器或内存地址。</p>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596615187481-8dc6d121-9a9a-44e7-a28b-ba458aee3621.png" alt="image.png"></p>
+<ul>
+<li><p><strong>CPU的功能</strong>：中央处理单元，与RAM配合，<strong>负责执行程序</strong>。</p>
+</li>
+<li><p><strong>数学指令</strong>（eg. 加/减）：CPU 让 ALU 进行数学运算</p>
+</li>
+<li><p><strong>内存指令</strong>：CPU 和内存进行通信，然后读/写值</p>
+</li>
+<li><p><strong>微体系架构</strong>：把重点放在功能，而不是一根根线具体怎么连，当我们用一条线连接两个组件时，这条线只是所有必须线路的一个抽象，这种高层次视角叫  “<strong>微体系架构</strong>“。</p>
+</li>
+</ul>
+<h2 id="CPU的组成"><a href="#CPU的组成" class="headerlink" title="CPU的组成"></a>CPU的组成</h2><p><strong>寄存器</strong>：用来 <strong>临时存数据 和 操作数据</strong></p>
+<ul>
+<li><strong>通用寄存器</strong>：存储任意数据</li>
+<li><strong>指令地址寄存器</strong>/<strong>指令计数器</strong>：存放当前指令的内存地址（追踪程序运行到哪里了）。能自动形成下一条指令的地址（+1）</li>
+<li><strong>指令寄存器</strong>：存储指令</li>
+</ul>
+<p><strong>运算器 ALU</strong>：负责算数和逻辑运算</p>
+<ul>
+<li><p><strong>控制器/控制单元</strong>：控制整个 CPU 的工作，保证 程序的正确执行 以及 能够处理异常事件。</p>
+</li>
+<li><p>eg. 指令解码由控制单元的逻辑电路完成。</p>
+</li>
+<li><p><strong>包含 指令地址寄存器 和 指令寄存器 等</strong>。</p>
+</li>
+</ul>
+<p><strong>时钟</strong>：负责管理CPU的节奏</p>
+<ul>
+<li><p>时钟以精确的间隔触发电信号，控制单元会用这个信号，推进 CPU 的内部操作，确保一切按步骤进行。</p>
+</li>
+<li><p>CPU “取指令→解码→执行” 中每一步的时间为一个周期，每一步的速度叫 “<strong>时钟速度</strong>“，单位是<strong>赫兹</strong>，代表 多少个周期每秒。</p>
+</li>
+<li><p>eg. 6 分钟 4 条指令，每条指令包含取指令、解码、执行这 3 个周期，则时钟速度为 4 × 3 / 360 = 0.033 赫兹</p>
+</li>
+<li><p><strong>超频</strong>：加快时钟速度，提升性能</p>
+</li>
+<li><p><strong>降频</strong>：减慢时钟速度，省电</p>
+</li>
+<li><p><strong>动态调整频率</strong>：很多现代处理器可以按需求  加快或减慢时钟速度</p>
+</li>
+</ul>
+<p>将以上组件提升一层新的<strong>抽象</strong>，变成一个独立的 CPU 组件，如下图所示。</p>
+<p>RAM 是在 CPU 外面的独立组件，CPU 和 RAM 之间用 “地址线”  “数据线” 和 “允许读/写线” 进行通信。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596620628301-45ea1c24-0d1a-43f7-b116-bbdc6a9560aa.png?x-oss-process=image/resize,w_1492" alt="image.png"></p>
+<h1 id="CPU-执行指令的流程"><a href="#CPU-执行指令的流程" class="headerlink" title="CPU 执行指令的流程"></a>CPU 执行指令的流程</h1><blockquote>
+<p>取指令  –&gt;  解码  –&gt;  执行</p>
+</blockquote>
+<h2 id="取指令阶段-FETCH-PHASE"><a href="#取指令阶段-FETCH-PHASE" class="headerlink" title="取指令阶段 FETCH PHASE"></a>取指令阶段 FETCH PHASE</h2><p>取指令阶段负责拿到指令。</p>
+<ul>
+<li><p>首先，指令地址寄存器连接到 RAM。</p>
+<blockquote>
+<p>由于当我们启动计算机时，所有寄存器从0开始，所以指令地址寄存器中的值为0，将指令地址寄存器与RAM的地址线相连，然后开启RAM的允许读取线，就能使得RAM返回地址0中保存的值，并且将RAM的数据线和指令寄存器相连，就能将存放到指令寄存器中。</p>
+</blockquote>
+</li>
+<li><p>若当前指令地址寄存器中存储的指令地址为address，则RAM返回address对应的值（指令），并复制到指令寄存器</p>
+</li>
+</ul>
+<p>如下图所示，初始时，各个寄存器初始值都为0，因此RAM返回地址0对应的值。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596616068373-9a0b17d2-23a4-4c56-bbfd-66022522978e.png?x-oss-process=image/resize,w_1492" alt="image.png"></p>
+<h2 id="解码阶段-DECODE-PHASE"><a href="#解码阶段-DECODE-PHASE" class="headerlink" title="解码阶段 DECODE PHASE"></a>解码阶段 DECODE PHASE</h2><ul>
+<li>将指令寄存器中的指令参照指令表</li>
+</ul>
+<p>这里的例子，指令前四位代表操作码，后四位代表数据来源（内存或寄存器地址）</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596616976387-8b02601f-869e-4c1f-ba3e-9b4ca24bc954.png?x-oss-process=image/resize,w_1492" alt="image.png"></p>
+<p><strong>指令解码由控制单元（Control Unit）进行</strong>。可通过简单的逻辑门电路对指令进行解码，如下图所示。不同的指令由不同的逻辑电路解码。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596617109711-1450db2c-566e-4da0-b153-42a3bb5d238b.png?x-oss-process=image/resize,w_732" alt="image.png"></p>
+<h2 id="执行阶段-EXECUTE-PHASE"><a href="#执行阶段-EXECUTE-PHASE" class="headerlink" title="执行阶段 EXECUTE PHASE"></a>执行阶段 EXECUTE PHASE</h2><p>以指令 0010 1110 为例，该指令操作码是0010，解码为 LOAD_A 指令：</p>
+<ul>
+<li>用”检查是否 LOAD_A 指令的电路”，可以打开 RAM 的 “允许读取线”</li>
+<li>把地址 14（1110） 传给 RAM</li>
+<li>用 “检查是否 LOAD_A 指令的电路” 启用寄存器 A 的 “允许写入线”</li>
+<li>把 RAM 地址 14 的值存储到寄存器A中</li>
+<li>指令执行结束，<strong>指令地址寄存器中的地址 +1</strong></li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596617938534-6928702f-f485-4bb9-b34a-ee89e9f54aab.png?x-oss-process=image/resize,w_1492" alt="image.png"></p>
+<p>以指令 1000 0100 为例，该指令操作码是1000，解码为 ADD 指令；第一个地址是 01, 代表寄存器B，第二个地址是 00, 代表寄存器A。该指令代表把寄存器 B 的值，加到寄存器 A 里：</p>
+<ul>
+<li>启用寄存器 B（寄存器地址01），作为 ALU 的第一个输入</li>
+<li>启用寄存器 A（寄存器地址00），作为 ALU 的第二个输入</li>
+<li>传递 ADD 操作码给 ALU，使 ALU 明确其要进行的是加法操作</li>
+<li>控制单元用一个自己的寄存器暂时保存结果 0001 0001（3+4=17）</li>
+<li>关闭 ALU，然后把值写入正确的寄存器 A 。（先保存到控制单元的临时寄存器，关闭ALU后再写入寄存器A，否则会不断和自己相加）</li>
+<li><strong>指令地址 + 1</strong></li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596618833588-96289e30-a4bf-485e-8643-dc9cb55ec78a.png?x-oss-process=image/resize,w_1492" alt="image.png"></p>
+<p>所以控制单元必须传递ADD操作码告诉它要做什么</p>
+<p>以指令 0100 1101 为例，该指令操作码是0100，解码为 STORE_A 指令：</p>
+<ul>
+<li>打开 RAM 的允许写入线</li>
+<li>把地址 13（1101） 传给 RAM</li>
+<li>打开寄存器 A 的 “允许读取线”</li>
+<li>把寄存器 A 里的值，传给 RAM，保存到 RAM 地址 13</li>
+<li><strong>指令地址 + 1</strong></li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596619378433-732fea03-3c49-4fb2-a1da-450a6972958a.png?x-oss-process=image/resize,w_1492" alt="image.png"></p>
+]]></content>
+      <categories>
+        <category>计算机科学技术</category>
+      </categories>
+      <tags>
+        <tag>二进制</tag>
+        <tag>逻辑门</tag>
+        <tag>ALU</tag>
+        <tag>RAM</tag>
+        <tag>CPU</tag>
       </tags>
   </entry>
 </search>

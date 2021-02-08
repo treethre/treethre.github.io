@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="简单了解一下组成电子计算机大脑的电子元件（控制电子流动的开关）的概念及其发展：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机科学技术之电子计算机">
+<meta property="og:url" content="http://example.com/posts/e554ef1e/index.html">
+<meta property="og:site_name" content="Rick Blog">
+<meta property="og:description" content="简单了解一下组成电子计算机大脑的电子元件（控制电子流动的开关）的概念及其发展：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-08T11:54:21.000Z">
+<meta property="article:modified_time" content="2021-02-08T13:45:03.538Z">
+<meta property="article:author" content="Rick">
+<meta property="article:tag" content="继电器">
+<meta property="article:tag" content="真空管">
+<meta property="article:tag" content="晶体管">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/posts/e554ef1e/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>计算机科学技术之电子计算机 | Rick Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Rick Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/e554ef1e/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Rick">
+      <meta itemprop="description" content="一个瞎折腾的博客，不知道能坚持几天">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rick Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机科学技术之电子计算机
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-08 19:54:21 / 修改时间：21:45:03" itemprop="dateCreated datePublished" datetime="2021-02-08T19:54:21+08:00">2021-02-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">算机科学技术</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+<p>简单了解一下组成电子计算机大脑的电子元件（<strong>控制电子流动的开关</strong>）的概念及其发展：</p>
+</blockquote>
+<a id="more"></a>
+
+<blockquote>
+<p>组成电子计算机大脑的电子元件（<strong>控制电子流动的开关</strong>）的发展：</p>
+<p>​        继电器  –&gt;  真空管  –&gt;  晶体管</p>
+</blockquote>
+<h1 id="继电器"><a href="#继电器" class="headerlink" title="继电器"></a>继电器</h1><blockquote>
+<p><strong>定义</strong>：用电控制的<strong>机械开关。</strong>继电器里，有根”控制线路”，控制电路是开还是关。</p>
+<p>控制线路用于控制电路的开关，它连接着一个线圈，当线圈通电时，会产生感应磁场，由此能够吸引上方的金属臂，从而闭合电路，得到高电平。</p>
+</blockquote>
+<p>1937年最大的机电计算机之一是哈佛的马克一号，是IBM在1944年给二战同盟国建造的。该机器的大脑是由<strong>继电器（relay）</strong>构成的，存在大约3500个继电器。</p>
+<p>继电器采用<strong>机械结构</strong>，机械臂本身有质量，无法快速开关。</p>
+<p><strong>代表</strong>：1937年最大的机电计算机之一是<strong>哈佛</strong>的<strong>马克一号</strong>，是<strong>IBM</strong>在<strong>1944</strong>年给二战同盟国建造的。</p>
+<p><strong>性能：</strong>1940年一个好的继电器1秒能翻转50次。哈佛马克一号1秒能做3次加减法运算，一次乘法需要6秒，除法需要15秒，三角函数需要一分钟以上。</p>
+<p><strong>限制</strong>：</p>
+<ul>
+<li><strong>速度慢</strong></li>
+<li>齿轮<strong>易磨损</strong></li>
+<li>吸引昆虫——&gt;<strong>BUG</strong></li>
+</ul>
+<h1 id="三极真空管"><a href="#三极真空管" class="headerlink" title="三极真空管"></a>三极真空管</h1><p>1904 年，英国物理学家John Ambrose Fleming开发了新的电子组件——<strong>热电子管</strong>，是世界上第一个<strong>真空管</strong>。</p>
+<blockquote>
+<p><strong>热电子管：</strong>把两个电极装在一个气密的真空玻璃灯泡中。其中一个电极A可以加热，从而发射电子，称为<strong>热电子发射（Thermionic emission）</strong>；另一个电极B会吸引电子，来形成电流。但只有当电极B带正电时才能吸引电子，否则当电极B带负电荷或者中性电荷时，电子就无法跨越真空区域。</p>
+<p><strong>真空管</strong>定义：和继电器一样，也是<strong>开关</strong>，控制电路开闭。向”控制”电极施加正电荷，则允许电子流动；施加负电荷，则组织电子流动。</p>
+</blockquote>
+<p>1906年，美国发明家Lee de Forest在此基础上加入了第三个控制电极。通过向控制电极施加正电荷，就能吸引电子，从而闭合电路；而通过施加负电荷，就能闭合电路。</p>
+<p><strong>二极管</strong>（电流只能单向流动的电子部件）改进为<strong>三极管</strong>（加入了第三个 “控制” 电极）。</p>
+<p><strong>性能：</strong>每秒可开闭数千次。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li><strong>更少的磨损</strong>：真空管内部没有运动的机械部件</li>
+<li><strong>每秒可以开闭数千次</strong></li>
+</ul>
+<p><strong>限制</strong>：</p>
+<ul>
+<li>真空管有点<strong>脆弱</strong>，容易故障（玻璃制成，易碎，且像灯泡一样会烧坏</li>
+</ul>
+<p><strong>真空管的出现，</strong>==<strong>标志着计算机从机电转向电子</strong>==</p>
+<p><strong>代表1：</strong>第一个大规模使用真空管的计算机是<strong>巨人1号</strong>，由工程师Tommy Flowers设计并于<strong>1943</strong>年12月完工。</p>
+<ul>
+<li>诞生于英国的”布莱切利园”, 用于破解纳粹通信</li>
+<li><strong>第一个可编程的电子计算机</strong>。但是编程的方法是把几百根电线插入插板，有点像老电话交换机</li>
+<li><strong>编程麻烦，还要配置</strong>。</li>
+</ul>
+<p><strong>代表2：</strong> <strong>电子数值积分计算机ENIAC</strong>，在<strong>1946</strong>年于<strong>宾夕法尼亚大学</strong>设计制造</p>
+<ul>
+<li><strong>第一个真正的通用，可编程，电子计算机</strong></li>
+<li>每秒可执行 5000 次十位数加减法</li>
+</ul>
+<h1 id="晶体管"><a href="#晶体管" class="headerlink" title="晶体管"></a>晶体管</h1><p>1947 年，发明于<strong>贝尔实验室</strong>，标志着一个全新的计算机时代的诞生</p>
+<p>涉及量子力学</p>
+<blockquote>
+<p><strong>晶体管</strong>：类似于继电器和真空管，晶体管也是一个用于控制电路闭合断开的开关。晶体管有两个电极，这两个电极之间通过半导体材料隔开。这里通过控制连接到半导体的电极电荷数，可以控制半导体的导电性，由此来控制电流是否流动。当控制线路通电时，两个电极接通，否则两个电极断开。</p>
+</blockquote>
+<p>晶体管两极之间有一种材料隔开它们，这种材料有时候导电，有时候不导电，称为<strong>半导体</strong>。</p>
+<p><strong>通过控制半导体材料的导电性，来控制电流的流动。</strong></p>
+<p><strong>性能：</strong>每秒可开关10000次。</p>
+<p><strong>优势：</strong></p>
+<ul>
+<li><strong>速度快：每秒可以开关 10,000 次，现在**</strong>每秒可以切换上百万次**</li>
+<li><strong>可靠性高</strong>：晶体管是固态的，比起玻璃的真空管更可靠，能工作几十年</li>
+<li><strong>降低了成本和大小</strong>：晶体管可以远远小于继电器或真空管，导致更小更便宜的计算机</li>
+</ul>
+<p><strong>代表</strong>：第一个消费者可购买的，完全由晶体管构成的计算机是<strong>1957</strong>年发布的<strong>IBM</strong> <strong>608</strong></p>
+<ul>
+<li>有 3000 个晶体管，每秒执行 4500 次加法</li>
+<li>每秒能执行 80 次左右的乘除法</li>
+</ul>
+<p><strong>硅谷</strong>：很多晶体管和半导体开发在圣克拉拉谷，位于旧金山和圣河西之间，由于制造半导体最常见的材料是硅，由此这个地方被称为“硅谷”。并且William Shockley搬过去创建了<strong>肖克利半导体</strong>，里面的员工后来成立了<strong>仙童半导体</strong>，而这里面的员工后来创立了<strong>英特尔</strong>。</p>
+
+    </div>
+
+    
+    
+    <div>
+  <div class="end-slogan" style="text-align:center;font-size:22px;letter-spacing:10px;user-seclect:none;color:#bbb">----------- 本文结束啦<i class="fa fa-star"></i>感谢您阅读-----------</div>		
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Rick
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/posts/e554ef1e/" title="计算机科学技术之电子计算机">http://example.com/posts/e554ef1e/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E7%BB%A7%E7%94%B5%E5%99%A8/" rel="tag"><i class="fa fa-tag"></i> 继电器</a>
+              <a href="/tags/%E7%9C%9F%E7%A9%BA%E7%AE%A1/" rel="tag"><i class="fa fa-tag"></i> 真空管</a>
+              <a href="/tags/%E6%99%B6%E4%BD%93%E7%AE%A1/" rel="tag"><i class="fa fa-tag"></i> 晶体管</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/18730745/" rel="prev" title="计算机科学技术之计算机早期历史">
+      <i class="fa fa-chevron-left"></i> 计算机科学技术之计算机早期历史
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/a6e7dd8e/" rel="next" title="计算机科学技术之从二进制到CPU">
+      计算机科学技术之从二进制到CPU <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%A7%E7%94%B5%E5%99%A8"><span class="nav-text">继电器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E6%9E%81%E7%9C%9F%E7%A9%BA%E7%AE%A1"><span class="nav-text">三极真空管</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%99%B6%E4%BD%93%E7%AE%A1"><span class="nav-text">晶体管</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Rick"
+      src="/images/avatar.jpg">
+  </a>
+  <p class="site-author-name" itemprop="name">Rick</p>
+  <div class="site-description" itemprop="description">一个瞎折腾的博客，不知道能坚持几天</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-sun"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rick</span>
+</div>
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+<!-- 不蒜字统计 -->
+<div>
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_uv">
+    访问人数：<span id="busuanzi_value_site_uv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    总访问量：<span id="busuanzi_value_site_pv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <!-- 添加博客全站总字数统计-->
+  <i class="fa fa-pencil"></i>
+  <span class="post-count">博客全站共 289.4k 字</span>
+</div>
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '',
+      clientSecret: '',
+      repo        : '',
+      owner       : '',
+      admin       : [''],
+      id          : '9f4529cd0a0b6ee7af7e4bb99be83225',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
