@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="早期计算机的提速方式是减少晶体管的切换时间，因为晶体管是门、ALU和之前介绍的所有部件的基础，但是这种提速方法最终会遇到瓶颈。所以处理器厂商发明各种新技术来提升性能，不但让简单指令运行更快，也让它能进行更复杂的运算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机科学技术之高级CPU设计">
+<meta property="og:url" content="http://example.com/posts/bd281c41/index.html">
+<meta property="og:site_name" content="Rick Blog">
+<meta property="og:description" content="早期计算机的提速方式是减少晶体管的切换时间，因为晶体管是门、ALU和之前介绍的所有部件的基础，但是这种提速方法最终会遇到瓶颈。所以处理器厂商发明各种新技术来提升性能，不但让简单指令运行更快，也让它能进行更复杂的运算">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/1324638/1597481827805-0996b918-c1af-4fc4-9293-6daeed54148f.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/1324638/1597481874070-bd453462-fc27-4405-8d82-cb2b2c0933da.png">
+<meta property="article:published_time" content="2021-02-09T12:21:59.000Z">
+<meta property="article:modified_time" content="2021-02-09T13:13:20.443Z">
+<meta property="article:author" content="Rick">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2020/png/1324638/1597481827805-0996b918-c1af-4fc4-9293-6daeed54148f.png">
+
+<link rel="canonical" href="http://example.com/posts/bd281c41/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>计算机科学技术之高级CPU设计 | Rick Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Rick Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/bd281c41/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Rick">
+      <meta itemprop="description" content="一个瞎折腾的博客，不知道能坚持几天">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rick Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机科学技术之高级CPU设计
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-09 20:21:59 / 修改时间：21:13:20" itemprop="dateCreated datePublished" datetime="2021-02-09T20:21:59+08:00">2021-02-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">计算机科学技术</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+<p>早期计算机的提速方式是减少晶体管的切换时间，因为晶体管是门、ALU和之前介绍的所有部件的基础，但是这种提速方法最终会遇到瓶颈。所以处理器厂商发明各种新技术来提升性能，不但让简单指令运行更快，也让它能进行更复杂的运算</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="早期计算机提速方式"><a href="#早期计算机提速方式" class="headerlink" title="早期计算机提速方式"></a>早期计算机提速方式</h1><p>早期，通过<strong>减少晶体管的切换时间</strong>，来提升 CPU 速度。</p>
+<ul>
+<li><strong>晶体管</strong>组成了逻辑门，ALU 以及其他组件</li>
+<li>碰到了<strong>瓶颈</strong></li>
+</ul>
+<h1 id="提升-CPU-性能的新技术"><a href="#提升-CPU-性能的新技术" class="headerlink" title="提升 CPU 性能的新技术"></a>提升 CPU 性能的新技术</h1><p>提升 CPU 性能，不但让简单指令运行更快，也让它能进行更复杂的运算。</p>
+<h2 id="专门电路处理复杂操作（复杂度-vs-速度的平衡）"><a href="#专门电路处理复杂操作（复杂度-vs-速度的平衡）" class="headerlink" title="专门电路处理复杂操作（复杂度 vs 速度的平衡）"></a>专门电路处理复杂操作（复杂度 vs 速度的平衡）</h2><p>现代 CPU 直接<strong>在硬件层面设计了除法</strong>，可以直接给 ALU 除法指令</p>
+<ul>
+<li><strong>缺点</strong>：让 <strong>ALU 更大也更复杂</strong>一些</li>
+<li><strong>优点</strong>：但是<strong>运算速度更快</strong>（用一连串减法代替除法的操作要多个时钟周期，很低效）</li>
+</ul>
+<p>现代处理器有<strong>专门电路来处理图形操作</strong>, 游戏、解码压缩视频, 加密文档 等等</p>
+<ul>
+<li><strong>优点</strong>：<strong>速度快</strong>，而如果用标准操作来实现，要很多个时钟周期</li>
+<li><strong>缺点</strong>：指令不断增加，人们一旦习惯了它的便利就很难删掉，所以为了兼容旧指令集，指令数量越来越多</li>
+</ul>
+<blockquote>
+<p>基于标准操作用软件方式构建的方法，通常需要若干个时钟周期，而通过关键专门的电路可以进行提速。</p>
+</blockquote>
+<p>为了兼容旧指令集，指令数量变得越来越多。第一个集成CPU Intel 4004有46条指令，但现代处理器有上千条指令，有各种巧妙复杂的电路。</p>
+<h2 id="缓存-Cache"><a href="#缓存-Cache" class="headerlink" title="缓存 Cache"></a>缓存 Cache</h2><blockquote>
+<p>问题引入：超高的时钟速度带来另一个问题，<strong>如何快速传递数据给 CPU</strong>？</p>
+<p>——<strong>给 CPU 加缓存</strong></p>
+</blockquote>
+<p>RAM是独立于CPU的一个组件，CPU和RAM之间通过<strong>总线（Bus）</strong>相连（包含地址总线、数据总线、允许写入线、允许读取线等等），虽然这个总线通常只有几厘米，并且电信号的传输速度接近光速，但是对于超高的时钟速度，很小的延迟也会造成问题。并且RAM还需要时间找地址、取数据、配置输出数据等等，所以一条“从内存读取数据”的指令可能需要很多个时钟周期（因为目前时钟速度相对于读取RAM速度快很快），此时CPU就会空等数据。</p>
+<p>以上解决延迟的方法之一就是给CPU加一个小的RAM，称为<strong>缓存（Cache）</strong>。因为CPU中的space不大，所以缓存一般只有KB或者MB，而RAM一般都是GB起步的。使用缓存能够提高速度。当CPU从RAM加载数据时，RAM不用传单独一个数据，而是传一批数据，然后将这批数据保存在缓存中。这种读取方式很实用，因为数据通常都是一个个按顺序处理的，这样CPU就可以先访问缓存来加载下一数据，因为缓存离CPU比较近，所以一个时钟周期就能找到数据，这样CPU就不用空等，这比反复去RAM读取数据快很多。</p>
+<blockquote>
+<p><strong>局部性原理：</strong>是指CPU访问RAM时，无论是存取指令还是存取数据，所访问的位置都趋于聚集在一个较小的连续区域中。<br>         <strong>为什么速度会更快：</strong>因为像RAM这种GB级别的存储器，如果使用性能更好造价更贵的部件，成本太高，而使用像缓存这种只有KB或MB级别的存储器，完全可以使用性能更好的部件，所以从缓存中读取数据会更快。并且根据局部性原理，下一个数据有很大可能会在缓存中，所以保证了CPU通常会从缓存中读取数据。</p>
+</blockquote>
+<h3 id="缓存的作用"><a href="#缓存的作用" class="headerlink" title="缓存的作用"></a>缓存的作用</h3><ul>
+<li>提高数据存取速度，更快喂给 CPU </li>
+<li><strong>解决CPU运算速率与内存读写速率不匹配的矛盾</strong></li>
+</ul>
+<h3 id="缓存工作的原则"><a href="#缓存工作的原则" class="headerlink" title="缓存工作的原则"></a>缓存工作的原则</h3><p><strong>缓存工作的原则</strong>，就是“引用的<strong>局部性</strong>”，这可以分为<strong>时间局部性和空间局部性</strong>。</p>
+<p>CPU 从 RAM 拿数据时， RAM 不只传一个，可以传一批，虽然花的时间久一点，但数据可以存在缓存加快之后的访问速度。以 计算餐馆销售额 为例：算餐厅的当日收入，先取 RAM 地址 100 的交易额。RAM 与其只给 1 个值，不如直接把地址 100 到 200 的一批值都复制到缓存,当处理器要下一个交易额时，交易额原本存储在 RAM 地址 100，但现在已经存储在缓存中，就不需要去 RAM 中取了.缓存离 CPU 近, 一个时钟周期就能给数据；而去 RAM 读取数据可能要多个时钟周期,因此，从缓存中读取数据，比反复去 RAM 拿数据快得多，让 CPU 不用空等</p>
+<p>如果想要的数据已经在缓存中，叫<strong>缓存命中（Cache Hit）</strong>，如果想要的数据不在缓存中，叫<strong>缓存未命中（Cache Miss）</strong>。并且缓存也可以当<strong>临时空间</strong>，存一些中间值，适合长/复杂的运算，这样不但存起来更快，而且如果还要用这个中间值继续计算时，取值也会更快。</p>
+<p><strong>问题：缓存和 RAM 不一致</strong></p>
+<p>缓存中保存的RAM的副本和RAM中真实的数据不一致了。这些不一致必须记录下来，之后还要<strong>同步</strong>，因此缓存中每块空间都有一个特殊标记，称为<strong>脏位（Dirty Bit）</strong>。同步通常发生在缓存满了，而CPU又需要新的缓存时。在清理缓存腾出空间之前，会先检查脏位，如果是脏的，则在加载新内容之前，会将数据写回RAM。</p>
+<h2 id="指令流水线"><a href="#指令流水线" class="headerlink" title="指令流水线"></a>指令流水线</h2><p>另一种提升性能的方法叫<strong>指令流水线（Instruction Pipelining）</strong>，可以通过<strong>并行处理（Paralleize）</strong>来进一步提高效率。</p>
+<h3 id="并行处理-parallelize"><a href="#并行处理-parallelize" class="headerlink" title="并行处理 parallelize"></a>并行处理 parallelize</h3><p>假设指令执行分为 3 个阶段：取指 → 解码 → 执行。</p>
+<ul>
+<li>若按序处理：</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1597481827805-0996b918-c1af-4fc4-9293-6daeed54148f.png" alt="image.png"></p>
+<ul>
+<li>并行处理：</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1597481874070-bd453462-fc27-4405-8d82-cb2b2c0933da.png" alt="image.png"></p>
+<p>可以看到，使用并行处理，每个阶段利用 CPU 的不同部分，不同任务重叠进行，同时用上 CPU 里不同部分。这样的流水线，使得指令吞吐量 x 3，但并行处理也带来了两个主要问题：</p>
+<h3 id="问题一：指令之间的依赖关系——-gt-乱序执行"><a href="#问题一：指令之间的依赖关系——-gt-乱序执行" class="headerlink" title="问题一：指令之间的依赖关系——&gt;乱序执行"></a>问题一：指令之间的依赖关系——&gt;乱序执行</h3><p>但是并行处理也存在问题，第一个问题是<strong>指令之间的依赖关系</strong></p>
+<p>eg. 第二条指令读某个数据，而并行正在执行的第一条指令会改这个数据，那并行执行第二条指令的话，这个数据还没被改，也就是说拿的是旧数据。</p>
+<h4 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a><strong>解决方案：</strong></h4><p>弄清数据依赖性，必要时停止流水线，避免出问题。</p>
+<h5 id="乱序执行-out-of-order-execution"><a href="#乱序执行-out-of-order-execution" class="headerlink" title="乱序执行 out-of-order execution"></a><strong>乱序执行 out-of-order execution</strong></h5><ul>
+<li>定义：高端 CPU，比如笔记本和手机里那种，会更进一步，动态排序 有依赖关系的指令，最小化流水线的停工时间，即<strong>乱序执行</strong></li>
+<li>缺点：这种电路非常复杂</li>
+<li>优点：流水线非常高效，几乎所有现代处理器都实现了流水线</li>
+</ul>
+<h3 id="问题二：条件跳转——-gt-推测执行-amp-分支预测"><a href="#问题二：条件跳转——-gt-推测执行-amp-分支预测" class="headerlink" title="问题二：条件跳转——&gt;推测执行 &amp; 分支预测"></a>问题二：条件跳转——&gt;推测执行 &amp; 分支预测</h3><p>另一个问题是<strong>条件跳转（Conditional Jump Instructions）</strong>，这些指令会改变程序的执行流。</p>
+<h4 id="解决方案：-1"><a href="#解决方案：-1" class="headerlink" title="解决方案："></a><strong>解决方案</strong>：</h4><p>简单的流水线处理器，看到 JUMP 指令会停一会儿，等待条件值确定下来，再继续流水线。缺点：造成延迟</p>
+<h5 id="推测执行-speculative-execution"><a href="#推测执行-speculative-execution" class="headerlink" title="推测执行 speculative execution"></a><strong>推测执行 speculative execution</strong></h5><p>可以把 JUMP 想成是 “岔路口”，高端 CPU 会猜哪条路的可能性大一些，然后提前把指令放进流水线，这叫 “推测执行”</p>
+<h5 id="分支预测-branch-prediction"><a href="#分支预测-branch-prediction" class="headerlink" title="分支预测 branch prediction"></a><strong>分支预测 branch prediction</strong></h5><p>推测执行如果如果 CPU 猜错了，就要清空流水线。为了尽可能减少清空流水线的次数，CPU 厂商开发了复杂的方法，来猜测哪条分支更有可能，叫”分支预测”</p>
+<h2 id="优化-1-个指令流的吞吐量"><a href="#优化-1-个指令流的吞吐量" class="headerlink" title="优化 1 个指令流的吞吐量"></a>优化 1 个指令流的吞吐量</h2><h3 id="超标量处理器"><a href="#超标量处理器" class="headerlink" title="超标量处理器"></a>超标量处理器</h3><p>如果只有一个单核 CPU ，且 CPU 中各个部件（例如 ALU、缓存等）只有一套，则使用流水线时，理想情况下，一个时钟周期完成 1 个指令。而<strong>超标量处理器</strong>，使得一个时钟周期完成多个指令。</p>
+<p><strong>原理理解</strong>：即便有流水线设计，在指令执行阶段，处理器里有些区域还是可能会空闲。比如，执行一个 “从内存取值” 指令期间，ALU 会闲置。所以一次性处理多条指令（取指令+解码） 会更好，如果多条指令要 ALU 的不同部分，就多条同时执行。</p>
+<h3 id="多个相同电路-部件（eg-ALU）"><a href="#多个相同电路-部件（eg-ALU）" class="headerlink" title="多个相同电路/部件（eg. ALU）"></a>多个相同电路/部件（eg. ALU）</h3><p> 超标量处理其更进一步，加多几个相同的电路执行出现频次很高的指令，eg. 很多 CPU 有四个, 八个甚至更多 完全相同的 ALU ，可以同时执行多个数学运算。</p>
+<h2 id="同时运行多个指令流"><a href="#同时运行多个指令流" class="headerlink" title="同时运行多个指令流"></a>同时运行多个指令流</h2><h3 id="多核-CPU"><a href="#多核-CPU" class="headerlink" title="多核 CPU"></a>多核 CPU</h3><p>目前提升性能的方法都是只有一个指令流，另一个提升性能的方法是同时运行多个指令流，这需要使用<strong>多核处理器（Multi-core Processors）</strong>，四核处理器意味着一个CPU芯片内，有多个独立处理单元，并且它们之间可以共享一些资源，比如缓存，使得多核之间可以合作运算。</p>
+<h3 id="多个独立-CPU"><a href="#多个独立-CPU" class="headerlink" title="多个独立 CPU"></a>多个独立 CPU</h3><p>如果多核不够，可以用多个CPU，2个或4个CPU是最常见的，但是现在的需求更大，所以出现了<strong>超级计算机（Supercomputer）</strong>，中国无锡的国家超算中心，神威·太湖之光有40960个CPU，每个CPU有256个核，每个核心的频率为1.45GHz，每秒可进行9.3亿亿次浮点数运算，也称为<strong>浮点运算次数（Floating Point Math Operations Per Second，FLOPS）</strong>。</p>
+<h3 id="超级计算机"><a href="#超级计算机" class="headerlink" title="超级计算机"></a>超级计算机</h3><p>如果要做怪兽级运算，比如模拟宇宙形成，你需要强大的计算能力，给普通台式机加几个 CPU 没什么用。需要成千上万个 CPU ！</p>
+<p>神威·太湖之光有 40960 个CPU，每个 CPU 有 256 个核心，总共超过1千万个核心，每个核心的频率是 1.45GHz，每秒可以进行 9.3 亿亿次浮点数运算，也叫 每秒浮点运算次数 (FLOPS)。</p>
+
+    </div>
+
+    
+    
+    <div>
+  <div class="end-slogan" style="text-align:center;font-size:22px;letter-spacing:10px;user-seclect:none;color:#bbb">----------- 本文结束啦<i class="fa fa-star"></i>感谢您阅读-----------</div>		
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Rick
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/posts/bd281c41/" title="计算机科学技术之高级CPU设计">http://example.com/posts/bd281c41/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/5d7c338d/" rel="prev" title="计算机科学技术之指令和程序">
+      <i class="fa fa-chevron-left"></i> 计算机科学技术之指令和程序
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/fa7f2f9/" rel="next" title="计算机科学技术之编程语言发展史">
+      计算机科学技术之编程语言发展史 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A9%E6%9C%9F%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8F%90%E9%80%9F%E6%96%B9%E5%BC%8F"><span class="nav-text">早期计算机提速方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%90%E5%8D%87-CPU-%E6%80%A7%E8%83%BD%E7%9A%84%E6%96%B0%E6%8A%80%E6%9C%AF"><span class="nav-text">提升 CPU 性能的新技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%93%E9%97%A8%E7%94%B5%E8%B7%AF%E5%A4%84%E7%90%86%E5%A4%8D%E6%9D%82%E6%93%8D%E4%BD%9C%EF%BC%88%E5%A4%8D%E6%9D%82%E5%BA%A6-vs-%E9%80%9F%E5%BA%A6%E7%9A%84%E5%B9%B3%E8%A1%A1%EF%BC%89"><span class="nav-text">专门电路处理复杂操作（复杂度 vs 速度的平衡）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98-Cache"><span class="nav-text">缓存 Cache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-text">缓存的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%B7%A5%E4%BD%9C%E7%9A%84%E5%8E%9F%E5%88%99"><span class="nav-text">缓存工作的原则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-text">指令流水线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86-parallelize"><span class="nav-text">并行处理 parallelize</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%B8%80%EF%BC%9A%E6%8C%87%E4%BB%A4%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB%E2%80%94%E2%80%94-gt-%E4%B9%B1%E5%BA%8F%E6%89%A7%E8%A1%8C"><span class="nav-text">问题一：指令之间的依赖关系——&gt;乱序执行</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A"><span class="nav-text">解决方案：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B9%B1%E5%BA%8F%E6%89%A7%E8%A1%8C-out-of-order-execution"><span class="nav-text">乱序执行 out-of-order execution</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%BA%8C%EF%BC%9A%E6%9D%A1%E4%BB%B6%E8%B7%B3%E8%BD%AC%E2%80%94%E2%80%94-gt-%E6%8E%A8%E6%B5%8B%E6%89%A7%E8%A1%8C-amp-%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B"><span class="nav-text">问题二：条件跳转——&gt;推测执行 &amp; 分支预测</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A-1"><span class="nav-text">解决方案：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8E%A8%E6%B5%8B%E6%89%A7%E8%A1%8C-speculative-execution"><span class="nav-text">推测执行 speculative execution</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B-branch-prediction"><span class="nav-text">分支预测 branch prediction</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96-1-%E4%B8%AA%E6%8C%87%E4%BB%A4%E6%B5%81%E7%9A%84%E5%90%9E%E5%90%90%E9%87%8F"><span class="nav-text">优化 1 个指令流的吞吐量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8"><span class="nav-text">超标量处理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E7%9B%B8%E5%90%8C%E7%94%B5%E8%B7%AF-%E9%83%A8%E4%BB%B6%EF%BC%88eg-ALU%EF%BC%89"><span class="nav-text">多个相同电路&#x2F;部件（eg. ALU）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8C%E6%97%B6%E8%BF%90%E8%A1%8C%E5%A4%9A%E4%B8%AA%E6%8C%87%E4%BB%A4%E6%B5%81"><span class="nav-text">同时运行多个指令流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%A0%B8-CPU"><span class="nav-text">多核 CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E7%8B%AC%E7%AB%8B-CPU"><span class="nav-text">多个独立 CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%85%E7%BA%A7%E8%AE%A1%E7%AE%97%E6%9C%BA"><span class="nav-text">超级计算机</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Rick"
+      src="/images/avatar.jpg">
+  </a>
+  <p class="site-author-name" itemprop="name">Rick</p>
+  <div class="site-description" itemprop="description">一个瞎折腾的博客，不知道能坚持几天</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-sun"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rick</span>
+</div>
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+<!-- 不蒜字统计 -->
+<div>
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_uv">
+    访问人数：<span id="busuanzi_value_site_uv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    总访问量：<span id="busuanzi_value_site_pv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <!-- 添加博客全站总字数统计-->
+  <i class="fa fa-pencil"></i>
+  <span class="post-count">博客全站共 296k 字</span>
+</div>
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '',
+      clientSecret: '',
+      repo        : '',
+      owner       : '',
+      admin       : [''],
+      id          : '7f7b7deb14600050f6ce5a735f97108b',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

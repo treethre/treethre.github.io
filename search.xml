@@ -9244,7 +9244,7 @@
 <p><strong>硅谷</strong>：很多晶体管和半导体开发在圣克拉拉谷，位于旧金山和圣河西之间，由于制造半导体最常见的材料是硅，由此这个地方被称为“硅谷”。并且William Shockley搬过去创建了<strong>肖克利半导体</strong>，里面的员工后来成立了<strong>仙童半导体</strong>，而这里面的员工后来创立了<strong>英特尔</strong>。</p>
 ]]></content>
       <categories>
-        <category>算机科学技术</category>
+        <category>计算机科学技术</category>
       </categories>
       <tags>
         <tag>继电器</tag>
@@ -9781,5 +9781,266 @@
         <tag>RAM</tag>
         <tag>CPU</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>计算机科学技术之指令和程序</title>
+    <url>/posts/5d7c338d/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+<p>CPU之所以强大，是因为它是可编程的，如果写入不同指令，就会执行不同任务，所以CPU是一块可以被软件控制的硬件</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="CPU-指令集"><a href="#CPU-指令集" class="headerlink" title="CPU 指令集"></a>CPU 指令集</h1><blockquote>
+<p><strong>指令集</strong>，就是CPU中用来计算和控制计算机系统的一套指令的集合。而每一种新型的CPU在设计时就规定了一系列与其他硬件电路相配合的指令系统。</p>
+</blockquote>
+<p>这里假定一个简单的指令集，进行说明。这里假设的 CPU 很基础，所有指令都是 8 位，前四位代表操作码，后四位代表内存地址或寄存器编号。</p>
+<table>
+<thead>
+<tr>
+<th><strong>指令 INSTRUCTION</strong></th>
+<th><strong>描述</strong></th>
+<th><strong>内存地址或寄存器</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LOAD_A</td>
+<td>从 RAM 中读取并加载到寄存器 A</td>
+<td>4-bit RAM 地址</td>
+</tr>
+<tr>
+<td>LOAD_B</td>
+<td>从 RAM 中读取并加载到寄存器 B</td>
+<td>4-bit RAM 地址</td>
+</tr>
+<tr>
+<td>STORE_A</td>
+<td>将寄存器 A 的内容保存到 RAM</td>
+<td>4-bit RAM 地址</td>
+</tr>
+<tr>
+<td>ADD</td>
+<td>将两个寄存器的值相加，结果保存到第二个寄存器</td>
+<td>2-bit 寄存器 ID，2-bit 寄存器 ID</td>
+</tr>
+<tr>
+<td>SUB</td>
+<td>将两个寄存器的值相减，结果保存到第二个寄存器</td>
+<td>2-bit 寄存器 ID，2-bit 寄存器 ID</td>
+</tr>
+<tr>
+<td>JUMP</td>
+<td>更新指令地址寄存器中的指令地址，即跳转到新地址</td>
+<td>4-bit memory 地址</td>
+</tr>
+<tr>
+<td>JUMP_NEG</td>
+<td>如果 ALU 的结果是负的，则更新指令地址寄存器中的指令地址（跳转到新地址）</td>
+<td>4-bit memory 地址</td>
+</tr>
+<tr>
+<td>HALT</td>
+<td>程序运行结束，CPU<strong>停止</strong>运行。</td>
+<td>NA</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>注</strong>：指令和数据都是存在同一个内存里的，它们在根本层面上毫无区别（都是二进制数）。因此，HALT 指令很重要，能区分指令和数据，让 CPU 停止运行。</p>
+</blockquote>
+<p>举个例子，如下图所示的保存了一些指令和数据的RAM，其中将操作码根据指令集转换成了对应的指令。首先，指令地址寄存器初始化为0，所以控制单元会先从RAM中地址为0处获取指令并保存在指令寄存器中，LOAD_A 14是将RAM中14处的数据保存在寄存器A中，所以当前寄存器A中保存了数据1，然后指令地址寄存器+1，由此执行下一条指令；LOAD_B 15是将RAM中15处的1保存在寄存器B中；ADD B A是使用ALU将寄存器B中的数据加到寄存器A中，所以当前寄存器A中数据为2；STORE_A 13是将寄存器A中的数据保存在RAM 13处；JUMP 2表示将2覆盖指令地址寄存器，所以当前指令地址寄存器指向ADD B A，就是将寄存器B中的数据再加到寄存器A中，所以当前寄存器A中的数据为3，然后又执行STORE_A 13将寄存器A中的数据保存在RAM 13处。反复执行上述过程，就是对寄存器A中的数据不断+1，并且结果不断刷新在RAM 13处，从未停止，这个称为<strong>无限循环（Infinite Loop）</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1596700067072-7d78d66b-ca2f-44f2-b8f9-ba1533738891.png?x-oss-process=image/resize,w_1192" alt="image.png"></p>
+<p>我们这里假设的CPU十分简单，一个指令长度只有8位，操作码4位说明最多只支持16中指令，而地址位只有4位，说明最多只能索引到RAM中的16位，这具有很大的局限性。</p>
+<p>目前真正的现代CPU采用两种策略：</p>
+<ol>
+<li>最直接的方法就是用更多位来代表指令，比如32位或64位，这个称为<strong>指令长度（Instruction Length）</strong>，说明一个指令要跨越多个字节。</li>
+<li>另一种策略可以使用<strong>可变长度指令（Variable Length Instruction）</strong>。比如某个CPU用8位操作码，因为内存中每个地址保存一个字节，而指令地址寄存器保存的是该指令最小地址，并且操作码刚好是一个字节，所以指令地址寄存器保存的是操作码的地址，所以CPU最先看到的信息就是操作码，所以CPU可以根据操作码的类型，来决定是否要读取后续字节来确定指令内容。比如CPU看到HALT指令，因为HALT指令不需要其他额外的数据，所以CPU就会马上执行HALT指令；如果看到了JUMP，因为该操作码需要知道需要跳转到的地址，而这个值就在JUMP后面，这个称为<strong>立即值（Immediate Value）</strong>，CPU就会读取这立即值来知道跳转的地址。通过这样设计，指令可以是任意长度的，但是会让读取阶段复杂一些</li>
+</ol>
+<blockquote>
+<p>一般来说，指令=操作码+操作值地址，比如LOAD_A 10表示的是将RAM 10中保存的数据加载到寄存器A中。当指令=操作码+操作值时，该操作值就称为<strong>立即值</strong>，不需要在RAM中索引出对应的操作值，比如JUMP 2，这里直接跳转到RAM 2处，所以这个2称为立即值。总之，不需要从RAM中索引出操作值就能使用的称为立即值。</p>
+</blockquote>
+<p>在Intel 4004中，它支持46个指令，使用8位立即值来执行JUSMP，所以可以表示更多的内存地址。处理器从1971年至今，现代CPU比如Intel Core i7含有上千个指令和指令变体，长度从1到15字节。</p>
+<p><img src="https://pic3.zhimg.com/v2-4b875c844248119e0daa74576011811e_r.jpg" alt="img"></p>
+]]></content>
+      <categories>
+        <category>计算机科学技术</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>计算机科学技术之高级CPU设计</title>
+    <url>/posts/bd281c41/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+<p>早期计算机的提速方式是减少晶体管的切换时间，因为晶体管是门、ALU和之前介绍的所有部件的基础，但是这种提速方法最终会遇到瓶颈。所以处理器厂商发明各种新技术来提升性能，不但让简单指令运行更快，也让它能进行更复杂的运算</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="早期计算机提速方式"><a href="#早期计算机提速方式" class="headerlink" title="早期计算机提速方式"></a>早期计算机提速方式</h1><p>早期，通过<strong>减少晶体管的切换时间</strong>，来提升 CPU 速度。</p>
+<ul>
+<li><strong>晶体管</strong>组成了逻辑门，ALU 以及其他组件</li>
+<li>碰到了<strong>瓶颈</strong></li>
+</ul>
+<h1 id="提升-CPU-性能的新技术"><a href="#提升-CPU-性能的新技术" class="headerlink" title="提升 CPU 性能的新技术"></a>提升 CPU 性能的新技术</h1><p>提升 CPU 性能，不但让简单指令运行更快，也让它能进行更复杂的运算。</p>
+<h2 id="专门电路处理复杂操作（复杂度-vs-速度的平衡）"><a href="#专门电路处理复杂操作（复杂度-vs-速度的平衡）" class="headerlink" title="专门电路处理复杂操作（复杂度 vs 速度的平衡）"></a>专门电路处理复杂操作（复杂度 vs 速度的平衡）</h2><p>现代 CPU 直接<strong>在硬件层面设计了除法</strong>，可以直接给 ALU 除法指令</p>
+<ul>
+<li><strong>缺点</strong>：让 <strong>ALU 更大也更复杂</strong>一些</li>
+<li><strong>优点</strong>：但是<strong>运算速度更快</strong>（用一连串减法代替除法的操作要多个时钟周期，很低效）</li>
+</ul>
+<p>现代处理器有<strong>专门电路来处理图形操作</strong>, 游戏、解码压缩视频, 加密文档 等等</p>
+<ul>
+<li><strong>优点</strong>：<strong>速度快</strong>，而如果用标准操作来实现，要很多个时钟周期</li>
+<li><strong>缺点</strong>：指令不断增加，人们一旦习惯了它的便利就很难删掉，所以为了兼容旧指令集，指令数量越来越多</li>
+</ul>
+<blockquote>
+<p>基于标准操作用软件方式构建的方法，通常需要若干个时钟周期，而通过关键专门的电路可以进行提速。</p>
+</blockquote>
+<p>为了兼容旧指令集，指令数量变得越来越多。第一个集成CPU Intel 4004有46条指令，但现代处理器有上千条指令，有各种巧妙复杂的电路。</p>
+<h2 id="缓存-Cache"><a href="#缓存-Cache" class="headerlink" title="缓存 Cache"></a>缓存 Cache</h2><blockquote>
+<p>问题引入：超高的时钟速度带来另一个问题，<strong>如何快速传递数据给 CPU</strong>？</p>
+<p>——<strong>给 CPU 加缓存</strong></p>
+</blockquote>
+<p>RAM是独立于CPU的一个组件，CPU和RAM之间通过<strong>总线（Bus）</strong>相连（包含地址总线、数据总线、允许写入线、允许读取线等等），虽然这个总线通常只有几厘米，并且电信号的传输速度接近光速，但是对于超高的时钟速度，很小的延迟也会造成问题。并且RAM还需要时间找地址、取数据、配置输出数据等等，所以一条“从内存读取数据”的指令可能需要很多个时钟周期（因为目前时钟速度相对于读取RAM速度快很快），此时CPU就会空等数据。</p>
+<p>以上解决延迟的方法之一就是给CPU加一个小的RAM，称为<strong>缓存（Cache）</strong>。因为CPU中的space不大，所以缓存一般只有KB或者MB，而RAM一般都是GB起步的。使用缓存能够提高速度。当CPU从RAM加载数据时，RAM不用传单独一个数据，而是传一批数据，然后将这批数据保存在缓存中。这种读取方式很实用，因为数据通常都是一个个按顺序处理的，这样CPU就可以先访问缓存来加载下一数据，因为缓存离CPU比较近，所以一个时钟周期就能找到数据，这样CPU就不用空等，这比反复去RAM读取数据快很多。</p>
+<blockquote>
+<p><strong>局部性原理：</strong>是指CPU访问RAM时，无论是存取指令还是存取数据，所访问的位置都趋于聚集在一个较小的连续区域中。<br>         <strong>为什么速度会更快：</strong>因为像RAM这种GB级别的存储器，如果使用性能更好造价更贵的部件，成本太高，而使用像缓存这种只有KB或MB级别的存储器，完全可以使用性能更好的部件，所以从缓存中读取数据会更快。并且根据局部性原理，下一个数据有很大可能会在缓存中，所以保证了CPU通常会从缓存中读取数据。</p>
+</blockquote>
+<h3 id="缓存的作用"><a href="#缓存的作用" class="headerlink" title="缓存的作用"></a>缓存的作用</h3><ul>
+<li>提高数据存取速度，更快喂给 CPU </li>
+<li><strong>解决CPU运算速率与内存读写速率不匹配的矛盾</strong></li>
+</ul>
+<h3 id="缓存工作的原则"><a href="#缓存工作的原则" class="headerlink" title="缓存工作的原则"></a>缓存工作的原则</h3><p><strong>缓存工作的原则</strong>，就是“引用的<strong>局部性</strong>”，这可以分为<strong>时间局部性和空间局部性</strong>。</p>
+<p>CPU 从 RAM 拿数据时， RAM 不只传一个，可以传一批，虽然花的时间久一点，但数据可以存在缓存加快之后的访问速度。以 计算餐馆销售额 为例：算餐厅的当日收入，先取 RAM 地址 100 的交易额。RAM 与其只给 1 个值，不如直接把地址 100 到 200 的一批值都复制到缓存,当处理器要下一个交易额时，交易额原本存储在 RAM 地址 100，但现在已经存储在缓存中，就不需要去 RAM 中取了.缓存离 CPU 近, 一个时钟周期就能给数据；而去 RAM 读取数据可能要多个时钟周期,因此，从缓存中读取数据，比反复去 RAM 拿数据快得多，让 CPU 不用空等</p>
+<p>如果想要的数据已经在缓存中，叫<strong>缓存命中（Cache Hit）</strong>，如果想要的数据不在缓存中，叫<strong>缓存未命中（Cache Miss）</strong>。并且缓存也可以当<strong>临时空间</strong>，存一些中间值，适合长/复杂的运算，这样不但存起来更快，而且如果还要用这个中间值继续计算时，取值也会更快。</p>
+<p><strong>问题：缓存和 RAM 不一致</strong></p>
+<p>缓存中保存的RAM的副本和RAM中真实的数据不一致了。这些不一致必须记录下来，之后还要<strong>同步</strong>，因此缓存中每块空间都有一个特殊标记，称为<strong>脏位（Dirty Bit）</strong>。同步通常发生在缓存满了，而CPU又需要新的缓存时。在清理缓存腾出空间之前，会先检查脏位，如果是脏的，则在加载新内容之前，会将数据写回RAM。</p>
+<h2 id="指令流水线"><a href="#指令流水线" class="headerlink" title="指令流水线"></a>指令流水线</h2><p>另一种提升性能的方法叫<strong>指令流水线（Instruction Pipelining）</strong>，可以通过<strong>并行处理（Paralleize）</strong>来进一步提高效率。</p>
+<h3 id="并行处理-parallelize"><a href="#并行处理-parallelize" class="headerlink" title="并行处理 parallelize"></a>并行处理 parallelize</h3><p>假设指令执行分为 3 个阶段：取指 → 解码 → 执行。</p>
+<ul>
+<li>若按序处理：</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1597481827805-0996b918-c1af-4fc4-9293-6daeed54148f.png" alt="image.png"></p>
+<ul>
+<li>并行处理：</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1597481874070-bd453462-fc27-4405-8d82-cb2b2c0933da.png" alt="image.png"></p>
+<p>可以看到，使用并行处理，每个阶段利用 CPU 的不同部分，不同任务重叠进行，同时用上 CPU 里不同部分。这样的流水线，使得指令吞吐量 x 3，但并行处理也带来了两个主要问题：</p>
+<h3 id="问题一：指令之间的依赖关系——-gt-乱序执行"><a href="#问题一：指令之间的依赖关系——-gt-乱序执行" class="headerlink" title="问题一：指令之间的依赖关系——&gt;乱序执行"></a>问题一：指令之间的依赖关系——&gt;乱序执行</h3><p>但是并行处理也存在问题，第一个问题是<strong>指令之间的依赖关系</strong></p>
+<p>eg. 第二条指令读某个数据，而并行正在执行的第一条指令会改这个数据，那并行执行第二条指令的话，这个数据还没被改，也就是说拿的是旧数据。</p>
+<h4 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a><strong>解决方案：</strong></h4><p>弄清数据依赖性，必要时停止流水线，避免出问题。</p>
+<h5 id="乱序执行-out-of-order-execution"><a href="#乱序执行-out-of-order-execution" class="headerlink" title="乱序执行 out-of-order execution"></a><strong>乱序执行 out-of-order execution</strong></h5><ul>
+<li>定义：高端 CPU，比如笔记本和手机里那种，会更进一步，动态排序 有依赖关系的指令，最小化流水线的停工时间，即<strong>乱序执行</strong></li>
+<li>缺点：这种电路非常复杂</li>
+<li>优点：流水线非常高效，几乎所有现代处理器都实现了流水线</li>
+</ul>
+<h3 id="问题二：条件跳转——-gt-推测执行-amp-分支预测"><a href="#问题二：条件跳转——-gt-推测执行-amp-分支预测" class="headerlink" title="问题二：条件跳转——&gt;推测执行 &amp; 分支预测"></a>问题二：条件跳转——&gt;推测执行 &amp; 分支预测</h3><p>另一个问题是<strong>条件跳转（Conditional Jump Instructions）</strong>，这些指令会改变程序的执行流。</p>
+<h4 id="解决方案：-1"><a href="#解决方案：-1" class="headerlink" title="解决方案："></a><strong>解决方案</strong>：</h4><p>简单的流水线处理器，看到 JUMP 指令会停一会儿，等待条件值确定下来，再继续流水线。缺点：造成延迟</p>
+<h5 id="推测执行-speculative-execution"><a href="#推测执行-speculative-execution" class="headerlink" title="推测执行 speculative execution"></a><strong>推测执行 speculative execution</strong></h5><p>可以把 JUMP 想成是 “岔路口”，高端 CPU 会猜哪条路的可能性大一些，然后提前把指令放进流水线，这叫 “推测执行”</p>
+<h5 id="分支预测-branch-prediction"><a href="#分支预测-branch-prediction" class="headerlink" title="分支预测 branch prediction"></a><strong>分支预测 branch prediction</strong></h5><p>推测执行如果如果 CPU 猜错了，就要清空流水线。为了尽可能减少清空流水线的次数，CPU 厂商开发了复杂的方法，来猜测哪条分支更有可能，叫”分支预测”</p>
+<h2 id="优化-1-个指令流的吞吐量"><a href="#优化-1-个指令流的吞吐量" class="headerlink" title="优化 1 个指令流的吞吐量"></a>优化 1 个指令流的吞吐量</h2><h3 id="超标量处理器"><a href="#超标量处理器" class="headerlink" title="超标量处理器"></a>超标量处理器</h3><p>如果只有一个单核 CPU ，且 CPU 中各个部件（例如 ALU、缓存等）只有一套，则使用流水线时，理想情况下，一个时钟周期完成 1 个指令。而<strong>超标量处理器</strong>，使得一个时钟周期完成多个指令。</p>
+<p><strong>原理理解</strong>：即便有流水线设计，在指令执行阶段，处理器里有些区域还是可能会空闲。比如，执行一个 “从内存取值” 指令期间，ALU 会闲置。所以一次性处理多条指令（取指令+解码） 会更好，如果多条指令要 ALU 的不同部分，就多条同时执行。</p>
+<h3 id="多个相同电路-部件（eg-ALU）"><a href="#多个相同电路-部件（eg-ALU）" class="headerlink" title="多个相同电路/部件（eg. ALU）"></a>多个相同电路/部件（eg. ALU）</h3><p> 超标量处理其更进一步，加多几个相同的电路执行出现频次很高的指令，eg. 很多 CPU 有四个, 八个甚至更多 完全相同的 ALU ，可以同时执行多个数学运算。</p>
+<h2 id="同时运行多个指令流"><a href="#同时运行多个指令流" class="headerlink" title="同时运行多个指令流"></a>同时运行多个指令流</h2><h3 id="多核-CPU"><a href="#多核-CPU" class="headerlink" title="多核 CPU"></a>多核 CPU</h3><p>目前提升性能的方法都是只有一个指令流，另一个提升性能的方法是同时运行多个指令流，这需要使用<strong>多核处理器（Multi-core Processors）</strong>，四核处理器意味着一个CPU芯片内，有多个独立处理单元，并且它们之间可以共享一些资源，比如缓存，使得多核之间可以合作运算。</p>
+<h3 id="多个独立-CPU"><a href="#多个独立-CPU" class="headerlink" title="多个独立 CPU"></a>多个独立 CPU</h3><p>如果多核不够，可以用多个CPU，2个或4个CPU是最常见的，但是现在的需求更大，所以出现了<strong>超级计算机（Supercomputer）</strong>，中国无锡的国家超算中心，神威·太湖之光有40960个CPU，每个CPU有256个核，每个核心的频率为1.45GHz，每秒可进行9.3亿亿次浮点数运算，也称为<strong>浮点运算次数（Floating Point Math Operations Per Second，FLOPS）</strong>。</p>
+<h3 id="超级计算机"><a href="#超级计算机" class="headerlink" title="超级计算机"></a>超级计算机</h3><p>如果要做怪兽级运算，比如模拟宇宙形成，你需要强大的计算能力，给普通台式机加几个 CPU 没什么用。需要成千上万个 CPU ！</p>
+<p>神威·太湖之光有 40960 个CPU，每个 CPU 有 256 个核心，总共超过1千万个核心，每个核心的频率是 1.45GHz，每秒可以进行 9.3 亿亿次浮点数运算，也叫 每秒浮点运算次数 (FLOPS)。</p>
+]]></content>
+      <categories>
+        <category>计算机科学技术</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>计算机科学技术之编程语言发展史</title>
+    <url>/posts/fa7f2f9/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+<p>本文将简要介绍程序如何进入计算机以及编程语言的发展历史</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="早期计算机的编程方式"><a href="#早期计算机的编程方式" class="headerlink" title="早期计算机的编程方式"></a>早期计算机的编程方式</h1><blockquote>
+<p>打孔纸卡  –&gt;  插线板   –&gt;  面板拨开关</p>
+</blockquote>
+<h2 id="打孔纸卡-Punched-card"><a href="#打孔纸卡-Punched-card" class="headerlink" title="打孔纸卡 Punched card"></a>打孔纸卡 Punched card</h2><h3 id="打孔纸卡的来源"><a href="#打孔纸卡的来源" class="headerlink" title="打孔纸卡的来源"></a>打孔纸卡的来源</h3><h4 id="打孔纸卡在纺织业的应用"><a href="#打孔纸卡在纺织业的应用" class="headerlink" title="打孔纸卡在纺织业的应用"></a><strong>打孔纸卡在纺织业的应用</strong></h4><p>在计算机出现之前，纺织业就有了给机器（纺织机）编程的需求（用来绘制图案）,通过纸卡特定位置是否穿孔，决定线的高低,为了让每行图案不同，纸卡连成长条，就形成了连续指令。<strong>雅卡尔织布机</strong>是最早的编程</p>
+<h4 id="打孔纸卡在人口普查中的应用"><a href="#打孔纸卡在人口普查中的应用" class="headerlink" title="打孔纸卡在人口普查中的应用"></a><strong>打孔纸卡在人口普查中的应用</strong></h4><p>打孔纸卡用于 1890 年美国人口普查,一张卡存一个人的信息，包含种族、婚姻状况、子女数量等，针对每个问题，在对应位置打孔,卡片插入汇总机，孔会让对应的总和值 +1</p>
+<ul>
+<li><strong>早期汇总机只用于汇总数据，操作时固定的，不能编程，因此不算计算机</strong>。</li>
+<li><strong>当时的打孔纸卡只用于存储数据，而不是程序</strong></li>
+</ul>
+<h3 id="打孔纸卡的优点"><a href="#打孔纸卡的优点" class="headerlink" title="打孔纸卡的优点"></a>打孔纸卡的优点</h3><p>打孔纸卡便宜、可靠、也易懂</p>
+<h2 id="插线板-Plug-board"><a href="#插线板-Plug-board" class="headerlink" title="插线板 Plug board"></a>插线板 Plug board</h2><h3 id="插线板的来源"><a href="#插线板的来源" class="headerlink" title="插线板的来源"></a>插线板的来源</h3><p><strong>起源</strong>：上面说到打孔纸卡在人口普查中的应用，但当时的汇总机只用于汇总数据，而不能编程；之后的 60 年，这些机器被加强，不仅可以做汇总（加法），还可以做减、乘、除甚至这些机器还可以做一些小决定，决定何时执行某指令，为了正确执行不同计算，程序员需要某种控制面板；控制面板上有很多小插孔，程序员可以插电线，让机器的不同部分互相传数据和信号，因此也叫 <strong>插线板</strong></p>
+<p><strong>发展：</strong>上面提到程序员通过插电线，让机器的不同部分互相传数据和信号，这意味着运行不同程序要重新接线；<strong>为了让编程更方便</strong>，到 1920 年代，控制面板变成了<strong>可拔插</strong>，对插线板进行不同的插线，就相当于给计算机编入不同的程序（<strong>编程</strong>）</p>
+<p><strong>缺点</strong>：插线板编程复杂，线一团乱</p>
+<p>​       <img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1597652017074-4802211c-e6a6-485d-b124-8393229f2343.png" alt="image.png"></p>
+<ul>
+<li>1946 年，第一台通用电子计算机 ENIAC 诞生，用了一大堆插线板</li>
+<li>由于插线板编程极为复杂，程序在纸上设计好之后，给 ENIAC 连线，最多可能花三个星期</li>
+<li>早期计算机非常昂贵，停机几个星期只为换程序，完全无法接受</li>
+</ul>
+<h3 id="冯诺依曼结构-amp-内存"><a href="#冯诺依曼结构-amp-内存" class="headerlink" title="冯诺依曼结构 &amp; 内存"></a>冯诺依曼结构 &amp; 内存</h3><h4 id="冯诺依曼结构"><a href="#冯诺依曼结构" class="headerlink" title="冯诺依曼结构"></a><strong>冯诺依曼结构</strong></h4><p>上面提到，插线板编程的复杂性，急需更快、更灵活的新方式来编程，到 1940 年代晚期 1950 年代初，<strong>内存</strong>价格下降, 容量上升；<strong>与其把程序存在插线板，不如存储在内存中</strong>，<strong>程序易于修改、方便 CPU 快速读取</strong>；这类机器叫 “<strong>存储程序计算机</strong>“</p>
+<ul>
+<li><strong>定义</strong>：<strong>把</strong> <strong>程序</strong> <strong>和</strong> <strong>数据</strong> <strong>都存在一个地方（内存）</strong>，叫冯诺依曼结构</li>
+<li><strong>标志</strong>：<strong>处理器（包含 ALU） + 数据寄存器 + 指令寄存器 + 指令地址寄存器 + 内存（存储数据和指令）</strong></li>
+</ul>
+<p>第一台冯诺依曼架构的”储存程序计算机”：宝宝，曼彻斯特大学，1948</p>
+<h4 id="内存-打孔纸卡（类似于外存）"><a href="#内存-打孔纸卡（类似于外存）" class="headerlink" title="内存 + 打孔纸卡（类似于外存）"></a><strong>内存 + 打孔纸卡（类似于外存）</strong></h4><p>前面提到可以用<strong>内存代替插线板存储程序和数据。但是程序和数据依旧需要某种方式输入计算机，所以还是需要用到打孔纸卡。同时，程序运行结果也可以输出到打孔纸卡</strong>。到1980年代，几乎所有的计算机都有打孔纸卡读取器，可以吸入一张卡片，把卡片内容写进内存。如果放了一叠卡片，读取器会一个个写进内存。一旦程序和数据写入完毕，电脑会开始执行。</p>
+<p>用纸卡的最大型程序，是美国空军的 SAGE 防空系统，于 1955 年完成，顶峰时期 雇佣了世上 20% 程序员，主控制程序用了 62500 张穿孔纸卡</p>
+<ul>
+<li><strong>缺点</strong>：即便简单程序也有几百条指令，要用一叠纸卡来存。如果不小心摔倒弄撒了，要花上几小时、几天、甚至几周来整理</li>
+<li><strong>发展</strong>：打孔纸卡——&gt;纸袋——&gt;更先进的存储方式（硬盘, 只读光盘, DVD, U盘等）</li>
+</ul>
+<h2 id="面板编程-Panel-programming"><a href="#面板编程-Panel-programming" class="headerlink" title="面板编程 Panel programming"></a>面板编程 Panel programming</h2><h3 id="面板编程"><a href="#面板编程" class="headerlink" title="面板编程"></a>面板编程</h3><ul>
+<li>用一大堆开关和按钮，代替插线板的一堆插线</li>
+<li>面板上有指示灯，代表各种函数的状态和内存中的值</li>
+</ul>
+<h3 id="Altair-8800——第一款取得商业成功的家用计算机"><a href="#Altair-8800——第一款取得商业成功的家用计算机" class="headerlink" title="Altair 8800——第一款取得商业成功的家用计算机"></a>Altair 8800——第一款取得商业成功的家用计算机</h3><ul>
+<li>大多数家庭用户负担不起昂贵的外围设备 ，比如穿孔纸卡读取器。因此，早期家用计算机，大量使用了开关</li>
+<li>组件版 Altair 8800 售价极低，在 1975 年卖 400 美元左右，相当于 2017 年的 2000 美元</li>
+<li>为了给 8800 编程，需要拨动面板上的开关，输入二进制操作码，然后按 “存储键” 把值存入内存；然后会到下一个内存位置，你可以再次拨开关，写下一个指令；重复这样做，把整个程序都写入内存之后，可以推动开关，回到内存地址0，然后按运行按钮，灯会闪烁</li>
+</ul>
+<h2 id="早期编程的缺点"><a href="#早期编程的缺点" class="headerlink" title="早期编程的缺点"></a>早期编程的缺点</h2><p>早期编程需要非常了解底层硬件，比如操作码, 寄存器等, 才能写程序，需要专家才能完成；因此编程很难、很烦，哪怕工程师和科学家都无法 完全发挥计算机的能力；因此，需要一种更简单的编程方式，告诉计算机要做什么——编程语言</p>
+<h1 id="编程语言"><a href="#编程语言" class="headerlink" title="编程语言"></a>编程语言</h1><h2 id="二进制-机器码"><a href="#二进制-机器码" class="headerlink" title="二进制/机器码"></a>二进制/机器码</h2><p>计算机只能理解并处理二进制（即 0 和 1 ），二进制是计算机的母语（CPU 可以直接执行机器码）；因此，在计算机早期阶段，必须用二进制（<strong>机器语言（Machine Language）</strong>或<strong>机器码（Machine Code）</strong>）来编写程序，程序员<strong>先</strong>在纸上<strong>写伪代码</strong>，<strong>然后</strong>再按照“操作码表”手工<strong>将伪代码转换成二进制机器码</strong></p>
+<ul>
+<li>缺点：很麻烦</li>
+</ul>
+<h2 id="汇编语言-助记符"><a href="#汇编语言-助记符" class="headerlink" title="汇编语言/助记符"></a>汇编语言/助记符</h2><p>在1940-1950年，程序员开发出一种新语言，更可读、更高层次，每个操作码分配一个简单名字，称为<strong>助记符（Mnemonics）</strong>，助记符后跟数据，形成完整的指令。所以与其写0和1的机器码，程序员可以直接写“LOAD_A 14”，这个语言称为<strong>汇编语言（Assembly Language）</strong>。</p>
+<ul>
+<li><strong>优点</strong>：更高层次，更可读，更易理解</li>
+<li><strong>缺点</strong>：汇编和底层硬件连接很紧密，一般来说一条汇编指令对应一条机器指令。也就是说汇编只是修饰了一下机器码，但仍然强迫程序员思考用什么寄存器和内存，因此编写和改动代码都很麻烦，也很冗长</li>
+</ul>
+<h3 id="汇编器-Assmebler"><a href="#汇编器-Assmebler" class="headerlink" title="汇编器 Assmebler"></a>汇编器 Assmebler</h3><ul>
+<li><strong>功能</strong>：将<strong>汇编语言</strong>自动<strong>转</strong>换成计算机能理解的<strong>机器码</strong>（二进制指令）</li>
+</ul>
+<h2 id="A-0-——-一个高级编程语言"><a href="#A-0-——-一个高级编程语言" class="headerlink" title="A-0 —— 一个高级编程语言"></a>A-0 —— 一个高级编程语言</h2><p>汇编只是修饰了一下机器码，一般来说，一条汇编指令对应一条机器指令，所以汇编码和底层硬件连接很密切，程序员仍需要思考使用什么寄存器和内存地址。为了释放电脑的潜力，海军军官 Grace 设计了一个高级编程语言，叫做Arithmetic Language Version 0，简称A0。</p>
+<h3 id="编译器-Compiler"><a href="#编译器-Compiler" class="headerlink" title="编译器 Compiler"></a>编译器 Compiler</h3><p>一行高级编程语言，可能转换成几十条二进制指令。为此做到这种复杂转换，霍普在1952年创造了第一个<strong>编译器（Compiler）</strong>，编译器专门把高级语言转换成低级语言（比如汇编或机器码）。由此，高级编程语言就不用管寄存器或内存位置，编译器会解决这些细节。</p>
+<p><strong>功能</strong>：将<strong>高级语言转</strong>换成<strong>低级语言（汇编语言或者机器码）</strong>。一行高级编程语言  可能会转成几十条二进制指令</p>
+<h2 id="FORTRAN"><a href="#FORTRAN" class="headerlink" title="FORTRAN"></a>FORTRAN</h2><ul>
+<li><strong>全称</strong>：Formula Translation，即 公式翻译</li>
+<li><strong>来源</strong>：IBM，1957.</li>
+<li><strong>优点</strong>：高级编程语言，使得编程更容易。主宰了早期计算机编程。平均来说，FORTRAN 写的程序，比等同的手写汇编代码短 20 倍</li>
+</ul>
+<blockquote>
+<p>FORTRAN 项目总监 John Backus 说过：“我做的大部分工作都是因为懒，我不喜欢写程序，所以我写这门语言，让编程更容易”</p>
+</blockquote>
+<ul>
+<li><strong>缺点</strong>：最初 FORTRAN 代码只能跑在 IBM 计算机上，如果更换计算机，可能要重新所有代码</li>
+</ul>
+<h2 id="COBAL"><a href="#COBAL" class="headerlink" title="COBAL"></a>COBAL</h2><p>在1950年，大多数编程语言和编译器只能运行在一种计算机中，如果更换计算机，就要重写所有代码，因此1959年开发一种通用编程语言，可以在不同机器上通用，最后诞生了一门高级、易于使用的语言<strong>普通面向商业语言（Common Business-Oriented Language，COBOL）</strong>。为了兼容不同底层硬件，每个计算机架构需要一个COBOL编译器，由此无论运行的计算机是什么，这些编译器可以接收相同的COBOL代码。如今大多数编程语言都是如此，不必接触CPU特有的汇编码和机器码。</p>
+<ul>
+<li><strong>优点</strong>：通用编程语言，可以在不同机器上通用</li>
+<li><strong>特点</strong>：为了兼容不同底层硬件，每个计算架构需要一个 COBOL 编译器，这些编译器都可以接收相同 COBOL 代码，转换成各个计算机能识别执行的机器码，即”<strong>一次编写，到处运行</strong>“</li>
+</ul>
+<h2 id="新编程语言的发展"><a href="#新编程语言的发展" class="headerlink" title="新编程语言的发展"></a>新编程语言的发展</h2><ul>
+<li>1960年代：ALGOL, LISP 和 BASIC</li>
+<li>1970年代：Pascal，C 和 Smalltalk</li>
+<li>1980年代：C++，Objective-C 和 Perl</li>
+<li>1990年代：Python，Ruby 和 Java</li>
+<li>2000+：Swift, C#, Go</li>
+</ul>
+]]></content>
+      <categories>
+        <category>计算机科学技术</category>
+      </categories>
   </entry>
 </search>
