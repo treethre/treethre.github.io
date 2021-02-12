@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="简要介绍计算机网络的历史及相关知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机科学技术之计算机网络">
+<meta property="og:url" content="http://example.com/posts/4a543580/index.html">
+<meta property="og:site_name" content="Rick Blog">
+<meta property="og:description" content="简要介绍计算机网络的历史及相关知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-bd0dfa011a483016ac431b355610fefb_1440w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-059e0333f1ad801bb826f3f89afeb0a7_1440w.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-618cd9d33b6ca884945143c2d8e3810e_1440w.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/v2-ad036fdcd77f84f1660e8450f1e80d58_r.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-1dfe349330934319af7db52c2e6a1f20_1440w.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-ec8b9003913221d48a7cd5896c709232_1440w.png">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-4b93626c61f38edb5e2508ff877bc512_1440w.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-9211cf69881af0f8ba2e4a8e8b5ce8ee_1440w.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-969988861bec7064179dd4e99b60dbf8_1440w.png">
+<meta property="og:image" content="https://pic4.zhimg.com/v2-0caef9d75a93b514ed6f84d3c7f4ca63_r.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/v2-061760eadb27bb199a2a917547852efc_r.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/v2-d373ca2976fcc9af82483fd35094f7a4_r.jpg">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-5c297a37758affab1974f221b51a678d_r.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/v2-d1f17935f645f06fc006ff22a4d68d4b_r.jpg">
+<meta property="article:published_time" content="2021-02-12T13:02:42.000Z">
+<meta property="article:modified_time" content="2021-02-12T13:09:09.460Z">
+<meta property="article:author" content="Rick">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic4.zhimg.com/80/v2-bd0dfa011a483016ac431b355610fefb_1440w.jpg">
+
+<link rel="canonical" href="http://example.com/posts/4a543580/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>计算机科学技术之计算机网络 | Rick Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Rick Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/4a543580/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Rick">
+      <meta itemprop="description" content="一个瞎折腾的博客，不知道能坚持几天">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rick Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机科学技术之计算机网络
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-12 21:02:42 / 修改时间：21:09:09" itemprop="dateCreated datePublished" datetime="2021-02-12T21:02:42+08:00">2021-02-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">计算机科学技术</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+<p>简要介绍计算机网络的历史及相关知识</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h1><p>第一个计算机网络出现在1950-1960年代，通常在公司或研究室内部使用，方便信息交换，称为<strong>球鞋网络（Sneakernet）</strong>，第二个好处在于共享物理资源，比如多台计算机可以共享一台打印机，并且早期网络也会共享存储空间，因为为每台计算机都配存储器太过昂贵。</p>
+<p>计算机近距离构成的小型网络称为<strong>局域网（Local Area Network，LAN）</strong>，局域网能小到是同一间房间内的两台计算机，或者大到校园内的上千台电脑。</p>
+<p>其中最著名和成功的局域网技术是1970年代的<strong>以太网（Ethernet）</strong>，以太网最简单的形式是一条以太网电线连接数台计算机，当一台计算机要传数据给另一台计算机时，它以电信号形式，将数据传入电缆中，由于电缆是共享的，所以连接在同一个网络里的其他计算机都能看到数据，但是所有计算机都不知道这些数据是给自己的还是给别人的。为了解决这个问题，以太网需要每台计算机有唯一的<strong>媒体访问控制地址（Media Access Control Address，MAC Address）</strong>，然后将MAC地址作为数据的前缀发送到网络中，所以计算机只需要监听以太网电缆，只要看到自己的MAC地址，才去接收处理数据。现在制造的每台计算机都自带唯一的MAC地址，用于以太网和无线网络。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-bd0dfa011a483016ac431b355610fefb_1440w.jpg" alt="img"></p>
+<p>这种多台电脑共享一个传输媒介（比如上面例子中共享的以太网电线）的方法称为<strong>载波侦听多路访问（Carrier Sense Multiple Access，CSMA）</strong>，这里的<strong>Carrier</strong>指的是传输数据用的任意共享传输媒介，比如以太网的载体就是铜线，WiFi的载体就是传播无线电波的空气。许多计算机可以同时侦听相同的载体，因此使用Sense和Multiple Access。而载体传输数据的速度称为<strong>带宽（Bandwidth）</strong>。</p>
+<p>但是共享载体有个很大的<strong>弊端</strong>：当网络流量比较小时，计算机可以等待载体清空，然后再传输他们的数据。但随着网络流量上升，两台计算机想同时写入数据的概率也会上升，这称为<strong>冲突（Collision）</strong>，就会使得传输的数据混乱。幸好计算机能够监听电线里的信号来检测冲突，最简单的解决方案就是看到冲突就停止传输，等待网络空闲后再试一次，问题是其他计算机也是这样打算的，其他等待的计算机可能在任何停顿间隙就闯入开始传输数据，这就导致了越来越多的冲突。</p>
+<p>以太网的<strong>解决方法</strong>是：当计算机检测到冲突后，就会在重传之前等待一小段时间，并且要保证所有计算机等待时间都不相同，所以就会让计算机等待1秒叫上一个随机时间，来相互避开。</p>
+<p>当然这个并不能完全解决问题，还需要用到另一个技巧。如果一台计算机在传输数据期间检测到冲突，就等待1秒加上一个随机时间，但是如果再次发生冲突，就表明有网络拥塞，就让计算机等待2秒加上一个随机时间，以此类推，直到成功传输。因为计算机的退避，冲突次数会大幅减少，使得数据能够再次流动起来，网络就变得顺畅了。这种指数级增加等待时间的方法称为<strong>指数退避（Exponential Backoff）</strong>，很多以太网和WiFi都用到这个技术。</p>
+<p>但是即使有了以上的技术，想用一根网线连接整个大学的计算机还是不可能的，为了减少冲突同时提高效率，我们需要减少同一载体中设备的数量，载体和其中的设备总称为<strong>冲突域（Collision Domain）</strong>。以之前以太网为例，一根电缆连接了6台计算机，这个称为一个冲突域。为了减少冲突，我们可以用<strong>交换机（Switch）</strong>将它拆成两个冲突域。交换机位于两个更小的网络之间，在必要时才在两个网络之间传输数据，并且交换机会记录一个<strong>列表</strong>，写着哪个MAC地址位于哪边网络，所以当MAC A想要传数据给MAC C，交换机就不会将数据传到另一边的网络，同理如果MAC E传输数据给MAC F，交换机也不会将数据传到上面的网络，这使得两边的传输能同时进行。但是如果MAC F想传数据给A，数据就会通过交换机，使得两个网络都会被短暂占用。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-059e0333f1ad801bb826f3f89afeb0a7_1440w.jpg" alt="img"></p>
+<p>即使最大型的网络——<strong>互联网（Internet）</strong>也是这样构建起来的，本质还是多个连在一起的稍小一点的网络，使得不同网络间可以传递数据。而大型网络有一个特点，从一台主机到另一台主机通常有多条线路（<strong>解决的主要问题</strong>），这就引出了另一个话题——<strong>路由（Routing）（用来选择合适路线的方法）</strong>。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-618cd9d33b6ca884945143c2d8e3810e_1440w.jpg" alt="img"></p>
+<p>连接两台相隔遥远的计算机或网络，最简单的方法是分配一条专门的通信线路，早期的电话系统就是这样运作的，这种方法称为<strong>电路交换（Circuit Switching）</strong>，因为是对整个电路进行修改，来连接到正确目的地，所以这种方法不灵活且价格昂贵，并且总有闲置的路线。但是好处是你可以最大限度随意使用，无需共享。因此军队、银行和其他一些机构依然会购买专门线路来连接数据中心。</p>
+<p>传输数据的另一种方法是<strong>报文交换（Message Switching）</strong>，就像邮政系统一样。不像之前A和B之间有一条专有线路，这里消息会经过好几个站点，就类似于邮寄信封，信封会通过一个个中转站最终到达收件人手中，每个站点都知道下一站要发往哪里，因为站点都有自己一个<strong>表格</strong>，用来记录到达各个目的地，信件要如何传递。报文交换的<strong>好处是</strong>，你可以用不同的路由，使得通信更可靠。比如如果其中一个城市由于降雪无法接收邮件时，就能换到另一个城市继续传递数据。这里，城市就相当于网络中的路由器一样。</p>
+<blockquote>
+<p>交换机是连接若干个主机的机器，用来解决冲突域问题。路由器是连接主机、路由器或交换机的机器，用来构建数据传输的线路。</p>
+</blockquote>
+<p>信息沿着路由跳转的次数称为<strong>跳数（Hop Count）</strong>，通过记录跳数，可以分辨出路由问题。比如当路由A认为到达目的地最快的下一个路由是B，就将信息传递给路由B，而路由B则认为到达目的地最快的下一个路由是A，又将信息传递回给了路由A，这就使得信息在路由A和B之间踢皮球，但是这种错误可以通过在信息中实时记录的跳数来解决，如果某条信息的跳数很大，就说明路由有出问题，这个称为<strong>跳数限制（Hop Limit）</strong>。</p>
+<p>而报文交换的<strong>缺点</strong>之一就是当报文较大时，会堵塞网络，因为这里要求将整个报文从一个路由传到下一个路由后，才能继续传递其他报文，当传输大报文时，其他报文要么等待它传递完，要么选择另一条效率较低的路线。解决方法就是将大报文分成很多小块，称为<strong>数据包（Packet）</strong>。和报文交换一样，每个数据包都有网络中的目的地址，因此路由器知道要发送到哪里，这个地址的具体格式由<strong>互联网协议（Internet Protocol，IP）</strong>定义。每个联网的计算机都需要一个<strong>IP地址（IP Address）</strong>，例如<code>172.217.7.238</code>。</p>
+<blockquote>
+<p>MAC地址用来标识每条计算机，而IP地址是对数据包而言的。</p>
+</blockquote>
+<p>路由器会平衡与其他路由器之间的负载，来确保传输可以快速可靠，称为<strong>拥塞控制 （Congestion Control）</strong>。有时候一个报文的多个数据包会经过不同线路，使得到达顺序也可能不相同，这对一些软件来说是存在问题的。幸运的是，在IP之上还有其他协议，比如TCP/IP可以解决乱序问题。</p>
+<p>将数据拆分成多个小数据包，然后通过灵活的路由传递，非常高效且容错率高，这种方法称为<strong>分组交换（Packet Switching）</strong>。它的好处是可以去中心化，就没有单点失败问题。</p>
+<p>如今全球的路由器协同工作，找出最高效的线路，用各种标准协议传输数据，比如<strong>因特网控制信息协议（Internet Control Message Protocol，ICMP）</strong>和<strong>边界网关协议（Border Gateway Protocol，BGP）</strong>。</p>
+<h1 id="互联网"><a href="#互联网" class="headerlink" title="互联网"></a>互联网</h1><p>任意计算机都和一个巨大的分布式网络连接在一起，称为<strong>互联网（Internet）</strong>。</p>
+<p>当你在家中通过计算机观看网上视频时，你的计算机首先需要连接到局域网LAN，这个局域网是由家里WiFi路由器连接的所有设备组成的。然后家里的局域网再通过路由器连接到<strong>广域网（Wide Area Network，WAN</strong>），广域网的路由器一般属于你的<strong>互联网服务提供商（Internet Service Provider，ISP）</strong>。在广域网里，首先会有一个区域性路由器，比如覆盖你所在街区的一个路由器，然后该路由器会连接到一个更大的广域网中，比如覆盖你所在的城市，可能再跳跃几次，最终会到达互联网主干，一般由一群超大型、带宽超高的路由器组成。</p>
+<blockquote>
+<p>即首先会连接到你家里的WiFi路由器构建的局域网，然后该路由器再连接到ISP提供的广域网中，该广域网是由很多层层递进的路由器构成的。</p>
+</blockquote>
+<p>比如要从YouTube中获得视频，数据包首先会到达互联网主干，沿着主干到达对应保存该视频文件的YouTube服务器，可能这里会跳4次到达互联网主干，然后跳两次穿过互联网主干，最终再跳4次到达YouTube服务器，所以总共会跳跃10次。</p>
+<p>我们可以通过<code>traceroute</code>来看跳跃了几次：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Windows上的Traceroute</span><br><span class="line">1.按开始按钮</span><br><span class="line">2.输入“ CMD”，然后按“ Enter”</span><br><span class="line">3.在命令提示符下，键入“ tracert dftba.com”</span><br><span class="line"></span><br><span class="line">在Mac上的Traceroute</span><br><span class="line">1.点击“转到”下拉菜单</span><br><span class="line">2.点击“实用程序”</span><br><span class="line">3.打开终端</span><br><span class="line">4.键入“ traceroute dftba.com”</span><br><span class="line"></span><br><span class="line">Linux上的Traceroute</span><br><span class="line">1.通过键入CTRL + Alt + T打开终端</span><br><span class="line">2.输入：“ traceroute dftba.com”</span><br></pre></td></tr></table></figure>
+<p><img src="https://pic1.zhimg.com/v2-ad036fdcd77f84f1660e8450f1e80d58_r.jpg" alt="img"></p>
+<p>但是数据包到底是怎么传递过去的呢？如果传输时数据包丢失了，会发生什么？当我们在浏览器中输入网址时，浏览器怎么知道服务器的地址是什么呢？</p>
+<p>就像上节介绍的，互联网是一个巨大分布式网络，如果要发送的数据较大，分组传输就会将数据拆成一个个较小的数据包进行传输。其中数据包要想在互联网上进行传输，就要符合<strong>互联网协议（Internet Protocol，IP）</strong>。类似于邮寄手写信一般，每封信都需要一个地址，并且地址必须是唯一的，并且信的大小和重量也是有限制的，否则信件就无法送达。IP数据包也是如此，因为IP是一个非常底层的协议，数据包的头部只包含目标地址（IP地址），意味着当数据包到达对方电脑时，计算机不知道要把数据包交给哪个程序（比如QQ或微信），因此需要在IP之上，开发更高级的协议。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-1dfe349330934319af7db52c2e6a1f20_1440w.jpg" alt="img"></p>
+<p>最简单常见的协议称为用户数据报协议（User Datagram Protocol，UDP）。UDP也有头部，位于data payload里面，在data之前。UDP头部里面包含了很多有用的信息，其中之一就是<strong>端口号（Port Number）</strong>，每个想访问网络的程序都要向操作系统申请一个端口号。所以当数据包到达时，接收方的操作系统会读取UDP头部里的端口号，来确定该数据包是要交给哪个软件的。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-ec8b9003913221d48a7cd5896c709232_1440w.png" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-4b93626c61f38edb5e2508ff877bc512_1440w.jpg" alt="img"></p>
+<blockquote>
+<p>IP协议通过IP地址把数据包送到正确的计算机内；UDP通过数据包里的端口号送到正确的程序。</p>
+</blockquote>
+<p>同时UDP的头部中还有<strong>校验和（Checksum）</strong>，通过对数据求和来检查数据是否正确。假设UDP数据包里原始数据是<code>89 111 33 32 58 41</code>， 最简单的计算校验和的方式就是，在发送数据包之前，计算机会把所有数据加在一起，计算出校验和364。在UDP中，校验和是以16位形式存储的，如果计算出来的和超过16位能表示的最大值，则高位数会被丢弃，只保留低位。当接收方计算机接收到这个数据包时，也会重复以上过程，如果计算出来的校验和和UDP中保存的校验和相同，代表数据是正常的，否则数据是出错的。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-9211cf69881af0f8ba2e4a8e8b5ce8ee_1440w.jpg" alt="img"></p>
+<p>但是，UDP不提供数据修复或数据重发机制，当接收方知道数据损坏后，一般只是丢弃这个数据包。并且当发送方使用UDP协议发送数据包时，是无法得知数据包是否到达目的地的。</p>
+<p>有些程序并不在意以上问题，因为UDP十分简单且快速。比如视频通常使用UDP协议，当数据包丢失时，也就造成视频卡顿。</p>
+<p>但是有些数据不能接受数据包丢失的问题，比如发送电子邮件时，所有数据必须到达，所以就需要<strong>传输控制协议（Transmission Control Protocol，TCP）</strong>。和UDP一样，它的头部也保存在数据之前，人们通常将IP协议和TCP协议统称为<strong>TCP/IP协议</strong>。TCP的头部中也包含端口号和校验和，并且TCP协议还提供更高级的功能：</p>
+<p><img src="https://pic1.zhimg.com/80/v2-969988861bec7064179dd4e99b60dbf8_1440w.png" alt="img"></p>
+<ol>
+<li>TCP的数据包是有序号的，使得接收方可以通过这个序号将数据包排成正确顺序，即使到达时间不同。</li>
+<li>TCP要求接收方的电脑收到数据包并校验和检查无误后，需要给发送方发送一个<strong>确认码（Acknowledgement，ACK）</strong>，代表数据包已经正确接收。当发送方接收到确认码后，就知道上一个数据包成功抵达了，发送方就会发送下一个数据包，如果这次发送方过了一段时间没有接收到确认码，则会重新发送一次。即使这里只是由于确认码延迟了，使得接收方那里有重复的数据包，但是通过序列号，可以直接删除重复的数据包。</li>
+</ol>
+<p><img src="https://pic4.zhimg.com/v2-0caef9d75a93b514ed6f84d3c7f4ca63_r.jpg" alt="img"></p>
+<p>并且数据包并不会一个个数据包进行传输，而是同时发送多个数据包，同时接收多个确认码，这将大大提高效率，不用浪费时间等待确认码。并且通过确认码的成功率和来回时间，我们可以推测网络的拥塞程度，TCP通过这个信息，来调整同时发包数量来解决拥塞问题。</p>
+<p><img src="https://pic1.zhimg.com/v2-061760eadb27bb199a2a917547852efc_r.jpg" alt="img"></p>
+<p>简而言之，TCP可以处理乱序和丢包问题，并且可以根据拥塞情况自动调整传输率。但是由于确认码数据包的存在，使得TCP需要传输的数据包数量翻了一倍，并且并没有传输更多信息，这对时间要求很高的程序代价太高，所以这类程序就会使用UDP协议。</p>
+<p>当计算机访问一个网站时，需要两个东西：IP地址（目标网站的地址）和端口号（对应于你使用的计算机浏览器）。但是通过IP地址访问网站十分不方便，所以互联网提供一个特殊服务，来将<strong>域名（Domain Name）</strong>和IP地址一一对应，称为<strong>域名系统（Dimain Name System，DNS）</strong>，一般DNS服务器都是由ISP提供的。当你在浏览器中输入网站域名时，浏览器就会去访问DNS服务器，DNS就会去查表，如果域名存在，则会返回浏览器对应IP地址，然后浏览器就会给这个IP地址发送TCP请求。</p>
+<p>因为当前域名特别多，所以DNS不会将其保存成列表形式，而是将其保存成树状结构。最顶层是<strong>顶级域名（Top Level Domain，TLD）</strong>，比如<code>.com</code>和<code>.gov</code>；下一层是<strong>二级域名（Second Level Domain）</strong>， 比如<code>google.com</code>和<code>dftba.com</code>；再下一层是<strong>子域名（Sub-domain）</strong>，比如<code>images.google.com</code>等等。由于这个树结构特别大，因此这些数据分布在很多DNS服务器上，不同服务器负责树的不同部分。</p>
+<p><img src="https://pic1.zhimg.com/v2-d373ca2976fcc9af82483fd35094f7a4_r.jpg" alt="img">域结构</p>
+<p>总结上两节的内容，其实计算机网络分成很多层次，接下来从最底层到最高层：</p>
+<ol>
+<li><strong>物理层（Physical Layer）</strong>，比如线路中的电信号，以及无线网络中的无线信号。</li>
+<li><strong>数据链路层（Data Link Layer）</strong>负责操控物理层，其中包含MAC地址、冲突检测、指数回退以及其他一些底层协议。</li>
+<li><strong>网络层（Network Layer）</strong>负责各种报文交换和路由技术。</li>
+<li><strong>传输层（Transport Layer）</strong>负责在计算机之间进行点到点的传输，还会检测和修复错误，比如UDP和TCP协议。</li>
+<li><strong>会话层（Session Layer）</strong>会使用TCP和UDP来创建连接，传递信息，然后关掉连接。</li>
+</ol>
+<p>以上是<strong>开放式系统互联通信参考模型（Open System Interconnection model，OSI）</strong>下的5层，这个框架将网络通信划分成了很多层，每一层处理各自的问题。这种抽象可以使得分工改进多个层，而无需考虑整体复杂性。并且OSI还有额外两层：<strong>表示层（Presentation Layer）</strong>和<strong>应用层（Application Layer）</strong>，在下一节中进行介绍。</p>
+<h1 id="万维网"><a href="#万维网" class="headerlink" title="万维网"></a>万维网</h1><p>前两节介绍的东西共同组成了互联网，这一节将向上抽象一层，来讨论<strong>万维网（World Wide Web）</strong>。万维网和互联网的概念完全不同，万维网是运行于互联网之上的，还有其他比如Skype、Instagram等也是运行在互联网之上的。互联网是用来传输数据的管道，各种程序都会使用到，其中传输最多数据的程序就是万维网，我们可以使用特殊的程序——<strong>浏览器（Web Browser）</strong>来访问万维网。</p>
+<p>万维网的最基本单位是单个页面，里面包含内容，也有访问其他页面的链接，这些链接称为<strong>超链接（Hyperlink）</strong>。这些超链接形成巨大的互联网络，这也是万维网名字的由来。</p>
+<p>并且由于文字超链接的强大，它有一个特殊的名字——<strong>超文本（Hypertext）</strong>。如今超文本最常指向的是另一个页面，这些页面会被获取并由浏览器进行渲染。</p>
+<p>为了使网页能够互相连接，每个网页需要一个唯一的地址，这个地址称为<strong>统一资源定位器（Uniform Resource Locator，URL）</strong>，比如<code>thecrashcourse.com/courses</code>就是一个页面URL。</p>
+<p>当你访问<code>thecrashcourse.com</code>网址时，计算机首先会进行DNS查询，这里输入一个域名，然后DNS就会返回给浏览器对应的计算机IP地址。然后浏览器就会打开一个TCP连接到这个IP地址对应的计算机上，而这个计算机运行着一个特殊的软件——<strong>网络服务器（Web Server）</strong>，网络服务器的标准端口是80。此时，你的计算机就连接到了<code>thecrashcourse.com</code>对应的服务器了，下一步是向服务器请求<code>courses</code> 页面，这里就会用到<strong>超文本传输协议（Hypertext Transfer Protocol，HTTP）</strong>。</p>
+<p>HTTP的第一个标准是1991年创建的HTTP 0.9，只有一个指令<code>GET</code> 。因为这里我们想要获取<code>courses</code>页面， 我们可以直接向服务器发送指令<code>GET/courses</code>， 该指令以ASCII编码发送到服务器，服务器会返回该网址对应的页面，然后浏览器就会将其渲染到屏幕上。如果用户点击了另一个链接，计算机就会重新发送一个GET请求。</p>
+<p>在之后的版本中，HTTP添加了新的状态码，会将其放在请求页面的前面，比如状态码200表示网页被正确找到了，状态码400-499代表客户端出错。</p>
+<p><img src="https://pic2.zhimg.com/v2-5c297a37758affab1974f221b51a678d_r.jpg" alt="img"></p>
+<p>因为超文本的存储和发送都是以普通文本形式进行的，编码可能是ASCII或者UTF-8，这样就无法表明什么是链接，什么只是普通的文本了，所以必须开发一种标记方法，因此出现了<strong>超文本标记语言（Hypertext Markup Language，HTML）</strong>，第一代HTML创建于1990年的0.8版本，有18种指令。</p>
+<p><img src="https://pic4.zhimg.com/v2-d1f17935f645f06fc006ff22a4d68d4b_r.jpg" alt="img"></p>
+<p>综上，网络浏览器可以和网络服务器沟通，不仅获取网页和媒体，并且还负责显示。</p>
+<p>随着后期万维网日益繁荣，人们越来越需要搜索。起初人们会维护一个目录，来链接到其他网站，但是随着网络越来越大，人工编辑目录变得很不方便，所以开发了搜索引擎。</p>
+<p>最早的搜索引擎是JumpStation，它有3个部分：1. 通过爬虫来将新链接添加进自己的列表中。2. 不断扩张的索引，用来记录访问过的网页上出现了哪些词。3. 查询索引的搜索算法，比如输入了某个关键字，则包含这个关键字的网页就会显示出来。早期的搜索引擎的排名方式直接取决于搜索词在页面上的出现次数，但是有的网页会通过在页面中重复该关键字来提高排名。Google成名的很大原因就是提出了一种算法来解决这个问题，与其信任页面上的内容，搜索引擎会看其他网页有没有连接到这个网页。</p>
+<p>最后提一个概念——<strong>网络中立性（Network Neutrality）</strong>，它指的是要对所有数据包都平等对待，速度和优先级都应该一样。</p>
+
+    </div>
+
+    
+    
+    <div>
+  <div class="end-slogan" style="text-align:center;font-size:22px;letter-spacing:10px;user-seclect:none;color:#bbb">----------- 本文结束啦<i class="fa fa-star"></i>感谢您阅读-----------</div>		
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Rick
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/posts/4a543580/" title="计算机科学技术之计算机网络">http://example.com/posts/4a543580/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/87988e0b/" rel="prev" title="计算机科学技术之命令行到图形化界面">
+      <i class="fa fa-chevron-left"></i> 计算机科学技术之命令行到图形化界面
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/d6843d0f/" rel="next" title="计算机科学技术之计算机安全">
+      计算机科学技术之计算机安全 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C"><span class="nav-text">计算机网络</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%92%E8%81%94%E7%BD%91"><span class="nav-text">互联网</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%87%E7%BB%B4%E7%BD%91"><span class="nav-text">万维网</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Rick"
+      src="/images/avatar.jpg">
+  </a>
+  <p class="site-author-name" itemprop="name">Rick</p>
+  <div class="site-description" itemprop="description">一个瞎折腾的博客，不知道能坚持几天</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-sun"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rick</span>
+</div>
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+<!-- 不蒜字统计 -->
+<div>
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_uv">
+    访问人数：<span id="busuanzi_value_site_uv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    总访问量：<span id="busuanzi_value_site_pv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <!-- 添加博客全站总字数统计-->
+  <i class="fa fa-pencil"></i>
+  <span class="post-count">博客全站共 321.5k 字</span>
+</div>
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '',
+      clientSecret: '',
+      repo        : '',
+      owner       : '',
+      admin       : [''],
+      id          : '37e1d43d6374aea521716b8eb6a221df',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

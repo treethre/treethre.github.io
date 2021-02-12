@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="计算机安全的范围和计算能力的发展速度一样快，我们可以把计算机安全，看成是保护系统和数据的保密性、完整性和可用性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机科学技术之计算机安全">
+<meta property="og:url" content="http://example.com/posts/d6843d0f/index.html">
+<meta property="og:site_name" content="Rick Blog">
+<meta property="og:description" content="计算机安全的范围和计算能力的发展速度一样快，我们可以把计算机安全，看成是保护系统和数据的保密性、完整性和可用性。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic4.zhimg.com/v2-ad22132f4bd318368243f25a680fba8f_r.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/v2-2f8bbc97560a1921161c1601c23b3442_r.jpg">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-a93ea4bc100410987f352c87e3d25fc1_r.jpg">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-7b79d79f273c903857207db7c25f8865_r.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=B%5Ex%5C%25M">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=(B%5EY+%5C%25M)%5EX%5C%25M=B%5E%7BXY%7D%5C%25M">
+<meta property="article:published_time" content="2021-02-12T13:07:10.000Z">
+<meta property="article:modified_time" content="2021-02-12T13:09:09.460Z">
+<meta property="article:author" content="Rick">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic4.zhimg.com/v2-ad22132f4bd318368243f25a680fba8f_r.jpg">
+
+<link rel="canonical" href="http://example.com/posts/d6843d0f/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>计算机科学技术之计算机安全 | Rick Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Rick Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/d6843d0f/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Rick">
+      <meta itemprop="description" content="一个瞎折腾的博客，不知道能坚持几天">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rick Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机科学技术之计算机安全
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-12 21:07:10 / 修改时间：21:09:09" itemprop="dateCreated datePublished" datetime="2021-02-12T21:07:10+08:00">2021-02-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">计算机科学技术</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+<p>计算机安全的范围和计算能力的发展速度一样快，我们可以把计算机安全，看成是保护系统和数据的<strong>保密性、完整性和可用性</strong>。</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="计算机安全"><a href="#计算机安全" class="headerlink" title="计算机安全"></a>计算机安全</h1><p>计算机安全的范围和计算能力的发展速度一样快，我们可以把计算机安全，看成是保护系统和数据的<strong>保密性、完整性和可用性</strong>。</p>
+<p><strong>保密性（Secrecy）：</strong>只有有权限的人才能读取计算机系统和数据，比如黑客泄露别人的信用卡信息，就是攻击保密性。</p>
+<p><strong>完整性（Integrity）：</strong>只有有权限的人才能使用和修改系统和数据，比如黑客假冒你发送邮件，就是攻击完整性。</p>
+<p><strong>可用性（Availability）：</strong>有权限的人应该随时可以访问系统和数据，<strong>拒绝服务攻击（DDOS</strong>）就是黑客发送大量的假请求到服务器上，使得网站很慢或者直接挂掉，这就是攻击可用性。</p>
+<p>为了实现这三个目标，安全专家会从抽象层面想想敌人可能是谁，这个称为<strong>威胁模型分析（Threat Model）</strong>。模型会对攻击者有个大致的描述：能力如何、目标是什么、可能使用什么手段。攻击手段又称为<strong>攻击矢量（Attack Vector）</strong>。威胁模型分析能够让你为特定情境做好准备，不被可能的攻击手段所淹没。换句话说，要怎么保护，具体看要对抗谁。</p>
+<p>通常威胁模型分析中，会以能力水平进行区分。在给定的威胁模型下，安全架构师要提供解决方案，来保持系统安全。</p>
+<p>有很多保护计算机系统、网络和数据的方法。很多安全问题可以总结成<strong>两个问题</strong>：</p>
+<ol>
+<li>你是谁？</li>
+<li>你能访问什么？</li>
+</ol>
+<p>权限应该给适合的人而拒绝错误的人，所以为了区分谁是谁，我们使用<strong>身份认证（Authentication）</strong>来让计算机得知使用者是谁。通常身份认证有三种，各有利弊：</p>
+<ol>
+<li><strong>你知道什么：</strong>这个是基于某种只有用户和计算机知道的秘密，比如用户名和密码。这是如今使用最广最容易实现的方法。但是如果黑客知道了你的密码就惨了，或者可以通过暴力攻击试了密码的所有可能来获取你的密码，有些系统会在你尝试若干次错误后阻止你继续尝试。即使增长密码也很容易破解，所以现在很多网站都要求大小写字母加特殊字符，来增加可能的密码。</li>
+<li><strong>你有什么：</strong>这是基于用户特定的物体，比如钥匙和锁。这种方法可以避免被人猜中密码的问题，而且通常需要人在现场，所以远程攻击就更加困难了。</li>
+<li><strong>你是什么：</strong>这是基于你，通过你自己的特征展示给计算机来进行验证，比如指纹识别器和红膜扫描仪，这些方法特别的安全，但是最好的识别技术十分昂贵。“你知道什么”和“你有什么”是确定性的，但是来自传感器的数据每次都不相同，所以“你是什么”是概率性的，系统可能认不出你，或者将其他人认成了你。并且这种方法另一个问题就是无法重设，你无法修改自己的指纹或者虹膜。</li>
+</ol>
+<p>每种方法都有优缺点，一般建议使用两种或两种以上的认证方式。</p>
+<p>当系统知道了你是谁，接下来就需要知道你能访问什么，这个称为<strong>访问控制（Access Control）</strong>，因此需要一个规范，来说明谁能访问什么、修改什么和使用什么。这个可以通过<strong>权限（Permission）</strong>或<strong>访问控制列表（Access Control List，ACL）</strong>来实现，其中描述了用户对每个文件、文件夹和程序的访问权限。</p>
+<p>读权限：允许用户查看文件内容。</p>
+<p>写权限：允许用户修改文件内容。</p>
+<p>执行权限：运行用户运行文件。</p>
+<p>有些阻止需要不同层次的权限，则ACL的正确配置就十分重要。假设我们有三个访问级别：<strong>公开、机密和顶级机密</strong>。有个经典模型称为<strong>Bell-LaPadula模型</strong>，其中包含两条规则：</p>
+<ol>
+<li>用户不能<strong>read up</strong>，即不能读等级更高的信息。</li>
+<li>用户不能<strong>write down</strong>，即用户不能写更低权限的信息，这样能避免高级别的信息不会泄漏到低级别的文件中。</li>
+</ol>
+<p>通过身份认证和权限控制，可以让计算机知道你是谁和你能访问什么，但是必须先保证做这些事的软硬件必须是可信的。但是仍然无法保证程序或计算机系统的安全，因为安全软件在理论上可能是安全的，但是实现时可能会不小心留下漏洞。但是我们有办法减少漏洞出现的可能性，比如一发现漏洞就马上修补。</p>
+<p>大部分漏洞都是具体实现时出错了，所以为了减少执行错误，就要减少执行。系统级安全的圣杯之一是安全内核或可信计算机基础：一组尽可能少的操作系统软件，这个安全性是接近可验证的。</p>
+<p>构建安全内核的挑战在于，要决定内核应该有什么（代码越少越好）。当最小化代码数量后，要是能保证代码是安全的，那就很好了。现在最好的验证代码安全性的手段是<strong>独立安全监察和质量验证（Independent Verification and Validation）</strong>，让一群安全行业内的软件开发者来审计代码，这也是为什么安全型代码几乎都是开源的。</p>
+<p>但是即使这样，还是有可能被黑客攻破，因此程序开发者需要控制损失的最大程度，这个称为<strong>隔离（Ioslation）</strong>。要实现隔离，可以<strong>“沙盒”（sandbox）</strong>程序，操作系统通过给每个程序独立的内存块，使得别的程序是无法触及的，这样就能把程序放到沙盒中，即使沙盒被破坏了，也不会影响别的程序执行。并且一台计算机可以运行多个<strong>虚拟机（Virtual Machine）</strong>，使得每个虚拟机都在自己的沙盒中。</p>
+<h1 id="黑客与攻击"><a href="#黑客与攻击" class="headerlink" title="黑客与攻击"></a>黑客与攻击</h1><p>这里只介绍一些入侵原理，提供一个大概的概念。</p>
+<p>黑客入侵最常见的方式不是通过技术，而是欺骗别人，这个称为<strong>社会工程学（Social Engineering）</strong>，通过欺骗别人来让人泄露秘密，或让人配置电脑系统来变得易于攻击。最常见的攻击是<strong>网络钓鱼（Phishing）</strong>，其次还有<strong>假托（Pretexting）</strong>，攻击者给某个公司打电话，假装是IT部门的人，攻击者的第一通电话一般会叫人转接，这样另一个接的时候，电话看起来就像内部的，然后让别人把电脑配置得易于入侵，或者让他们泄露机密信息，比如密码或网络配置。</p>
+<p>邮件里带<strong>木马（trojan horse）</strong>也是常见手段，木马通常会伪装成无害的东西，比如照片或发票，但实际上是恶意软件，有的会偷数据，有的会加密文件。</p>
+<p>如果攻击者无法用木马或电话欺骗，攻击者只能被迫使用其他手段，方法之一就是暴力破解，尝试所有可能的密码，直到进入系统，大多数现代系统会加长等待时间来抵御这种攻击。现在出现了一种攻破方法称为<strong>NAND镜像</strong>，如果能物理接触到电脑，可以往内存上接几根线，复制整个内存，然后暴力尝试密码，知道设备让你等待，这时只要把复制的内容覆盖掉内存，就无需等待，继续尝试密码。</p>
+<p>如果无法物理接触到设备，就需要远程攻击，比如通过互联网，这一般需要攻击者利用系统漏洞，来获得某些能力或访问权限，称为<strong>漏洞利用（Exploit）</strong>。一种常见的漏洞利用叫<strong>缓冲区溢出（Buffer Overflow）</strong>，这里的缓冲区是指预留的一块内存空间，比如我们在系统登录界面输入用户名和密码，而系统是用缓冲区来存储输入值的，假设缓冲区大小为10，并且缓冲区前后肯定还有其他数据，当用户输入用户名和密码时，这些值就会被复制到缓冲区中来进行验证，而该方法会溢出缓冲区，比如输入超过10个字符的密码，会覆盖掉相邻的数据，有时会让程序或系统崩溃，因为重要值被垃圾数据覆盖掉了。这里只是让系统崩溃，但是攻击者可以输入有意义的新值到程序的内存中，比如把<code>is_admin</code>标志位的值改为true，有了任意修改内存的能力，黑客就可以绕过登录这类东西，甚至使用那个程序劫持整个系统。</p>
+<p>有许多方法阻止缓冲区溢出，最简单的方法就是复制到内存之前先检查长度，称为<strong>边界检查（Bounds checking</strong>），许多现代编程语言都自带边界检查，程序也会随机存放变量在内存中的位置，这样黑客就不知道应该覆盖内存的哪部分，使得更容易让程序崩溃，而不是获得访问权限。程序也可以在缓冲区后，预留一些不用的空间，然后跟踪里面的值，看是否发生变化，来判断是否有攻击，这些不用的内存空间称为<strong>金丝雀（Canaries）</strong>。</p>
+<p>另一种经典手段是<strong>代码注入（Code Injection）</strong>，最常用于攻击用数据库的网站。假设网页上有登录提示，当用户点击“登录”，输入文本就会发送服务器，服务器就会运行代码，检查用户名是否存在，如果存在就看密码是否匹配。为此服务器会执行一段sql查询代码，比如</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT password FROM users WHERE username=&#x27;___&#x27;;</span><br></pre></td></tr></table></figure>
+<p>这里语句就是要从<code>users</code>表中查找<code>username</code>为<code>___</code>的密码<code>password</code>。 这里的<code>___</code>就是用户输入的用户名。由此攻击者就能把sql命令输入到用户名中，比如<code>whatever&#39;;DROP TABLE users;&#39;</code>，这时上面的查询语句就会变成</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT password FROM users WHERE username=&#x27;whatever&#x27;;DROP TABLE users;&#x27;;</span><br></pre></td></tr></table></figure>
+<p>如果服务器存在用户名<code>wharever</code>，数据库就会返回密码， 当然我们无法得知密码是什么，所以服务器会拒绝我们；如果不存在用户名<code>wharever</code>，服务器会返回空密码或者直接错误，服务器也会拒绝我们。 但是我们关心的是后面的代码<code>DROP TABLE users;</code>，这个是我们注入的命令，这个命令是删掉users这张表。如今几乎所有服务器都会防御这种手段。</p>
+<p>程序员需要认识到从外界输入的信息都是危险的，必须要好好检查，很多用户名和密码表单，不会让你直接输入特殊符号，比如分号或括号，来作为第一道防御。好的服务器也会清理输入，比如修改或删除特殊字符，然后才放到数据库查询语句中。</p>
+<p>当软件制造者不知道的新漏洞被发现时，称为<strong>0day漏洞（Zero Day Vulnerability）</strong>，黑客就会抢在白帽程序员做出补丁之前尽可能利用漏洞。</p>
+<p>如果有足够多的电脑有漏洞，让恶意程序可以自动地在电脑之间互相传播，称为<strong>蠕虫（Worm）</strong>。如果黑客拿下大量电脑，这些电脑可以组成<strong>僵尸网络（Botnet）</strong>，可以用于很多目的，比如发大量垃圾邮件等，用别人电脑的计算能力来挖比特币，或发起DDOS来攻击服务器。DDOS就是僵尸网络里的所有电脑发一大堆垃圾信息到服务器上，造成服务器的阻塞。</p>
+<h1 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h1><p>这节将介绍计算机安全中最常见的防御形式——密码学。</p>
+<p>为了加密信息，要将<strong>加密算法（Cipher）</strong>将明文专为密文，除非知道如何解密，否则密文看起来就是一堆乱码，这种将明文专为密文的过程叫做<strong>加密（Encryption）</strong>，而相反过程称为<strong>解密（Decryption）</strong>。</p>
+<p>加密算法早在计算机出现之前就存在了，凯撒使用我们如今称为<strong>凯撒加密（Caesar Cipher）</strong>的方法来加密私人信件，他会将信件中的字母向前移动3个位置，所以a变成d，brutus变成euxwxv。为了解密，接受者要知道使用了什么算法，以及偏移的字母位数作为钥匙。</p>
+<p>有一大类算法称为<strong>替换加密（Substitution Cipher）</strong>，凯撒密码就是其中一种，算法把每个字母替换成其他字母。但是有一个巨大的缺点是，字母出现的频率是一样的，比如英语中字母E出现的频率最高，如果将E替换成了X，则密文中X的出现频率就会很高，通过统计字母频率，就有可能破译密码。</p>
+<p>另一类加密算法叫<strong>移位加密（Permutation Cipher）</strong>，比如<strong>列移位加密（Columnar Transposition Cipher）</strong>，我们这里将明文填入网格，比如选择5x5大小的网格。为了加密信息，我们换一个顺序来读取，比如从左边开始，从下往上一次读一列，就会变成图2的形式，这样加密后的字母排列是不同的，，但是字母出现的频率没有变化。这里解密的关键是要知道读取方向和网格大小。</p>
+<p><img src="https://pic4.zhimg.com/v2-ad22132f4bd318368243f25a680fba8f_r.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/v2-2f8bbc97560a1921161c1601c23b3442_r.jpg" alt="img"></p>
+<p>到了1900年代，人们用密码学做了加密机器，比如德国的Enigma用来加密通讯信息。Enigma是一台类似打字机的机器，包含键盘和灯板，这两个都有完整的字母表，而且它还有一系列转子，这些是加密的关键。首先我们看一个转子，它一面有26个接触点，代表26个字母，然后线会连接到另一面来替换字母，其实这个就是替换加密。但是Enigma更加复杂，它有更多的转子，一个转子的输出作为下一个转子的输入，并且转子还有26个起始位置，还可以按不同顺序加入转子，来提供更多字母替换映射。转子之后是一个叫反射器的特殊电路，它每个引脚会连接另一个引脚，并把信号发回转子，最后机器前方有一个插板，可以把输入键盘的字母预先进行替换来增加一层复杂度。图中显示的是输入H后，经过加密会输出L，因为线路是双向的，所以输入L也会被加密成H，所以加密和解密步骤是一样的，直接将密文输入机器就能得到对应的明文。</p>
+<p><img src="https://pic2.zhimg.com/v2-a93ea4bc100410987f352c87e3d25fc1_r.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/v2-7b79d79f273c903857207db7c25f8865_r.jpg" alt="img"></p>
+<p>但是这个机器有个缺点，就是字母加密后，一定会变成另一个字母。</p>
+<p>最后，为了让Enigma不只是简单的替换加密，每输入一个字母，转子就会转一格，这样比如你输入<code>AAA</code>，可能会输出<code>BDK</code>，映射会随着每次按键发生改变。</p>
+<p>随着计算机出现，加密从硬件转向了软件。早期应用最广的加密算法是IBM和NSA于1977年开发的<strong>数据加密标准（Data Encryption Standard，DES）</strong>，DES最初用56位二进制密钥，但到了1999年，计算机能将DES所有可能密钥都试一遍，所以DES不再安全。所以在2001年出现了<strong>高级加密标准（Advanced Encryption Standard，AES）</strong>，AES使用128/192/256位密钥，使得暴力破解更加困难。</p>
+<p>AES将数据切成一块一块，每块16个字节，然后用密钥进行一系列替换加密和移位加密，再加上一些其他操作，进一步加密信息，并且每块数据会重复这个过程10次以上。因为加密是需要时间的，如果使用过长的密钥或者加密次数过多，虽然更加安全，但是加密时间过长。目前AES被广泛应用，比如iPhone上加密文件，用WPA2协议在WiFi中访问HTTPS网站。</p>
+<p>之前讨论的加密技术，都依赖于发送方和接收方都知道密钥，发送方用密钥进行加密，而接收方使用相同密钥来解密。现在我们需要某种方法，在公开的互联网上传递密钥给对方，但是这种方法不是很安全，密钥可能会被黑客拦截。解决方案就是<strong>密钥交换（Key Exchange）</strong>，这是一种不发送密钥，但依然让两台计算机在密钥上达到共识的算法。我们可以使用<strong>单向函数（One-way Function）</strong>来实现，这是一种数学操作，很容易计算出结果，但是想从结果逆向推算出输入非常困难。</p>
+<p>以颜料为例，我们可以很容易地将多个颜料混合得到最终的颜色，但是想要从最终颜色推算出用了哪些颜料进行混合是非常困难的。在这个例子中，我们的密钥就是一种独特的颜色。首先有一个公开的颜色，所有人都可以看到，然后对方和我自己各自选择一个秘密颜色，为了交换密钥，我先将我的颜色和公开颜色进行混合，然后发送给对方，并且对方也将他的颜色和公开颜色混合后发送给我，当我收到对方发来的颜色后，也将自己的颜色混入，并且对方也这么操作，这样我们就都得到了由3中颜色混合的一样的最终颜色，我们就可以将这个最终颜色当做密钥。</p>
+<p>计算机中，我们可以用<strong>Diffie-Hellman密钥交换</strong>，在Diffie-Hellman中，单向函数是<strong>模幂运算</strong>，首先将一个数作为基数（Base），再拿另一个数作为指数（Exponent），然后将其结果出于第三个数就得到我们想要的余数， <img src="https://www.zhihu.com/equation?tex=B%5Ex%5C%25M" alt="[公式]"> ，这样，如果只给B、M和余数很难知道x是多少，并且如果将数字变得很长，比如几百位，想要找到秘密指数几乎是不可能的。</p>
+<p>在Diffie-Hellman中，我们有公开的数——基数B和模数M。为了安全地给对方发送信息，我们选择一个秘密指数X，然后将计算结果发送给对方，对方同样也选择一个秘密指数Y，然后也将计算结果发送给我，为了算出双方共用的密钥，我将对方的结果作为新的基数，再取X指数并求余，即 <img src="https://www.zhihu.com/equation?tex=(B%5EY+%5C%25M)%5EX%5C%25M=B%5E%7BXY%7D%5C%25M" alt="[公式]"> ，而对方也用相同方法进行计算，得到的也是相同结果。这样就可以将这个计算结果当做密钥，使用AES之类的加密技术进行加密通信。</p>
+<p>Diffie-Hellman密钥交换时简历共享密钥的一种方法，双方使用一样的密钥加密和解密信息，称为<strong>对称加密（Symmetric Encryption）</strong>，因为加密和解密使用的密钥是一样的，前面的凯撒加密、Enigma和AES都是对称加密。同样还存在<strong>非对称加密（Asymmetric Encryption）</strong>，这里有两个不同的密钥，一个是公开的，一个是私有的，人们可以用公钥加密消息，而只有有私钥的人才能解密，所以知道公钥只能进行加密不能进行解密，而通过公钥加密后，也只能用私钥进行解密，所以它是不对称的。</p>
+<p>比如有一个带锁的箱子，我们可以将锁和箱子给别人，他将信息放入箱子并上锁后还给我，我就可以通过自己的钥匙将其打开。</p>
+<p>过程反过来也是可以的，可以用私钥加密再用公钥解密，这个通常用于签名。服务器可以用私钥进行加密，任何人都可以用服务器的公钥进行解密来获得信息，这使得私钥相当于一个签名，只有有私钥的人才能进行加密，只有当公钥能正确解密，才能证明数据来自正确的服务器或个人。</p>
+<p>目前最流行的非对称加密技术是RSA。</p>
+
+    </div>
+
+    
+    
+    <div>
+  <div class="end-slogan" style="text-align:center;font-size:22px;letter-spacing:10px;user-seclect:none;color:#bbb">----------- 本文结束啦<i class="fa fa-star"></i>感谢您阅读-----------</div>		
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Rick
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/posts/d6843d0f/" title="计算机科学技术之计算机安全">http://example.com/posts/d6843d0f/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/4a543580/" rel="prev" title="计算机科学技术之计算机网络">
+      <i class="fa fa-chevron-left"></i> 计算机科学技术之计算机网络
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8"><span class="nav-text">计算机安全</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%BB%91%E5%AE%A2%E4%B8%8E%E6%94%BB%E5%87%BB"><span class="nav-text">黑客与攻击</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A0%E5%AF%86"><span class="nav-text">加密</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Rick"
+      src="/images/avatar.jpg">
+  </a>
+  <p class="site-author-name" itemprop="name">Rick</p>
+  <div class="site-description" itemprop="description">一个瞎折腾的博客，不知道能坚持几天</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-sun"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rick</span>
+</div>
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+<!-- 不蒜字统计 -->
+<div>
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_uv">
+    访问人数：<span id="busuanzi_value_site_uv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    总访问量：<span id="busuanzi_value_site_pv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <!-- 添加博客全站总字数统计-->
+  <i class="fa fa-pencil"></i>
+  <span class="post-count">博客全站共 321.5k 字</span>
+</div>
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '',
+      clientSecret: '',
+      repo        : '',
+      owner       : '',
+      admin       : [''],
+      id          : '26c54c9bdf7617882d80c03ad74f89d6',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

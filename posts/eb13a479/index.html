@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一般来说，电脑内存是非永久性的（Non-Permanent），如果电脑关机，则内存中的所有数据都会丢弃，所以内存叫易失性存储器（Volatile Memory），还存在另一种存储器（Storage），存储器（storage）和内存（memory）存在一定的不同。任何写入storage的数据，就会一直保存，直到被覆盖或删除，断点也不会丢失，称为非易失性（Non-volatile）。过去是易失性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机科学技术之内存">
+<meta property="og:url" content="http://example.com/posts/eb13a479/index.html">
+<meta property="og:site_name" content="Rick Blog">
+<meta property="og:description" content="一般来说，电脑内存是非永久性的（Non-Permanent），如果电脑关机，则内存中的所有数据都会丢弃，所以内存叫易失性存储器（Volatile Memory），还存在另一种存储器（Storage），存储器（storage）和内存（memory）存在一定的不同。任何写入storage的数据，就会一直保存，直到被覆盖或删除，断点也不会丢失，称为非易失性（Non-volatile）。过去是易失性">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/1324638/1598535660895-8d1c3d7d-cad6-4179-9589-922cca02f5db.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/1324638/1598536308327-ab657763-1fc0-4692-85b9-27e4ff419f15.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/1324638/1598537639922-2ff7f2fc-9a06-4fd1-8776-78b019c5480a.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/1324638/1598538164741-e56b91e3-d559-4f86-ba57-534e917c1b51.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/1324638/1598538614362-8fd35636-34a9-4164-b695-0941114061f9.png">
+<meta property="article:published_time" content="2021-02-12T11:54:13.000Z">
+<meta property="article:modified_time" content="2021-02-12T13:09:09.445Z">
+<meta property="article:author" content="Rick">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2020/png/1324638/1598535660895-8d1c3d7d-cad6-4179-9589-922cca02f5db.png">
+
+<link rel="canonical" href="http://example.com/posts/eb13a479/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>计算机科学技术之内存 | Rick Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Rick Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/eb13a479/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Rick">
+      <meta itemprop="description" content="一个瞎折腾的博客，不知道能坚持几天">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rick Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机科学技术之内存
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-12 19:54:13 / 修改时间：21:09:09" itemprop="dateCreated datePublished" datetime="2021-02-12T19:54:13+08:00">2021-02-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">计算机科学技术</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+<p>一般来说，电脑内存是<strong>非永久性的（Non-Permanent）</strong>，如果电脑关机，则内存中的所有数据都会丢弃，所以内存叫<strong>易失性存储器（Volatile Memory）</strong>，还存在另一种<strong>存储器（Storage）</strong>，存储器（storage）和内存（memory）存在一定的不同。任何写入storage的数据，就会一直保存，直到被覆盖或删除，断点也不会丢失，称为<strong>非易失性（Non-volatile）</strong>。过去是易失性的速度快，非易失性的速度慢，但随着技术发展，两者的差异越来越小。</p>
+<p><strong>存储技术的发展</strong>：</p>
+<p>打孔纸卡/纸带   –&gt;    延迟线存储器  –&gt;   磁芯存储器   –&gt;   磁带 –&gt;   磁鼓存储器  —&gt; 硬盘 &amp; 软盘  —&gt;   光盘  —&gt; 固态硬盘</p>
+</blockquote>
+<a id="more"></a>
+
+<p><strong>内存 &amp; 储存介质</strong></p>
+<ul>
+<li><strong>内存 memory</strong>：”易失性”存储器，断电则数据丢失</li>
+<li><strong>储存介质/存储器 storage</strong>：是”非易失性”的，任何写入”存储器”的数据，比如你的硬盘数据会一直存着，直到被覆盖或删除，断电也不会丢失</li>
+</ul>
+<h1 id="打孔纸卡-amp-打孔纸带"><a href="#打孔纸卡-amp-打孔纸带" class="headerlink" title="打孔纸卡 &amp; 打孔纸带"></a>打孔纸卡 &amp; 打孔纸带</h1><p>最早的存储介质是打孔纸卡以及打孔纸带，到1940年代，纸卡标准是80列x12行，能够存储960位数据。纸卡用了十几年，因为不用电而且便宜耐用，但是读取速度较慢，只能写入一次，对于存临时值，纸卡不好用，我们需要更大更灵活的存储方式。</p>
+<p><strong>实例</strong>：美国军方 1958 年投入使用的防空系统，主程序存储在 62,500 个纸卡上，大小 5MB 左右, 相当如今手机一张照片的大小</p>
+<p><strong>优点</strong>：不用电而且便宜耐用</p>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>读取<strong>慢</strong></li>
+<li>容量<strong>小</strong></li>
+<li><strong>只能写入一次</strong>（打的孔无法轻易补上），不灵活，不方便存储临时值</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1598535660895-8d1c3d7d-cad6-4179-9589-922cca02f5db.png" alt="image.png"></p>
+<h1 id="延迟线存储器-Delay-Line-Memory"><a href="#延迟线存储器-Delay-Line-Memory" class="headerlink" title="延迟线存储器 Delay Line Memory"></a>延迟线存储器 Delay Line Memory</h1><p>1944年时，出现了<strong>延迟线存储器（Delay Line Memory）</strong>。</p>
+<p>拿一个管子装满液体，如水银，扬声器发出脉冲时会产生压力波，压力波需要时间传播到另一端的麦克风，麦克风将压力波转换回电信号。我们可以用压力波的传播延迟来存储数据。假设有压力波代表 1，没有代表 0，扬声器可以输出 1010 0111，压力波沿管子传播，过了一会儿，撞上麦克风，将信号转换回 1 和 0，如果加一个电路，连接麦克风和扬声器，再加一个放大器（Amplifier）来弥补信号衰弱，就能做一个存储数据的循环。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1598536308327-ab657763-1fc0-4692-85b9-27e4ff419f15.png" alt="image.png"></p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>信号沿电线传播几乎是瞬时的，所以任何时间点只显示  1 bit 数据</li>
+<li>但管子中可以存储多个位(bit)</li>
+</ul>
+<p><strong>实例</strong>：在1949年的EDVAC计算机中使用了延迟线存储器，总共有128条延迟线，每条能存352位，一共能保存45000位。这使得EDVAC成为最早的存储程序计算机之一。</p>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li> <strong>顺序存储器/循环存储器</strong>，访问速度慢：由于每一个时刻只能读一位 (bit) 数据，如果想访问一个特定的 bit，比如第 112 位(bit) ，你得等待它从循环中出现</li>
+<li><strong>难以增加内存密度</strong>，即难以提升存储容量：把压力波变得更紧密就更容易混在一起。</li>
+</ul>
+<p><strong>改良：</strong> “磁致伸缩延迟存储器”，用金属线的振动来代表数据，通过把线卷成线圈，1英尺×1英尺的面积能存储大概 1000位(bit)</p>
+<p><strong>时间</strong>：延迟线存储器在 1950 年代中期就基本过时了</p>
+<h1 id="磁芯存储器-Magnetic-Core-Memory"><a href="#磁芯存储器-Magnetic-Core-Memory" class="headerlink" title="磁芯存储器 Magnetic Core Memory"></a>磁芯存储器 Magnetic Core Memory</h1><ul>
+<li>使用一个像甜甜圈的小型磁圈，如果给磁芯绕上电线，并施加电流，可以将磁化在一个方向；如果关掉电流，磁芯保持磁化；如果沿相反方向施加电流，磁化的方向（极性）会翻转。这样就可以存一位 1 和 0。</li>
+<li>把磁圈排列成网格来存储多位数据。有电线负责选行和列；也有电线贯穿每个磁芯, 用于读写一位(bit)。</li>
+</ul>
+<p><strong>实例</strong>：磁芯存储器的第一次大规模运用是 1953 年麻省理工学院的 Whirlwind 1 计算机，磁芯排列是 32×32，所以能存 1024 位(bit)  (32x32=1024)；用了 16 块板子，能存储大约 16000 位(bit)</p>
+<p><strong>优点</strong>：磁芯存储器能是<strong>随机存取存储器</strong>，能随时访问任何一位(bit)</p>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>手工编织磁芯网格</li>
+<li><strong>存储成本依然很高</strong>：刚开始时，存储成本大约 1 美元 1 位(bit)；到1970年代，下降到 <strong>1 美分左右</strong> **1 位(bit)**，这意味着存储现代手机的一张照片（5MB ≈ 4000 万 bit），需要花费 40 万美分</li>
+</ul>
+<p><strong>时间</strong>：”磁芯存储器” 从 1950 年代中期开始成为主流，流行了 20 多年</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1598537639922-2ff7f2fc-9a06-4fd1-8776-78b019c5480a.png" alt="image.png"></p>
+<h1 id="磁带-Magnetic-Tape"><a href="#磁带-Magnetic-Tape" class="headerlink" title="磁带 Magnetic Tape"></a>磁带 Magnetic Tape</h1><p>到1951年，UNIVAC电脑推出了一种新存储——<strong>磁带（Magnetic Tape）</strong>。</p>
+<p>磁带是纤薄柔软的一长条卷在轴上的磁性带子，磁带可以在<strong>磁带驱动器</strong>内前后移动。</p>
+<ul>
+<li>写：磁带驱动器里面有一个”写头”绕了电线，电流通过产生磁场，导致磁带的一小部分被磁化，电流方向决定了极性，代表 1 和 0。</li>
+<li>读：磁带驱动器里还有一个”读头”，可以非破坏性地检测极性。</li>
+</ul>
+<p><strong>实例</strong>：1951 年，最早进行商业销售的电脑之一 UNIVAC 用了半英寸宽、8条并行的磁带，磁带每英寸可存 128 位数据，每卷有 1200 英尺长，意味着一共可以存 1500 万位左右，接近2兆字节（2 MB）</p>
+<p><strong>优点</strong>：虽然磁带驱动器很贵，但磁带<strong>又便宜又小</strong>，因此<strong>磁带至今仍用于存档</strong>。</p>
+<p><strong>缺点</strong>：<strong>访问速度慢</strong>：因为磁带是连续的，必须倒带或快进到达特定位置才能访问相应的数据，可能要几百英尺才能得到某个字节(byte)，这很慢。</p>
+<h1 id="磁鼓存储器-Magnetic-Drum-Memory"><a href="#磁鼓存储器-Magnetic-Drum-Memory" class="headerlink" title="磁鼓存储器 Magnetic Drum Memory"></a>磁鼓存储器 Magnetic Drum Memory</h1><p><strong>时间</strong>：1950, 60年代。到 1970 年代 “磁鼓存储器” 不再生产。</p>
+<p>类似磁带。有金属圆筒，盖满了磁性材料以记录数据。滚筒会持续旋转，周围有数十个读写头，data,,等滚筒转到正确的位置，读写头会读或写 1 位(bit) 数据。为了尽可能缩短延迟, 鼓轮每分钟上千转。</p>
+<p><strong>实例</strong>：到 1953 年，磁鼓技术飞速发展，可以买到存 80,000 位的”磁鼓存储器”，也就是 10 KB</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1598538164741-e56b91e3-d559-4f86-ba57-534e917c1b51.png" alt="image.png"></p>
+<h1 id="硬盘-Hard-Disk-Drives"><a href="#硬盘-Hard-Disk-Drives" class="headerlink" title="硬盘 Hard Disk Drives"></a>硬盘 Hard Disk Drives</h1><p>硬盘和磁鼓类似，<strong>磁鼓导致了硬盘的发展</strong>。不过硬盘用的是盘，不像磁鼓用圆柱体。</p>
+<ul>
+<li>磁盘表面有磁性，写入头和读取头  可以处理上面的 1 和 0。</li>
+<li>要访问某个特定位，一个读写磁头会上下移动，找到正确的磁盘，然后磁头会滑进去，就和磁鼓存储器一样，磁盘也会高速旋转，所以读写头要等到正确的部分旋转过来，这个称为<strong>寻道时间（Seek Time）</strong></li>
+</ul>
+<p><strong>优点</strong>：</p>
+<ul>
+<li><strong>容量大</strong>：硬盘薄，可以叠在一起，提供更多表面积来存数据</li>
+<li><strong>价格便宜</strong></li>
+</ul>
+<p><strong>实例</strong>：1956年，IBM生产的世界上第一台磁盘计算机 RAMAC 305，有 50 张 24 英寸直径的磁盘，总共能存 5 MB 左右。RAMAC 305 访问任意数据，平均要六分之一秒左右（寻道时间）</p>
+<p><strong>发展 &amp; 容量</strong>：如今的硬盘可以轻易容纳 1TB 甚至更多的数据，能存 20 万张 5MB 的照片，网上最低 40 美元就可以买到，每 bit 成本 0.0000000005 美分。另外，现代硬盘的平均寻道时间低于 1/100 秒。</p>
+<h1 id="软盘-Floppy-Disk"><a href="#软盘-Floppy-Disk" class="headerlink" title="软盘 Floppy Disk"></a>软盘 Floppy Disk</h1><p><strong>时间</strong>：在 1970~1990 非常流行，现已淘汰。</p>
+<p><strong>原理</strong>：除了磁盘是软的，软盘与硬盘基本一样。</p>
+<p><strong>优点</strong>：便携</p>
+<h1 id="光盘-CD-amp-DVD-Compact-Disk"><a href="#光盘-CD-amp-DVD-Compact-Disk" class="headerlink" title="光盘 CD &amp; DVD - Compact Disk"></a>光盘 CD &amp; DVD - Compact Disk</h1><p><strong>时间</strong>：光学存储器于 1972 年出现，12 英寸的”激光盘”；后来出现光盘，简称 CD；90年代流行 DVD</p>
+<p><strong>原理</strong>：光盘表面有很多小坑，造成光的不同反射，光学传感器会捕获到，并解码为 1 和 0</p>
+<h1 id="固态硬盘-SSD-Solid-State-Disk"><a href="#固态硬盘-SSD-Solid-State-Disk" class="headerlink" title="固态硬盘 SSD - Solid State Disk"></a>固态硬盘 SSD - Solid State Disk</h1><p>固态硬盘没有机械活动部件，里面是<strong>集成电路</strong>。</p>
+<p><strong>优点</strong>：<strong>快</strong>：由于 SSD 没有移动部件，磁头不用等磁盘转，所以 SSD 访问时间低于 1/1000 秒。</p>
+<p><strong>缺点</strong>：还是比 RAM 慢很多倍</p>
+<h1 id="内存层次结构-Memory-Hierarchy"><a href="#内存层次结构-Memory-Hierarchy" class="headerlink" title="内存层次结构 Memory Hierarchy"></a>内存层次结构 Memory Hierarchy</h1><p>一小部分高速但昂贵的内存 + 一部分稍慢但相对便宜些的内存 + 更慢更便宜但容量更大的内存。</p>
+<p>在成本和速度间取得平衡</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1324638/1598538614362-8fd35636-34a9-4164-b695-0941114061f9.png" alt="image.png"></p>
+
+    </div>
+
+    
+    
+    <div>
+  <div class="end-slogan" style="text-align:center;font-size:22px;letter-spacing:10px;user-seclect:none;color:#bbb">----------- 本文结束啦<i class="fa fa-star"></i>感谢您阅读-----------</div>		
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Rick
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/posts/eb13a479/" title="计算机科学技术之内存">http://example.com/posts/eb13a479/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/864d57dc/" rel="prev" title="计算机科学技术之操作系统">
+      <i class="fa fa-chevron-left"></i> 计算机科学技术之操作系统
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/4d9a0402/" rel="next" title="计算机科学技术之文件系统">
+      计算机科学技术之文件系统 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%93%E5%AD%94%E7%BA%B8%E5%8D%A1-amp-%E6%89%93%E5%AD%94%E7%BA%B8%E5%B8%A6"><span class="nav-text">打孔纸卡 &amp; 打孔纸带</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E7%BA%BF%E5%AD%98%E5%82%A8%E5%99%A8-Delay-Line-Memory"><span class="nav-text">延迟线存储器 Delay Line Memory</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A3%81%E8%8A%AF%E5%AD%98%E5%82%A8%E5%99%A8-Magnetic-Core-Memory"><span class="nav-text">磁芯存储器 Magnetic Core Memory</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A3%81%E5%B8%A6-Magnetic-Tape"><span class="nav-text">磁带 Magnetic Tape</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A3%81%E9%BC%93%E5%AD%98%E5%82%A8%E5%99%A8-Magnetic-Drum-Memory"><span class="nav-text">磁鼓存储器 Magnetic Drum Memory</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A1%AC%E7%9B%98-Hard-Disk-Drives"><span class="nav-text">硬盘 Hard Disk Drives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AF%E7%9B%98-Floppy-Disk"><span class="nav-text">软盘 Floppy Disk</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%89%E7%9B%98-CD-amp-DVD-Compact-Disk"><span class="nav-text">光盘 CD &amp; DVD - Compact Disk</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98-SSD-Solid-State-Disk"><span class="nav-text">固态硬盘 SSD - Solid State Disk</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84-Memory-Hierarchy"><span class="nav-text">内存层次结构 Memory Hierarchy</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Rick"
+      src="/images/avatar.jpg">
+  </a>
+  <p class="site-author-name" itemprop="name">Rick</p>
+  <div class="site-description" itemprop="description">一个瞎折腾的博客，不知道能坚持几天</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-sun"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rick</span>
+</div>
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+<!-- 不蒜字统计 -->
+<div>
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_uv">
+    访问人数：<span id="busuanzi_value_site_uv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    总访问量：<span id="busuanzi_value_site_pv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <!-- 添加博客全站总字数统计-->
+  <i class="fa fa-pencil"></i>
+  <span class="post-count">博客全站共 321.5k 字</span>
+</div>
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '',
+      clientSecret: '',
+      repo        : '',
+      owner       : '',
+      admin       : [''],
+      id          : '70bd4e68dbc045df6b4168882a8b1007',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
