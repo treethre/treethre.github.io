@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络之结构体系">
+<meta property="og:url" content="http://example.com/posts/49f3519/index.html">
+<meta property="og:site_name" content="Rick Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560423887412-d4d4f5b7-65c7-4642-b8b5-3d41f8c386b8.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424601319-92ba8339-6332-44f8-9e35-dc173f3e7fcf.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424670652-1ca1075f-1a0d-441f-b7c0-fbe6b22b83fe.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424760518-a535ce53-7f19-4d1e-9935-427ab8fc6e3c.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424831012-7bac8dbb-d83f-4897-8117-4c5cb9300b9c.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/230760/1600739086996-dc73c7f1-9c20-48bb-b987-08e953d2e9aa.jpeg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/7dabc067529f515dbc7442fb0669877a.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/4b0677993ef837ac31e0d941592e86d7.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/6489ab250029ecc20796125956c7e5d9.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/bf0041d13e872817776cd222d88c733f.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/b9a31e5b06430df4e6de25b819eba042.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/230760/1586864803617-45707af2-232c-4679-851b-a1188eb1edec.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/230760/1600739147883-3f99f92d-ca09-4475-bc76-7ef1379e2e6e.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/230760/1600739147946-a612b8fe-a825-4e3f-b2dc-d34936f99961.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560427330668-9b9d9b11-a352-4a26-a88c-2844e546be37.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/230760/1586580197983-818334f6-31dc-4ea9-85be-307b4721ce62.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560427485802-52ca725c-98e6-4208-81e3-88d6f2f6627b.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560427641075-02da04fc-e36b-47d7-b489-3f9df61d85be.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/230760/1560427728219-820fbf07-0969-484b-a00c-9b7918753643.jpeg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/230760/1586578197640-28d8e905-7b3a-4d68-ac5b-66b3e789a9c0.png">
+<meta property="article:published_time" content="2021-02-14T07:59:42.000Z">
+<meta property="article:modified_time" content="2021-02-14T08:32:29.011Z">
+<meta property="article:author" content="Rick">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560423887412-d4d4f5b7-65c7-4642-b8b5-3d41f8c386b8.png">
+
+<link rel="canonical" href="http://example.com/posts/49f3519/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>计算机网络之结构体系 | Rick Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Rick Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/49f3519/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Rick">
+      <meta itemprop="description" content="一个瞎折腾的博客，不知道能坚持几天">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rick Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机网络之结构体系
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-14 15:59:42 / 修改时间：16:32:29" itemprop="dateCreated datePublished" datetime="2021-02-14T15:59:42+08:00">2021-02-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="计算机网络体系概述"><a href="#计算机网络体系概述" class="headerlink" title="计算机网络体系概述"></a>计算机网络体系概述</h1><h2 id="计算机网络的组成"><a href="#计算机网络的组成" class="headerlink" title="计算机网络的组成"></a>计算机网络的组成</h2><h3 id="从组成成分上看"><a href="#从组成成分上看" class="headerlink" title="从组成成分上看"></a><strong>从组成成分上看</strong></h3><p><strong>硬件</strong></p>
+<ul>
+<li>主机</li>
+<li>通信链路（双绞线，光纤）</li>
+<li>交换设备（路由器，交换机）</li>
+</ul>
+<p><strong>软件（主要在应用层）</strong></p>
+<p>协议</p>
+<ul>
+<li>语法：用来规定信息格式;<strong>数据及控制信息的格式</strong>、编码及信号电平等<em>。</em></li>
+<li>语义：控制信息每个部分的含义。<strong>发出何种控制信息，发出何种动作，发出何种响应。</strong></li>
+<li>规则：(时序)定义了何时进行通信，先讲什么，后讲什么，讲话的速度等。 比如是采用同步传输还是异步传输。</li>
+</ul>
+<h3 id="从工作方式上看"><a href="#从工作方式上看" class="headerlink" title="从工作方式上看"></a><strong>从工作方式上看</strong></h3><p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560423887412-d4d4f5b7-65c7-4642-b8b5-3d41f8c386b8.png" alt="image"></p>
+<p><strong>边缘部分</strong></p>
+<ul>
+<li>实体：主机</li>
+<li>作用：通信和资源共享</li>
+</ul>
+<p><strong>核心部分</strong></p>
+<ul>
+<li>实体：网络和路由器</li>
+<li>作用：连通信和交换服务</li>
+</ul>
+<h3 id="从功能上看"><a href="#从功能上看" class="headerlink" title="从功能上看"></a><strong>从功能上看</strong></h3><p><strong>通信子网</strong></p>
+<p><strong>组成</strong></p>
+<ul>
+<li>传输介质</li>
+<li>通信设备</li>
+<li>网络协议</li>
+</ul>
+<p><strong>作用</strong></p>
+<ul>
+<li>数据传输</li>
+<li>数据交换</li>
+<li>数据控制</li>
+<li>数据存储</li>
+</ul>
+<p><strong>资源子网</strong>：资源共享功能的设备和软件的集合</p>
+<h2 id="计算机网络的功能"><a href="#计算机网络的功能" class="headerlink" title="计算机网络的功能"></a>计算机网络的功能</h2><p><strong>数据通信（最基本，最重要）</strong></p>
+<p><strong>资源共享</strong></p>
+<ol>
+<li>软件共享</li>
+<li>数据共享</li>
+<li>硬件共享</li>
+</ol>
+<p><strong>分布式处理</strong>：利用<strong>空闲</strong>计算机资源提高<strong>整个系统</strong>的<strong>利用率</strong></p>
+<p><strong>提高可靠性</strong></p>
+<p><strong>负载均衡</strong></p>
+<h2 id="计算机网络的分类"><a href="#计算机网络的分类" class="headerlink" title="计算机网络的分类"></a>计算机网络的分类</h2><h3 id="按分布范围"><a href="#按分布范围" class="headerlink" title="按分布范围"></a><strong>按分布范围</strong></h3><p><strong>广域网（WAN）</strong></p>
+<p>因特网的<strong>核心部分</strong></p>
+<ol>
+<li>使用<strong>高速链路</strong>和<strong>大通信容量</strong></li>
+<li>大部分采用<strong>交换技术</strong>；无线和卫星采用<strong>广播方式</strong></li>
+<li><strong>PPP 协议是广域网的典型子协议</strong></li>
+</ol>
+<p><strong>城域网（MAN）：</strong>采用以太网技术</p>
+<p><strong>局域网（PAN）：</strong>采用广播技术。</p>
+<ol>
+<li>广播式网络是局域网的一种，局域网是工作在<strong>数据链路层</strong>，故不需要网络层</li>
+<li>网络层最重要的是路由和分组，其中路由就是选择线路，比如成都到北京，有很多线路可以选择，路由就通过不同的路由协议，选择符合场景的线路。而局域网，就是范围很小的网络，比如你们家就是一个局域网，在类比，你们家那么大的地方，从卧室到厨房需要路由选择线路吗，肯定是不需要的。</li>
+</ol>
+<p><strong>个域网（PAN）</strong></p>
+<h3 id="按传输技术"><a href="#按传输技术" class="headerlink" title="按传输技术"></a><strong>按传输技术</strong></h3><p><strong>广播式网络</strong></p>
+<ul>
+<li>共享一个通信信道</li>
+<li>所有计算机监听分组，通过目的地址决定是否接收</li>
+</ul>
+<p><strong>点对点网络</strong></p>
+<h3 id="按拓扑结构"><a href="#按拓扑结构" class="headerlink" title="按拓扑结构"></a><strong>按拓扑结构</strong></h3><p><strong>星形（局域网）</strong></p>
+<ul>
+<li>中央设备是交换机</li>
+<li>优点：便于控制和管理</li>
+<li>缺点：中央结点故障敏感</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424601319-92ba8339-6332-44f8-9e35-dc173f3e7fcf.png" alt="image.png"></p>
+<p><strong>总线型（局域网）</strong></p>
+<p>优点：容易建网和增减网络容量</p>
+<p>缺点</p>
+<ul>
+<li>故障敏感</li>
+<li>重负载效率低</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424670652-1ca1075f-1a0d-441f-b7c0-fbe6b22b83fe.png" alt="image.png"></p>
+<p><strong>环型（局域网）</strong></p>
+<p>所有计算机<strong>接口连成环</strong></p>
+<ul>
+<li>令牌环局域网</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424760518-a535ce53-7f19-4d1e-9935-427ab8fc6e3c.png" alt="image.png"></p>
+<p><strong>网状网络</strong></p>
+<ul>
+<li><strong>每个节点至少有两个路径与其他节点连接</strong></li>
+<li>优点：可靠性高</li>
+<li>缺点：控制复杂，成本高</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424831012-7bac8dbb-d83f-4897-8117-4c5cb9300b9c.png" alt="image.png"></p>
+<p><strong>💡 因特网网络体系结构采用的是树形结构，具有单向依赖和层次性，可以良好扩充</strong></p>
+<h3 id="按使用者"><a href="#按使用者" class="headerlink" title="按使用者"></a><strong>按使用者</strong></h3><ol>
+<li>公共网络</li>
+<li>专用网络</li>
+</ol>
+<h3 id="交换技术"><a href="#交换技术" class="headerlink" title="交换技术"></a><strong>交换技术</strong></h3><h4 id="电路交换（专用）"><a href="#电路交换（专用）" class="headerlink" title="电路交换（专用）"></a>电路交换（专用）</h4><p>三个阶段：<strong>建立连接</strong>，<strong>传输数据</strong>，<strong>断开连接</strong></p>
+<p>适用场景：传统电话网</p>
+<p>优点：直接传送，时延小（不存在存储转发时延），有序传输</p>
+<p>缺点：利用率低，不能进行差错控制</p>
+<p>如果传送数据时间&gt;&gt;连接建立时间，且存在数据量大的传输，可以使用电路交换</p>
+<h4 id="报文交换"><a href="#报文交换" class="headerlink" title="报文交换"></a>报文交换</h4><p>报文格式：<strong>源地址</strong>，<strong>目的地址</strong>，<strong>校验码</strong>，…</p>
+<ul>
+<li>特点：<strong>整个报文传送到相邻结点，**</strong>全部存储在转发**</li>
+<li>优点：充分利用线路，实现不同数据率的转发，可以进行差错控制</li>
+<li>缺点：增大了资源开销，增加了时延</li>
+</ul>
+<p><strong>分组交换（包交换）：</strong>（除了报文交换的优点）将大的报文分片成小的分组，更加易于管理；且时延比报文交换小</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/230760/1600739086996-dc73c7f1-9c20-48bb-b987-08e953d2e9aa.jpeg" alt="image"></p>
+<h3 id="按传输介质"><a href="#按传输介质" class="headerlink" title="按传输介质"></a><strong>按传输介质</strong></h3><ol>
+<li>有线网络</li>
+<li>无线网络</li>
+</ol>
+<h2 id="计算机网络的性能指标"><a href="#计算机网络的性能指标" class="headerlink" title="计算机网络的性能指标"></a>计算机网络的性能指标</h2><h3 id="带宽"><a href="#带宽" class="headerlink" title="带宽"></a>带宽</h3><ul>
+<li>通信中表示信号的频带</li>
+<li>网络通信线路传送数据的能力，<strong>最高链路数据率</strong></li>
+<li>单位：bit/s</li>
+</ul>
+<h3 id="时延"><a href="#时延" class="headerlink" title="时延"></a>时延</h3><p><strong>发送时延（传输时延）：从结点到链路</strong></p>
+<ul>
+<li>从第一比特出发，到最后一个比特发出结束的时间</li>
+<li>发送时延 = <img src="https://cdn.nlark.com/yuque/__latex/7dabc067529f515dbc7442fb0669877a.svg" alt="img"></li>
+</ul>
+<p><strong>note</strong></p>
+<ol>
+<li>在计算发送时延的时候，如果遇上分组，那么一定是算分组后，也就是每个分组加上了控制信息后的长度作为总长度。</li>
+<li><strong>这里的信道宽度就是信道的带宽，也就是数据率</strong></li>
+<li><strong>这里的分组长度是指整个分组的长度。如，报文总长 L，分组组成h位和p位的首部和数据部分，那么整个分组成都就是</strong><img src="https://cdn.nlark.com/yuque/__latex/4b0677993ef837ac31e0d941592e86d7.svg" alt="img"></li>
+</ol>
+<p><strong>传播时延：在链路上</strong></p>
+<ol>
+<li><p>从 A 节点到 B 节点的时间</p>
+<p> 传播时延 = <img src="https://cdn.nlark.com/yuque/__latex/6489ab250029ecc20796125956c7e5d9.svg" alt="img"></p>
+</li>
+<li><p>处理时延</p>
+<p> 排队时延</p>
+</li>
+</ol>
+<p><strong>往返时延：</strong>包括了<strong>处理</strong>，<strong>排队</strong>和<strong>转发数据的**</strong>发送时延**</p>
+<p><strong>时延带宽积</strong></p>
+<ul>
+<li><p><strong>第一个发出的比特到达终点时，发送端发送的比特数</strong></p>
+</li>
+<li><p><img src="https://cdn.nlark.com/yuque/__latex/bf0041d13e872817776cd222d88c733f.svg" alt="img"></p>
+</li>
+<li><p>表示比特容量</p>
+</li>
+</ul>
+<h3 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h3><ul>
+<li>单位时间通过的数据量</li>
+<li><strong>受网络带宽和网络额定速率的限制</strong></li>
+</ul>
+<h3 id="速率"><a href="#速率" class="headerlink" title="速率"></a>速率</h3><p>数据率（比特率）</p>
+<p>最高数据率 = 带宽</p>
+<p><strong>PS：高速链路是指数据发送速率快</strong></p>
+<p><strong>信道利用率：</strong>指发送周期里，发送数据占用信道的时间。<img src="https://cdn.nlark.com/yuque/__latex/b9a31e5b06430df4e6de25b819eba042.svg" alt="img"></p>
+<p><strong>note：</strong></p>
+<p><strong>求时延，第一个总结点（主机）的发送时延+中间结点发送时延+最后一个分组（比特）传播时延</strong></p>
+<h1 id="计算机网络体系结构与参考模型"><a href="#计算机网络体系结构与参考模型" class="headerlink" title="计算机网络体系结构与参考模型"></a>计算机网络体系结构与参考模型</h1><h2 id="计算机网络分层结构"><a href="#计算机网络分层结构" class="headerlink" title="计算机网络分层结构"></a>计算机网络分层结构</h2><p>网络的体系结构 = <strong>各层及协议的集合</strong></p>
+<p>不同机器上的同一层：对等层</p>
+<p>通信时，对等层逻辑上直连</p>
+<p>同一层的实体，对等实体</p>
+<p>n 层（服务提供者）实体为 n+1 层提供服务</p>
+<p><strong>报文部分</strong></p>
+<ol>
+<li><p>服务数据单元（SDU-Service Data Unite）：为完成用户需求的功能传送的数据</p>
+<p> 协议控制信息（PCI-Protocol Control Information）：控制协议操作的信息</p>
+<p> 协议数据单元（PDU-Protocol Data Unite）</p>
+</li>
+<li><p>等于 SDU + PCI</p>
+<p> 对等层之间传送的数据单位</p>
+<p> <img src="https://cdn.nlark.com/yuque/0/2020/png/230760/1586864803617-45707af2-232c-4679-851b-a1188eb1edec.png" alt="image.png"></p>
+</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/230760/1600739147883-3f99f92d-ca09-4475-bc76-7ef1379e2e6e.png" alt="img"></p>
+<p><strong>PS：n+1 层的 PDU = n 层的 SDU</strong></p>
+<p><strong>网络分层的目的</strong></p>
+<ul>
+<li>提供标准语言</li>
+<li>定义标准界面</li>
+<li>增加功能独立性</li>
+<li>降低网络设计的复杂性</li>
+<li>便于对网络进行研究，实现和维护</li>
+</ul>
+<p><strong>服务访问点</strong></p>
+<ul>
+<li>物理层：网卡接口</li>
+<li>数据链路层：MAC 地址</li>
+<li>网络层：IP 地址</li>
+<li>传输层：端口号</li>
+<li>应用层：用户界面</li>
+</ul>
+<p><strong>分层的好处</strong></p>
+<ul>
+<li>各层独立</li>
+<li>灵活</li>
+<li>易于实现和维护</li>
+<li>标准化</li>
+</ul>
+<h2 id="计算机网络协议，接口和服务的概念"><a href="#计算机网络协议，接口和服务的概念" class="headerlink" title="计算机网络协议，接口和服务的概念"></a>计算机网络协议，接口和服务的概念</h2><h3 id="协议"><a href="#协议" class="headerlink" title="协议"></a><strong>协议</strong></h3><ul>
+<li>规则的集合</li>
+<li>规定了交换数据的格式和步骤</li>
+<li>协议是<strong>水平的</strong>，<strong>对等的</strong></li>
+</ul>
+<p><strong>组成</strong></p>
+<ul>
+<li>语法：数据传递的数据结构和格式</li>
+<li>语义：何种功能和控制信息，何种动作，何种响应</li>
+<li>同步：顺序</li>
+</ul>
+<p><strong>接口</strong></p>
+<ul>
+<li>相邻两层交换信息的连接点；如，服务访问点，SAP</li>
+</ul>
+<h3 id="服务"><a href="#服务" class="headerlink" title="服务"></a><strong>服务</strong></h3><ul>
+<li><p>服务是<strong>垂直的</strong></p>
+</li>
+<li><p>服务原语</p>
+</li>
+<li><p>提供的服务</p>
+<ul>
+<li><p>是否连接</p>
+<ul>
+<li><p>连接</p>
+<ul>
+<li><p>连接建立</p>
+</li>
+<li><p>数据传输</p>
+</li>
+<li><p>连接释放</p>
+</li>
+</ul>
+</li>
+<li><p>无连接：尽最大努力交付</p>
+<p>是否可靠：可靠又差错控制和重传等机制组成</p>
+<p>有无应答：是否有响应</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>💡 服务与协议的关系：要实现本层的协议需要下层的服务，而实现了本层的协议确保了为上层提供服务</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/230760/1600739147946-a612b8fe-a825-4e3f-b2dc-d34936f99961.png" alt="img"></p>
+<p><strong>PS：</strong></p>
+<p><strong>有应答包含前四个，无应答只有前两个</strong></p>
+<p><strong>实现本层协议需要下层提供服务</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560427330668-9b9d9b11-a352-4a26-a88c-2844e546be37.png" alt="image.png"></p>
+<ol>
+<li><img src="https://cdn.nlark.com/yuque/0/2020/png/230760/1586580197983-818334f6-31dc-4ea9-85be-307b4721ce62.png" alt="image.png"></li>
+</ol>
+<h2 id="ISO-OSI-参考模型和-TCP-参考模型"><a href="#ISO-OSI-参考模型和-TCP-参考模型" class="headerlink" title="ISO/OSI 参考模型和 TCP 参考模型"></a>ISO/OSI 参考模型和 TCP 参考模型</h2><p><strong>ISO/OSI 参考模型</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560427485802-52ca725c-98e6-4208-81e3-88d6f2f6627b.png" alt="image.png"></p>
+<p>各层实现的功能</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>物理层</th>
+<th>数据链路层</th>
+<th>网络层</th>
+<th>传输层</th>
+<th>会话层</th>
+<th>表示层</th>
+<th>应用层</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单位</td>
+<td>比特</td>
+<td>帧</td>
+<td>数据报 or 分组</td>
+<td>报文段（TCP）用户数据报（UDP）</td>
+<td>报文</td>
+<td>报文</td>
+<td>报文</td>
+</tr>
+<tr>
+<td>功能</td>
+<td>1.接口参数2.信号意义3.电器特征4.透明传输比特流5.提供了电缆的定义</td>
+<td>1.IP 数据报组装成帧（目的，源，控制信息）2.差错控制（确保了数据的正确，顺序的无错，因为物理层存在外界噪声的干扰）3.流量控制（协调两个点之间的发送，接收速率）4.点到点通信5.组帧（数据格式）</td>
+<td>1.路由2.流量控制：控制发送速率3.差错控制4.拥塞控制</td>
+<td>1.端到端的进程通信2.流量控制3.差错控制4.可靠性：面向连接5.【拥塞控制】-4层结构</td>
+<td>1.会话管理2.同步，插入同步点</td>
+<td>处理信息交换方式 具体来说，不同的机器采用了不同的编码模式，数据结构等，需要利用表示层在交换数据的时候进行转换，统一。 此外加密解密，数据压缩也是表示层做的事情</td>
+<td>用户和网络的界面</td>
+</tr>
+<tr>
+<td>其他</td>
+<td><strong>物理媒介（如，双绞线，光缆，无线信道等）是第0层</strong></td>
+<td>1.ppp协议，帧中继2.点到点通信3.广播式网络还要处理如何空指共享信道访问的问题，这个由其子层–介质访问子层实现</td>
+<td>1.IP协议</td>
+<td>1.TCP，UDP协议</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>补充</strong></p>
+<ol>
+<li><strong>会话层实现了管理和同步，支持断点重传</strong></li>
+<li><strong>表示层实现了数据的加密，解密，格式的转换和压缩</strong></li>
+<li><strong>传输层中的复用和分用是指，一台主机可以运行不同的程序。复用就是多个应用层程序可以使用同一个传输层的服务，分用相反</strong></li>
+</ol>
+<p><strong>TCP/IP 模型</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560427641075-02da04fc-e36b-47d7-b489-3f9df61d85be.png" alt="image.png"></p>
+<p>各层主要的协议</p>
+<p>网际层：IP</p>
+<p>传输层</p>
+<ul>
+<li>TCP</li>
+<li>UDP</li>
+</ul>
+<p><strong>两大模型的比较</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/230760/1560427728219-820fbf07-0969-484b-a00c-9b7918753643.jpeg" alt="image.jpeg"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/230760/1586578197640-28d8e905-7b3a-4d68-ac5b-66b3e789a9c0.png" alt="image.png"></p>
+<h5 id="TCP-IP-模型各层的功能"><a href="#TCP-IP-模型各层的功能" class="headerlink" title="TCP/IP 模型各层的功能"></a>TCP/IP 模型各层的功能</h5><table>
+<thead>
+<tr>
+<th>网络接口层</th>
+<th>类似于 OSI 的物理层和数据链路层</th>
+<th>指出主机必须使用某种协议与网络连接</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>网际层</td>
+<td></td>
+<td>将分组发往任何网络，独立选择路由，各分组有序到达由高层负责</td>
+</tr>
+<tr>
+<td>传输层</td>
+<td></td>
+<td>使得发送端，目的端上的对等实体进行会话</td>
+</tr>
+<tr>
+<td>应用层</td>
+<td></td>
+<td>包含所有高层协议</td>
+</tr>
+</tbody></table>
+<p><strong>相似</strong></p>
+<ul>
+<li>分层结构</li>
+<li>独立的协议栈</li>
+<li>解决异构网络的互连</li>
+</ul>
+<p><strong>区别</strong></p>
+<ul>
+<li>OSI 精确定义了服务，协议和接口</li>
+<li>OSI 的<strong>是否连接在网络层</strong>，TCP/IP 的<strong>是否连接在传输层</strong></li>
+</ul>
+<p><strong>note</strong></p>
+<ol>
+<li><strong>封装高层针对一下层，但物理层没有下一层，所以没有封装。</strong></li>
+<li><strong>物理寻址是在**</strong>数据链路层**<strong>，因为其还是逻辑上的功能，物理层就是实实在在的物理功能</strong></li>
+<li><strong>在 ISO/OSI 模型中，网络层提供面向连接和无连接的方式，而 TCP/IP 中，是传输层提供，这是易错点。</strong></li>
+</ol>
+
+    </div>
+
+    
+    
+    <div>
+  <div class="end-slogan" style="text-align:center;font-size:22px;letter-spacing:10px;user-seclect:none;color:#bbb">----------- 本文结束啦<i class="fa fa-star"></i>感谢您阅读-----------</div>		
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Rick
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/posts/49f3519/" title="计算机网络之结构体系">http://example.com/posts/49f3519/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/d6843d0f/" rel="prev" title="计算机科学技术之计算机安全">
+      <i class="fa fa-chevron-left"></i> 计算机科学技术之计算机安全
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E6%A6%82%E8%BF%B0"><span class="nav-text">计算机网络体系概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E7%BB%84%E6%88%90"><span class="nav-text">计算机网络的组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E7%BB%84%E6%88%90%E6%88%90%E5%88%86%E4%B8%8A%E7%9C%8B"><span class="nav-text">从组成成分上看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F%E4%B8%8A%E7%9C%8B"><span class="nav-text">从工作方式上看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E5%8A%9F%E8%83%BD%E4%B8%8A%E7%9C%8B"><span class="nav-text">从功能上看</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-text">计算机网络的功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-text">计算机网络的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E5%88%86%E5%B8%83%E8%8C%83%E5%9B%B4"><span class="nav-text">按分布范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E4%BC%A0%E8%BE%93%E6%8A%80%E6%9C%AF"><span class="nav-text">按传输技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E6%8B%93%E6%89%91%E7%BB%93%E6%9E%84"><span class="nav-text">按拓扑结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E4%BD%BF%E7%94%A8%E8%80%85"><span class="nav-text">按使用者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E6%8D%A2%E6%8A%80%E6%9C%AF"><span class="nav-text">交换技术</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%B5%E8%B7%AF%E4%BA%A4%E6%8D%A2%EF%BC%88%E4%B8%93%E7%94%A8%EF%BC%89"><span class="nav-text">电路交换（专用）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%A5%E6%96%87%E4%BA%A4%E6%8D%A2"><span class="nav-text">报文交换</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E4%BC%A0%E8%BE%93%E4%BB%8B%E8%B4%A8"><span class="nav-text">按传输介质</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="nav-text">计算机网络的性能指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%A6%E5%AE%BD"><span class="nav-text">带宽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E5%BB%B6"><span class="nav-text">时延</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%9E%E5%90%90%E9%87%8F"><span class="nav-text">吞吐量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9F%E7%8E%87"><span class="nav-text">速率</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">计算机网络体系结构与参考模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84"><span class="nav-text">计算机网络分层结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%EF%BC%8C%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-text">计算机网络协议，接口和服务的概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E8%AE%AE"><span class="nav-text">协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1"><span class="nav-text">服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ISO-OSI-%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B%E5%92%8C-TCP-%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">ISO&#x2F;OSI 参考模型和 TCP 参考模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#TCP-IP-%E6%A8%A1%E5%9E%8B%E5%90%84%E5%B1%82%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-text">TCP&#x2F;IP 模型各层的功能</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Rick"
+      src="/images/avatar.jpg">
+  </a>
+  <p class="site-author-name" itemprop="name">Rick</p>
+  <div class="site-description" itemprop="description">一个瞎折腾的博客，不知道能坚持几天</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-sun"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rick</span>
+</div>
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+<!-- 不蒜字统计 -->
+<div>
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_uv">
+    访问人数：<span id="busuanzi_value_site_uv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    总访问量：<span id="busuanzi_value_site_pv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <!-- 添加博客全站总字数统计-->
+  <i class="fa fa-pencil"></i>
+  <span class="post-count">博客全站共 324.3k 字</span>
+</div>
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '',
+      clientSecret: '',
+      repo        : '',
+      owner       : '',
+      admin       : [''],
+      id          : '6698883b73ecfb647a4be1b4d925ad46',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
