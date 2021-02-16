@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络之数据链路层">
+<meta property="og:url" content="http://example.com/posts/c9d999de/index.html">
+<meta property="og:site_name" content="Rick Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-72eec9c2f5da1885.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-4f088da1859e7e90.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/785/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-11c77ea98c206763.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-6a1acd1ad2a6c1eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-1dacf9fe20464222.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-0f0962eb5fccf66f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/923/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-1ad51faea9b7b205.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-82811736b014aa98.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-0d2fd9bb2602bf28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-34c5f707bef17f14.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-abbf8309faf2ebf1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-92422213075fe0e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-bf6fe42eeea3f376.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-3a36c2a60343962c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-f1441c531b4d740e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-eee524ce4e17f0e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-12fe81306aedad15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-645dde5eed8eceb2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-9d3f61fdd96b7dee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-6d39c2f162ddcae5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-fa8e42040c9adf41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-8a049d137b19e372.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-190a469aba121c1f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-e3a6540cad78b41e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-52140f44375b471a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-01ea200a849a5e31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-5b743916f5355e14.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-570f7783660d9c10.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-1a955429af0480a5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-f805603357f3a3a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-6fdae389d4679bf3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-88599fefa01ee548.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-68772b26b0ef0d3a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/518/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-af381efb26eee719.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-e30648ec8764ab02.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/958/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-34bf2b8a370feab8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/462/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-da5036b780359576.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/486/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-8dbdfdbac8087fd2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-3b4b0d81e5dd78eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-4015447553ed26b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/888/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-372ef347c338b585.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-cc9d42f63bd259cc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-2a7141766ab1aa80.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-eee45713110af40a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-13f6dabf165db4e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-0dfe16aee5eb8d75.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-1414be9bd8307609.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-7a8c7e3ec6ebaca6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-7621ee1bc4ab1619.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-c3f86dad2611e347.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-215e8704b22ef7f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-1df324a9b09dffb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-d2789fe0732f13ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-0d5f64664d096287.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-2ab9c838fac0cb24.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-bcb835b2adac5b3a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-dab51e8895eb9313.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-fd145efb1acc73fa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-bbc4187b9e27ef4c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-b384615e861000f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-d40da4575c590f5c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-6290c73d8957ee8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-501e6b9dd2afcee3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-96bbde153c114cf8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-4acef21a5275fab6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/849/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-6a109c1bb8576571.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/847/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-faea2c7d90c97f4d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/831/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-e8558245e4dd7086.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-3d6792f6b442b459.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-f42ef63e4cf0d34b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-7b3574f649543f8e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-85128fb198aad76c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-9f1dfdd7ce2cb611.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-753efa9c750d4ef1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-91ed6f416ae8fad6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-8d81f17d93395b48.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-daba961daee80d20.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-00eb7fba113030d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-a26a912dcecd040a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-9dc7a68973377382.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-574d77a51611a634.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-a03963c28232dfb8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/940/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-5621a9827bd41bf5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/669/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-a77d88a950995527.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-423fe21ffdbacb81.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-fa63a8f164fb9191.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-93f832e4b0a569ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-dc35877bb4bead1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-cf2d95546ecf2664.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-dd01f296832d017a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-6c9fe4ae6927eb02.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-c0ce898b417b3228.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-a756ebbd569e600a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-f0d70f0b26645fb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-1de197cb6f859f3c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-12262e66fc986d52.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-98353d62c0ef033f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-ac35b15f5f22bf7d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-c8d7aca5f6faec4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-ede2c92a0c809e6c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-b498a111836f82c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-eabec58905a9aad1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1199/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-5a66994327412b90.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-70ee74506eca1df4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-d0cf5b54089e4b40.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-db7d480bafececad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-a69b9384665e17aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-7a825d6f30766d99.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-04fe098832094ecb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-3f3a22fe2fbfa3ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-f274d401c24ad4d4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-1d6c26260c21ba6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-70e6e705d20e5c20.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-597f8c69867e595b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-407cbc74e63b0e50.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-77c204bc8181b3ed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-f12548de1d3cebe1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-5e1fd5537944a420.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-13b5ca5d08126cde.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-9de96c1c37c62e26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-97a253fd9b87b3be.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-d852b42ef4dbea32.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-87f01b333e4599d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-a3f00154df65aac0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-a013636443263063.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-d5847fbcc133c6b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-11cd254f6251a6ad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/624/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-dc092bbcb4344cf5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-0f8d87b7f79e94c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-001d34e299bee061.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/876/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-a8f68b1ee60923c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-bd7d832dc7f8ffbe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-2e2faba35d2d7852.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/741/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-4638409baba882e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-34c587f82d3a1286.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-134f67554e64e22b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-d80949431bd76379.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-d5c429a2f92149ff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-25db1be3ca96bc2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-df6859d2396549cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/925/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-5f9db8088bf224f9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-1ef3dc4a6841b1ce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-dbe273924b7c8eea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-cf46c0c890cfa2a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-4ee1af4bc8187125.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-071ec78303db43c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-b39e4a9145068aca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/983/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-3fc4ca18dcbaef03.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-04211a392a1b4b1c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/983/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-5033bf0f4c26a32b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/850/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-a65d811129786ec6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-d43f5c0c9ddbaf93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1133/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-36746a91a09f583c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/895/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-a2a78b40ae5307db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-89e9ef3fdfcc530c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-3f98534c040b90f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-5d3549cc02f9a3b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-6af352f81b800a98.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-44a2e259c33ecfd3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/938/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-a93996aae716c6aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1184/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-653b80a66c3cc5bb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/908/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-239ec8f47d072a9b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1069/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-dd58aec183276962.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="article:published_time" content="2021-02-16T02:53:23.000Z">
+<meta property="article:modified_time" content="2021-02-16T03:58:55.590Z">
+<meta property="article:author" content="Rick">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/24878825-72eec9c2f5da1885.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+
+<link rel="canonical" href="http://example.com/posts/c9d999de/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>计算机网络之数据链路层 | Rick Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Rick Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/c9d999de/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Rick">
+      <meta itemprop="description" content="一个瞎折腾的博客，不知道能坚持几天">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rick Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机网络之数据链路层
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-16 10:53:23 / 修改时间：11:58:55" itemprop="dateCreated datePublished" datetime="2021-02-16T10:53:23+08:00">2021-02-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="数据链路层概述"><a href="#数据链路层概述" class="headerlink" title="数据链路层概述"></a>数据链路层概述</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>链路</strong>是从一个结点到相邻结点的一段物理线路，<strong>数据链路</strong>则是在链路的基础上增加了一些必要的硬件（如网络适配器）和软件（如协议的实现）</p>
+<p><strong>网络中的主机、路由器等都必须实现数据链路层</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-72eec9c2f5da1885.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>局域网中的主机、交换机等都必须实现数据链路层</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-4f088da1859e7e90.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/785/format/webp" alt="img"></p>
+<p><strong>从层次上来看数据的流动</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-11c77ea98c206763.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>仅从数据链路层观察帧的流动</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-6a1acd1ad2a6c1eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-1dacf9fe20464222.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>主机H1 到主机H2 所经过的网络可以是多种不同类型的</p>
+<p><strong>注意：不同的链路层可能采用不同的数据链路层协议</strong></p>
+</blockquote>
+<p><strong>数据链路层使用的信道</strong></p>
+<p>数据链路层属于计算机网路的低层。<strong>数据链路层使用的信道主要有以下两种类型：</strong></p>
+<ul>
+<li>点对点信道</li>
+<li>广播信道</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-0f0962eb5fccf66f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/923/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>局域网属于数据链路层</strong></p>
+<p>局域网虽然是个网络。但我们并不把局域网放在网络层中讨论。这是因为在网络层要讨论的是多个网络互连的问题，是讨论分组怎么从一个网络，通过路由器，转发到另一个网络。</p>
+<p>而在同一个局域网中，分组怎么从一台主机传送到另一台主机，但并不经过路由器转发。从整个互联网来看，<strong>局域网仍属于数据链路层</strong>的范围</p>
+</blockquote>
+<h2 id="三个重要问题"><a href="#三个重要问题" class="headerlink" title="三个重要问题"></a>三个重要问题</h2><p>数据链路层传送的协议数据单元是<strong>帧</strong></p>
+<p><strong>封装成帧</strong></p>
+<ul>
+<li><strong>封装成帧</strong> (framing) 就是在一段数据的前后分别添加首部和尾部，然后就构成了一个帧。</li>
+<li>首部和尾部的一个重要作用就是进行<strong>帧定界</strong>。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-1ad51faea9b7b205.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>差错控制</strong></p>
+<p>在传输过程中可能会产生<strong>比特差错</strong>：1 可能会变成 0， 而 0 也可能变成 1。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-82811736b014aa98.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>可靠传输</strong></p>
+<p>接收方主机收到有误码的帧后，是不会接受该帧的，会将它丢弃</p>
+<p>如果数据链路层向其上层提供的是不可靠服务，那么丢弃就丢弃了，不会再有更多措施</p>
+<p><strong>如果数据链路层向其上层提供的是可靠服务，那就还需要其他措施，来确保接收方主机还可以重新收到被丢弃的这个帧的正确副本</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-0d2fd9bb2602bf28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>以上三个问题都是使用<strong>点对点信道的数据链路层</strong>来举例的</p>
+</blockquote>
+<p><strong>如果使用广播信道的数据链路层除了包含上面三个问题外，还有一些问题要解决</strong></p>
+<p>如图所示，主机A，B，C，D，E通过一根总线进行互连，主机A要给主机C发送数据，代表帧的信号会通过总线传输到总线上的其他各主机，那么主机B，D，E如何知道所收到的帧不是发送给她们的，主机C如何知道发送的帧是发送给自己的</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-34c5f707bef17f14.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>可以用编址（地址）的来解决</p>
+<p>将帧的目的地址添加在帧中一起传输</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-abbf8309faf2ebf1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>还有数据碰撞问题</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-92422213075fe0e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>随着技术的发展，交换技术的成熟，</p>
+<p>在 有线（局域网）领域 使用<strong>点对点链路</strong>和<strong>链路层交换机</strong>的<strong>交换式局域网</strong>取代了<del>共享式局域网</del></p>
+<p>在无线局域网中仍然使用的是共享信道技术</p>
+</blockquote>
+<hr>
+<h1 id="封装成帧"><a href="#封装成帧" class="headerlink" title="封装成帧"></a>封装成帧</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>封装成帧是指数据链路层给上层交付的协议数据单元添加帧头和帧尾使之成为帧</p>
+<ul>
+<li><strong>帧头和帧尾中包含有重要的控制信息</strong></li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-bf6fe42eeea3f376.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>发送方的数据链路层将上层交付下来的协议数据单元封装成帧后，还要通过物理层，将构成帧的各比特，转换成电信号交给传输媒体，那么接收方的数据链路层如何从物理层交付的比特流中提取出一个个的帧？</p>
+<p>答：需要帧头和帧尾来做<strong>帧定界</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-3a36c2a60343962c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>但比不是每一种数据链路层协议的帧都包含有帧定界标志，例如下面例子</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-f1441c531b4d740e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>前导码</p>
+<ul>
+<li><p>前同步码：作用是使接收方的时钟同步</p>
+</li>
+<li><p>帧开始定界符：表明其后面紧跟着的就是MAC帧</p>
+</li>
+</ul>
+</blockquote>
+<p>另外以太网还规定了帧间间隔为96比特时间，因此，MAC帧不需要帧结束定界符</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-eee524ce4e17f0e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="透明传输"><a href="#透明传输" class="headerlink" title="透明传输"></a>透明传输</h2><blockquote>
+<p><strong>透明</strong></p>
+<p>指某一个实际存在的事物看起来却好像不存在一样。</p>
+</blockquote>
+<p>透明传输是指<strong>数据链路层对上层交付的传输数据没有任何限制</strong>，好像数据链路层不存在一样</p>
+<p>帧界定标志也就是个特定数据值，如果在上层交付的协议数据单元中， 恰好也包含这个特定数值，接收方就不能正确接收</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-12fe81306aedad15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>所以数据链路层应该对上层交付的数据有限制，其内容不能包含帧定界符的值</p>
+</blockquote>
+<p><strong>解决透明传输问题</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-645dde5eed8eceb2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<ul>
+<li><strong>解决方法</strong>：面向字节的物理链路使用<strong>字节填充</strong> (byte stuffing) 或<strong>字符填充</strong> (character stuffing)，面向比特的物理链路使用比特填充的方法实现透明传输</li>
+<li>发送端的数据链路层在数据中出现控制字符“SOH”或“EOT”的前面<strong>插入一个转义字符“ESC”</strong>(其十六进制编码是1B)。</li>
+<li>接收端的数据链路层在将数据送往网络层之前删除插入的转义字符。</li>
+<li>如果转义字符也出现在数据当中，那么应在转义字符前面插入一个转义字符 ESC。当接收端收到连续的两个转义字符时，就删除其中前面的一个。</li>
+</ul>
+<p><strong>帧的数据部分长度</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-9d3f61fdd96b7dee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><img src="https://upload-images.jianshu.io/upload_images/24878825-6d39c2f162ddcae5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<hr>
+<h1 id="差错检测"><a href="#差错检测" class="headerlink" title="差错检测"></a>差错检测</h1><h2 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a>介绍</h2><p><img src="https://upload-images.jianshu.io/upload_images/24878825-fa8e42040c9adf41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="奇偶校验"><a href="#奇偶校验" class="headerlink" title="奇偶校验"></a>奇偶校验</h2><p><img src="https://upload-images.jianshu.io/upload_images/24878825-8a049d137b19e372.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="循环冗余校验CRC-Cyclic-Redundancy-Check"><a href="#循环冗余校验CRC-Cyclic-Redundancy-Check" class="headerlink" title="循环冗余校验CRC(Cyclic Redundancy Check)"></a>循环冗余校验CRC(Cyclic Redundancy Check)</h2><p><img src="https://upload-images.jianshu.io/upload_images/24878825-190a469aba121c1f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-e3a6540cad78b41e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>例题</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-52140f44375b471a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-01ea200a849a5e31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>总结</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-5b743916f5355e14.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>循环冗余校验 CRC 是一种检错方法，而帧校验序列 FCS 是添加在数据后面的冗余码</p>
+</blockquote>
+<hr>
+<h1 id="可靠传输"><a href="#可靠传输" class="headerlink" title="可靠传输"></a>可靠传输</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p><strong>下面是比特差错</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-570f7783660d9c10.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>其他传输差错</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-1a955429af0480a5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<ul>
+<li>分组丢失</li>
+</ul>
+<p>路由器输入队列快满了，主动丢弃收到的分组</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-f805603357f3a3a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<ul>
+<li>分组失序</li>
+</ul>
+<p>数据并未按照发送顺序依次到达接收端</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-6fdae389d4679bf3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<ul>
+<li>分组重复</li>
+</ul>
+<p>由于某些原因，有些分组在网络中滞留了，没有及时到达接收端，这可能会造成发送端对该分组的重发，重发的分组到达接收端，但一段时间后，滞留在网络的分组也到达了接收端，这就造成<strong>分组重复</strong>的传输差错</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-88599fefa01ee548.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="三种可靠协议"><a href="#三种可靠协议" class="headerlink" title="三种可靠协议"></a>三种可靠协议</h2><ul>
+<li>停止-等待协议SW</li>
+<li>回退N帧协议GBN</li>
+<li>选择重传协议SR</li>
+</ul>
+<blockquote>
+<p>这三种可靠传输实现机制的基本原理并不仅限于数据链路层，可以应用到计算机网络体系结构的各层协议中</p>
+</blockquote>
+<h2 id="停止-等待协议"><a href="#停止-等待协议" class="headerlink" title="停止-等待协议"></a>停止-等待协议</h2><h3 id="停止-等待协议可能遇到的四个问题"><a href="#停止-等待协议可能遇到的四个问题" class="headerlink" title="停止-等待协议可能遇到的四个问题"></a>停止-等待协议可能遇到的四个问题</h3><p><strong>确认与否认</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-68772b26b0ef0d3a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/518/format/webp" alt="img"></p>
+<p><strong>超时重传</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-af381efb26eee719.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>确认丢失</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-e30648ec8764ab02.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/958/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-34bf2b8a370feab8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/462/format/webp" alt="img"></p>
+<blockquote>
+<p>既然数据分组需要编号，确认分组是否需要编号？</p>
+<p>要。如下图所示</p>
+</blockquote>
+<p><strong>确认迟到</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-da5036b780359576.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/486/format/webp" alt="img"></p>
+<blockquote>
+<p>注意，图中最下面那个数据分组与之前序号为0的那个数据分组不是同一个数据分组</p>
+</blockquote>
+<p><strong>注意事项</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-8dbdfdbac8087fd2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="停止-等待协议的信道利用率"><a href="#停止-等待协议的信道利用率" class="headerlink" title="停止-等待协议的信道利用率"></a>停止-等待协议的信道利用率</h3><p>假设收发双方之间是一条直通的信道</p>
+<ul>
+<li><strong>TD</strong>：是发送方发送数据分组所耗费的发送时延</li>
+<li><strong>RTT</strong>：是收发双方之间的往返时间</li>
+<li><strong>TA</strong>：是接收方发送确认分组所耗费的发送时延</li>
+</ul>
+<p>TA一般都远小于TD，可以忽略，当RTT远大于TD时，信道利用率会非常低</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-3b4b0d81e5dd78eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-4015447553ed26b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/888/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-372ef347c338b585.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>像停止-等待协议这样通过确认和重传机制实现的可靠传输协议，常称为自动请求重传协议ARQ(<strong>A</strong>utomatic <strong>R</strong>epeat re<strong>Q</strong>uest)，意思是重传的请求是自动进行，因为不需要接收方显式地请求，发送方重传某个发送的分组</p>
+</blockquote>
+<h2 id="回退N帧协议GBN"><a href="#回退N帧协议GBN" class="headerlink" title="回退N帧协议GBN"></a>回退N帧协议GBN</h2><h3 id="为什么用回退N帧协议"><a href="#为什么用回退N帧协议" class="headerlink" title="为什么用回退N帧协议"></a>为什么用回退N帧协议</h3><p>在相同的时间内，使用停止-等待协议的发送方只能发送一个数据分组，而采用流水线传输的发送方，可以发送多个数据分组</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-cc9d42f63bd259cc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>回退N帧协议在流水线传输的基础上，利用发送窗口来限制发送方可连续发送数据分组的个数</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-2a7141766ab1aa80.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="无差错情况流程"><a href="#无差错情况流程" class="headerlink" title="无差错情况流程"></a>无差错情况流程</h3><p>发送方将序号落在发送窗口内的0~4号数据分组，依次连续发送出去</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-eee45713110af40a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>image-20201012191936466</p>
+<p>他们经过互联网传输正确到达接收方，就是没有乱序和误码，接收方按序接收它们，每接收一个，接收窗口就向前滑动一个位置，并给发送方发送针对所接收分组的确认分组，在通过互联网的传输正确到达了发送方</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-13f6dabf165db4e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>发送方每接收一个、发送窗口就向前滑动一个位置，这样就有新的序号落入发送窗口，发送方可以将收到确认的数据分组从缓存中删除了，而接收方可以择机将已接收的数据分组交付上层处理</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-0dfe16aee5eb8d75.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="累计确认"><a href="#累计确认" class="headerlink" title="累计确认"></a><strong>累计确认</strong></h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-1414be9bd8307609.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>累计确认</p>
+<p>优点:</p>
+<ul>
+<li><p>即使确认分组丢失，发送方也可能不必重传</p>
+</li>
+<li><p>减小接收方的开销</p>
+</li>
+<li><p>减小对网络资源的占用</p>
+</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>不能向发送方及时反映出接收方已经正确接收的数据分组信息</li>
+</ul>
+</blockquote>
+<h3 id="有差错情况"><a href="#有差错情况" class="headerlink" title="有差错情况"></a><strong>有差错情况</strong></h3><p>例如</p>
+<p>在传输数据分组时，5号数据分组出现误码，接收方通过数据分组中的检错码发现了错误</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-7a8c7e3ec6ebaca6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>于是丢弃该分组，而后续到达的这剩下四个分组与接收窗口的序号不匹配</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-7621ee1bc4ab1619.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>接收同样也不能接收它们，讲它们丢弃，并对之前按序接收的最后一个数据分组进行确认，发送ACK4，<strong>每丢弃一个数据分组，就发送一个ACK4</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-c3f86dad2611e347.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>当收到重复的ACK4时，就知道之前所发送的数据分组出现了差错，于是可以不等超时计时器超时就立刻开始重传，具体收到几个重复确认就立刻重传，根据具体实现决定</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-215e8704b22ef7f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>如果收到这4个重复的确认并不会触发发送立刻重传，一段时间后。超时计时器超时，也会将发送窗口内以发送过的这些数据分组全部重传</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-1df324a9b09dffb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>若WT超过取值范围，例如WT=8，会出现什么情况？</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-d2789fe0732f13ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>总结</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-0d5f64664d096287.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<ul>
+<li>回退N帧协议在流水线传输的基础上利用发送窗口来限制发送方连续发送数据分组的数量，是一种连续ARQ协议</li>
+<li>在协议的工作过程中发送窗口和接收窗口不断向前滑动，因此这类协议又称为滑动窗口协议</li>
+<li>由于回退N帧协议的特性，当通信线路质量不好时，其信道利用率并不比停止-等待协议高</li>
+</ul>
+<h2 id="选择重传协议SR"><a href="#选择重传协议SR" class="headerlink" title="选择重传协议SR"></a>选择重传协议SR</h2><p><img src="https://upload-images.jianshu.io/upload_images/24878825-2ab9c838fac0cb24.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>总结</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-bcb835b2adac5b3a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-dab51e8895eb9313.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<hr>
+<h1 id="点对点协议PPP"><a href="#点对点协议PPP" class="headerlink" title="点对点协议PPP"></a>点对点协议PPP</h1><ul>
+<li>点对点协议PPP（Point-to-Point Protocol）是目前使用最广泛的点对点数据链路层协议</li>
+<li>PPP协议是因特网工程任务组IEIF在1992年制定的。经过1993年和1994年的修订，现在的PPP协议已成为因特网的正式标准[RFC1661，RFC1662]</li>
+<li>数据链路层使用的一种协议，它的特点是：简单；只检测差错，而不是纠正差错；不使用序号，也不进行流量控制；可同时支持多种网络层协议</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-fd145efb1acc73fa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<ul>
+<li>PPPoE 是为宽带上网的主机使用的链路层协议</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-bbc4187b9e27ef4c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="帧格式"><a href="#帧格式" class="headerlink" title="帧格式"></a>帧格式</h2><p>必须规定特殊的字符作为帧定界符</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-b384615e861000f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="透明传输-1"><a href="#透明传输-1" class="headerlink" title="透明传输"></a>透明传输</h2><p>必须保证数据传输的透明性</p>
+<p>实现透明传输的方法</p>
+<ul>
+<li>面向字节的异步链路：字节填充法（插入“转义字符”）</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-d40da4575c590f5c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<ul>
+<li>面向比特的同步链路：比特填充法（插入“比特0”）</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-6290c73d8957ee8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="差错检测-1"><a href="#差错检测-1" class="headerlink" title="差错检测"></a>差错检测</h2><p>能够对接收端收到的帧进行检测，并立即丢弃有差错的帧。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-501e6b9dd2afcee3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="工作状态"><a href="#工作状态" class="headerlink" title="工作状态"></a>工作状态</h2><ul>
+<li>当用户拨号接入 ISP 时，路由器的调制解调器对拨号做出确认，并建立一条物理连接。</li>
+<li>PC 机向路由器发送一系列的 LCP 分组（封装成多个 PPP 帧）。</li>
+<li>这些分组及其响应选择一些 PPP 参数，并进行网络层配置，NCP 给新接入的 PC 机</li>
+<li>分配一个临时的 IP 地址，使 PC 机成为因特网上的一个主机。</li>
+<li>通信完毕时，NCP 释放网络层连接，收回原来分配出去的 IP 地址。接着，LCP 释放数据链路层连接。最后释放的是物理层的连接。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-96bbde153c114cf8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>可见，PPP 协议已不是纯粹的数据链路层的协议，它还包含了物理层和网络层的内容。</p>
+</blockquote>
+<hr>
+<h1 id="媒体接入控制（介质访问控制）——广播信道"><a href="#媒体接入控制（介质访问控制）——广播信道" class="headerlink" title="媒体接入控制（介质访问控制）——广播信道"></a>媒体接入控制（介质访问控制）——广播信道</h1><p><strong>媒体接入控制（介质访问控制）使用一对多的广播通信方式</strong></p>
+<blockquote>
+<p><strong>Medium Access Control</strong>翻译成媒体接入控制，有些翻译成介质访问控制</p>
+</blockquote>
+<p><strong>局域网的数据链路层</strong></p>
+<ul>
+<li>局域网最主要的<strong>特点</strong>是：<ul>
+<li>网络为一个单位所拥有；</li>
+<li>地理范围和站点数目均有限。</li>
+</ul>
+</li>
+<li>局域网具有如下<strong>主要优点</strong>：<ul>
+<li>具有广播功能，从一个站点可很方便地访问全网。局域网上的主机可共享连接在局域网上的各种硬件和软件资源。</li>
+<li>便于系统的扩展和逐渐地演变，各设备的位置可灵活调整和改变。</li>
+<li>提高了系统的可靠性、可用性和残存性。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-4acef21a5275fab6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/849/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-6a109c1bb8576571.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/847/format/webp" alt="img"></p>
+<p><strong>数据链路层的两个子层</strong></p>
+<p>为了使数据链路层能更好地适应多种局域网标准，IEEE 802 委员会就将局域网的数据链路层拆成<strong>两个子层</strong>：</p>
+<ol>
+<li><strong>逻辑链路控制</strong> LLC (Logical Link Control)子层；</li>
+<li><strong>媒体接入控制</strong> MAC (Medium Access Control)子层。</li>
+</ol>
+<p>与接入到传输媒体有关的内容都放在 MAC子层，而 LLC 子层则与传输媒体无关。  <strong>不管采用何种协议的局域网，对 LLC 子层来说都是透明的。</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-faea2c7d90c97f4d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/831/format/webp" alt="img"></p>
+<h2 id="基本概念-1"><a href="#基本概念-1" class="headerlink" title="基本概念"></a>基本概念</h2><p>为什么要媒体接入控制（介质访问控制）？</p>
+<p><strong>共享信道带来的问题</strong></p>
+<p>若多个设备在共享信道上同时发送数据，则会造成彼此干扰，导致发送失败。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-e8558245e4dd7086.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-3d6792f6b442b459.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>随着技术的发展，交换技术的成熟和成本的降低，具有更高性能的使用点对点链路和链路层交换机的交换式局域网在有线领域已完全取代了共享式局域网，但由于无线信道的广播天性，无线局域网仍然使用的是共享媒体技术</p>
+</blockquote>
+<h2 id="静态划分信道"><a href="#静态划分信道" class="headerlink" title="静态划分信道"></a>静态划分信道</h2><p><strong>信道复用</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-f42ef63e4cf0d34b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>频分复用FDM (Frequency Division Multiplexing)</strong></p>
+<ul>
+<li>将整个带宽分为多份，用户在分配到一定的频带后，在通信过程中自始至终都占用这个频带。</li>
+<li><strong>频分复用</strong>的所有用户在同样的时间<strong>占用不同的带宽资源</strong>（请注意，这里的“带宽”是频率带宽而不是数据的发送速率）。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-7b3574f649543f8e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>时分复用TDM (Time Division Multiplexing)</strong></p>
+<ul>
+<li><strong>时分复用</strong>则是将时间划分为一段段等长的<strong>时分复用帧（TDM帧）</strong>。每一个时分复用的用户在每一个 TDM 帧中占用固定序号的时隙。</li>
+<li>每一个用户所占用的时隙是<strong>周期性地出现</strong>（其周期就是TDM帧的长度）的。</li>
+<li>TDM 信号也称为<strong>等时</strong> (isochronous) 信号。</li>
+<li><strong>时分复用的所有用户在不同的时间占用同样的频带宽度。</strong></li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-85128fb198aad76c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>波分复用 WDM(Wavelength Division Multiplexing)</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-9f1dfdd7ce2cb611.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>波分复用就是光的频分复用，使用一根光纤来同时传输多个光载波信号</p>
+<p>光信号传输一段距离后悔衰减，所以要用 掺铒光纤放大器 放大光信号</p>
+</blockquote>
+<p><strong>码分复用 CDM (Code Division Multiplexing)</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-753efa9c750d4ef1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-91ed6f416ae8fad6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-8d81f17d93395b48.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="动态接入控制"><a href="#动态接入控制" class="headerlink" title="动态接入控制"></a>动态接入控制</h2><p>受控接入</p>
+<p><strong>受控接入在局域网中使用得较少，本书不再讨论</strong></p>
+<p><strong>随机接入</strong></p>
+<p><strong>重点</strong></p>
+<h2 id="随机接入（CSMA-CD协议）"><a href="#随机接入（CSMA-CD协议）" class="headerlink" title="随机接入（CSMA/CD协议）"></a>随机接入（CSMA/CD协议）</h2><p><strong>总线局域网使用协议：CSMA/CD</strong></p>
+<h3 id="基本概念-2"><a href="#基本概念-2" class="headerlink" title="基本概念"></a>基本概念</h3><p><strong>最初</strong>的<strong>以太网</strong>是将许多计算机都连接到一根总线上。易于实现广播通信。当初认为这样的连接方法既简单又可靠，因为总线上没有有源器件。</p>
+<blockquote>
+<p><strong>以太网（Ethernet）</strong>是一种计算机<strong>局域网技术</strong>。IEEE组织的IEEE 802.3标准制定了<strong>以太网（Ethernet）</strong>的技术标准</p>
+<p>以太网采用无连接的工作方式，对发送的数据帧不进行编号，也不要求对方发回确认。目的站收到有差错帧就把它丢弃，其他什么也不做</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-daba961daee80d20.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-00eb7fba113030d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="多址接入MA"><a href="#多址接入MA" class="headerlink" title="多址接入MA"></a>多址接入MA</h3><p>表示许多主机以多点接入的方式连接在一根总线上。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-a26a912dcecd040a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="载波监听CS"><a href="#载波监听CS" class="headerlink" title="载波监听CS"></a>载波监听CS</h3><p>是指每一个站在发送数据之前先要检测一下总线上是否有其他计算机在发送数据，如果有，则暂时不要发送数据，以免发生碰撞。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-9dc7a68973377382.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>总线上并没有什么“载波”。因此， <strong>“载波监听”就是用电子技术检测总线上有没有其他计算机发送的数据信号。</strong></p>
+<h3 id="碰撞检测CD"><a href="#碰撞检测CD" class="headerlink" title="碰撞检测CD"></a>碰撞检测CD</h3><ul>
+<li><strong>“碰撞检测”</strong>就是计算机<strong>边发送数据边检测</strong>信道上的信号电压大小。</li>
+<li>当几个站同时在总线上发送数据时，总线上的信号电压摆动值将会增大（互相叠加）。</li>
+<li>当一个站检测到的信号电压摆动值超过一定的门限值时，就认为总线上至少有两个站同时在发送数据，表明产生了碰撞。</li>
+<li><strong>所谓“碰撞”就是发生了冲突。因此“碰撞检测”也称为“冲突检测”。</strong></li>
+<li>在发生碰撞时，总线上传输的信号产生了严重的失真，无法从中恢复出有用的信息来。</li>
+<li><strong>每一个正在发送数据的站，一旦发现总线上出现了碰撞，就要立即停止发送，免得继续浪费网络资源，然后等待一段随机时间后再次发送。</strong></li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-574d77a51611a634.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>为什么要进行碰撞检测？ 因为信号传播时延对载波监听产生了影响</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-a03963c28232dfb8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/940/format/webp" alt="img"></p>
+<p>A 需要单程传播时延的 2 倍的时间，才能检测到与 B 的发送产生了冲突</p>
+</blockquote>
+<h3 id="CSMA-CD-协议工作流程"><a href="#CSMA-CD-协议工作流程" class="headerlink" title="CSMA/CD 协议工作流程"></a>CSMA/CD 协议工作流程</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-5621a9827bd41bf5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/669/format/webp" alt="img"></p>
+<h3 id="CSMA-CD-协议工作——争用期（碰撞窗口）"><a href="#CSMA-CD-协议工作——争用期（碰撞窗口）" class="headerlink" title="CSMA/CD 协议工作——争用期（碰撞窗口）"></a>CSMA/CD 协议工作——争用期（碰撞窗口）</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-a77d88a950995527.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="CSMA-CD-协议工作——最小帧长"><a href="#CSMA-CD-协议工作——最小帧长" class="headerlink" title="CSMA/CD 协议工作——最小帧长"></a>CSMA/CD 协议工作——最小帧长</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-423fe21ffdbacb81.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="CSMA-CD-协议工作——最大帧长"><a href="#CSMA-CD-协议工作——最大帧长" class="headerlink" title="CSMA/CD 协议工作——最大帧长"></a>CSMA/CD 协议工作——最大帧长</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-fa63a8f164fb9191.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="CSMA-CD-协议工作——截断二进制指数退避算法"><a href="#CSMA-CD-协议工作——截断二进制指数退避算法" class="headerlink" title="CSMA/CD 协议工作——截断二进制指数退避算法"></a>CSMA/CD 协议工作——截断二进制指数退避算法</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-93f832e4b0a569ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="CSMA-CD-协议工作——信道利用率"><a href="#CSMA-CD-协议工作——信道利用率" class="headerlink" title="CSMA/CD 协议工作——信道利用率"></a>CSMA/CD 协议工作——信道利用率</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-dc35877bb4bead1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="CSMA-CD-协议工作——帧接收流程"><a href="#CSMA-CD-协议工作——帧接收流程" class="headerlink" title="CSMA/CD 协议工作——帧接收流程"></a>CSMA/CD 协议工作——帧接收流程</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-cf2d95546ecf2664.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="CSMA-CD-协议的重要特性"><a href="#CSMA-CD-协议的重要特性" class="headerlink" title="CSMA/CD 协议的重要特性"></a>CSMA/CD 协议的重要特性</h3><ul>
+<li>使用 CSMA/CD 协议的以太网不能进行全双工通信而<strong>只能进行双向交替通信（半双工通信）。</strong></li>
+<li>每个站在发送数据之后的一小段时间内，存在着遭遇碰撞的可能性。</li>
+<li>这种<strong>发送的不确定性</strong>使整个以太网的平均通信量远小于以太网的最高数据率。</li>
+</ul>
+<blockquote>
+<p>CSMA/CD协议曾经用于各种总线结构以太网和双绞线以太网的早起版本中。</p>
+<p><strong>现在的以太网基于交换机和全双工连接，不会有碰撞，因此没有必要使用CSMA/CS协议</strong></p>
+</blockquote>
+<h2 id="随机接入（CSMA-CA协议）"><a href="#随机接入（CSMA-CA协议）" class="headerlink" title="随机接入（CSMA/CA协议）"></a>随机接入（CSMA/CA协议）</h2><p><strong>无线局域网使用的协议：CSMA/CA</strong></p>
+<h3 id="为什么无线局域网要使用CSMA-CA协议"><a href="#为什么无线局域网要使用CSMA-CA协议" class="headerlink" title="为什么无线局域网要使用CSMA/CA协议"></a>为什么无线局域网要使用CSMA/CA协议</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-dd01f296832d017a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="帧间间隔IFS（InterFrame-Space）"><a href="#帧间间隔IFS（InterFrame-Space）" class="headerlink" title="帧间间隔IFS（InterFrame Space）"></a>帧间间隔IFS（InterFrame Space）</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-6c9fe4ae6927eb02.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="CSMA-CA协议的工作原理"><a href="#CSMA-CA协议的工作原理" class="headerlink" title="CSMA/CA协议的工作原理"></a>CSMA/CA协议的工作原理</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-c0ce898b417b3228.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>源站为什么在检测到信道空闲后还要再等待一段时间DIFS？</strong></p>
+<ul>
+<li>考虑到可能有其他的站有高优先级的帧要发送。若有，就要让高优先级帧先发送</li>
+</ul>
+<p><strong>目的站为什么正确接收数据帧后还要等待一段时间SIFS才能发送ACK帧？</strong></p>
+<ul>
+<li>SIFS是最短的帧间间隔，用来分隔开属于一次对话的各帧，在这段时间内，一个站点应当能够从发送方式切换到接收方式</li>
+</ul>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-a756ebbd569e600a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>信道由忙转为空闲且经过DIFS时间后，还要退避一段随机时间才能使用信道？</strong></p>
+<p>防止多个站点同时发送数据而产生碰撞</p>
+</blockquote>
+<p><strong>使用退避算法的时机</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-f0d70f0b26645fb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="CSMA-CA协议的退避算法"><a href="#CSMA-CA协议的退避算法" class="headerlink" title="CSMA/CA协议的退避算法"></a>CSMA/CA协议的退避算法</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-1de197cb6f859f3c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>退避算法的示例</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-12262e66fc986d52.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="CSMA-CA协议的信道预约和虚拟载波监听"><a href="#CSMA-CA协议的信道预约和虚拟载波监听" class="headerlink" title="CSMA/CA协议的信道预约和虚拟载波监听"></a>CSMA/CA协议的信道预约和虚拟载波监听</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-98353d62c0ef033f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-ac35b15f5f22bf7d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>虚拟载波监听机制能减少隐蔽站带来的碰撞问题的示例</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-c8d7aca5f6faec4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<hr>
+<h1 id="MAC地址、IP地址以及ARP协议"><a href="#MAC地址、IP地址以及ARP协议" class="headerlink" title="MAC地址、IP地址以及ARP协议"></a>MAC地址、IP地址以及ARP协议</h1><p><img src="https://upload-images.jianshu.io/upload_images/24878825-ede2c92a0c809e6c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h2><blockquote>
+<ul>
+<li><p>使用点对点信道的数据链路层不需要使用地址</p>
+</li>
+<li><p>使用广播信道的数据链路层必须使用地址来区分各主机</p>
+</li>
+</ul>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-b498a111836f82c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="广播信道的数据链路层必须使用地址（MAC）"><a href="#广播信道的数据链路层必须使用地址（MAC）" class="headerlink" title="广播信道的数据链路层必须使用地址（MAC）"></a>广播信道的数据链路层必须使用地址（MAC）</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-eabec58905a9aad1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1199/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>MAC地址又称为硬件地址或物理地址</strong>。请注意：不要被 “物理” 二字误导认为物理地址属于物理层范畴，物理地址属于数据链路层范畴</p>
+</blockquote>
+<h3 id="IEEE-802局域网的MAC地址格式"><a href="#IEEE-802局域网的MAC地址格式" class="headerlink" title="IEEE 802局域网的MAC地址格式"></a>IEEE 802局域网的MAC地址格式</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-5a66994327412b90.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>组织唯一标识符OUI</strong></p>
+<ul>
+<li>生产网络设备的厂商，需要向IEEE的注册管理机构申请一个或多个OUI</li>
+</ul>
+<p><strong>网络接口标识符</strong></p>
+<ul>
+<li>由获得OUI的厂商自行随意分配</li>
+</ul>
+<p><strong>EUI-48</strong></p>
+<ul>
+<li>48是这个MAC地址的位数</li>
+</ul>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-70ee74506eca1df4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>对于使用EUI-48空间的应用程序，IEEE的目标寿命为100年（直到2080年），但是鼓励采用EUI-64作为替代</p>
+</blockquote>
+<p><strong>关于无效的 MAC 帧</strong></p>
+<ul>
+<li>数据字段的长度与长度字段的值不一致；</li>
+<li>帧的长度不是整数个字节；</li>
+<li>用收到的帧检验序列 FCS 查出有差错；</li>
+<li>数据字段的长度不在 46 ~ 1500 字节之间。</li>
+<li>有效的 MAC 帧长度为 64 ~ 1518 字节之间。</li>
+</ul>
+<blockquote>
+<p><strong>对于检查出的无效</strong>  <strong>MAC</strong>  <strong>帧就简单地丢弃。以太网不负责重传丢弃的帧。</strong></p>
+</blockquote>
+<h3 id="IEEE-802局域网的MAC地址发送顺序"><a href="#IEEE-802局域网的MAC地址发送顺序" class="headerlink" title="IEEE 802局域网的MAC地址发送顺序"></a>IEEE 802局域网的MAC地址发送顺序</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-d0cf5b54089e4b40.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="单播MAC地址举例"><a href="#单播MAC地址举例" class="headerlink" title="单播MAC地址举例"></a>单播MAC地址举例</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-db7d480bafececad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>主机B给主机C发送<strong>单播帧</strong>，主机B首先要构建该<strong>单播帧</strong>，<strong>在帧首部中的目的地址字段填入主机C的MAC地址</strong>，源地址字段填入自己的MAC地址，再加上帧首部的其他字段、数据载荷以及帧尾部，就构成了该<strong>单播帧</strong></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-a69b9384665e17aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>主机B将该<strong>单播帧</strong>发送出去，主机A和C都会收到该<strong>单播帧</strong></p>
+<p>主机A的网卡发现该<strong>单播帧</strong>的目的MAC地址与自己的MAC地址不匹配，丢弃该帧</p>
+<p>主机C的网卡发现该<strong>单播帧</strong>的目的MAC地址与自己的MAC地址匹配，接受该帧</p>
+<p>并将该帧交给其上层处理</p>
+</blockquote>
+<h3 id="广播MAC地址举例"><a href="#广播MAC地址举例" class="headerlink" title="广播MAC地址举例"></a>广播MAC地址举例</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-7a825d6f30766d99.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>假设主机B要发送一个<strong>广播帧</strong>，主机B首先要构建该<strong>广播帧</strong>，<strong>在帧首部中的目的地址字段填入广播地址</strong>，也就是十六进制的全F，源地址字段填入自己的MAC地址，再加上帧首部中的其他字段、数据载荷以及帧尾部，就构成了该<strong>广播帧</strong></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-04fe098832094ecb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>主机B讲该<strong>广播帧</strong>发送出去，主机A和C都会收到该<strong>广播帧</strong>，<strong>发现该帧首部中的目的地址字段的内容是广播地址</strong>，就知道该帧是<strong>广播帧</strong>，主机A和主机C都接受该帧，并将该帧交给上层处理</p>
+</blockquote>
+<h3 id="多播MAC地址举例"><a href="#多播MAC地址举例" class="headerlink" title="多播MAC地址举例"></a>多播MAC地址举例</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-3f3a22fe2fbfa3ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>假设主机A要发送<strong>多播帧</strong>给该<strong>多播地址</strong>。将该<strong>多播地址</strong>的左起第一个字节写成8个比特，第一个字节的最低比特位是1，这就表明该地址是<strong>多播地址</strong>。</p>
+<p>快速判断地址是不是<strong>多播地址</strong>，就是上图所示箭头所指的第十六进制数不能整除2（1,3,5,7,9,B,D,F），则该地址是<strong>多播地址</strong></p>
+<p>假设主机B，C和D支持多播，各用户给自己的主机配置多播组列表<strong>如下所示</strong></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-f274d401c24ad4d4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>主机B属于两个多播组，主机C也属于两个多播组，而主机D不属于任何多播组</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-1d6c26260c21ba6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>主机A首先要构建该<strong>多播帧</strong>，<strong>在帧首部中的目的地址字段填入该多播地址</strong>，源地址点填入自己的MAC地址，再加上帧首部中的其他字段、数据载荷以及帧尾部，就构成了该<strong>多播帧</strong></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-70e6e705d20e5c20.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>主机A将该<strong>多播帧</strong>发送出去，主机B、C、D都会收到该<strong>多播帧</strong></p>
+<p><strong>主机B和C发现该多播帧的目的MAC地址在自己的多播组列表中</strong>，主机B和C都会接受该帧</p>
+<p>主机D发现该<strong>多播帧</strong>的目的MAC地址不在自己得多播组列表中，则丢弃该<strong>多播帧</strong></p>
+</blockquote>
+<blockquote>
+<p>给主机配置多播组列表进行私有应用时，不得使用公有的标准多播地址</p>
+</blockquote>
+<h2 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h2><p>IP地址属于网络层的范畴，不属于数据链路层的范畴</p>
+<p>下面内容讲的是IP地址的使用，详细的IP地址内容在网络层中介绍</p>
+<h3 id="基本概念-3"><a href="#基本概念-3" class="headerlink" title="基本概念"></a>基本概念</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-597f8c69867e595b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="从网络体系结构看IP地址与MAC地址"><a href="#从网络体系结构看IP地址与MAC地址" class="headerlink" title="从网络体系结构看IP地址与MAC地址"></a>从网络体系结构看IP地址与MAC地址</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-407cbc74e63b0e50.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="数据包转发过程中IP地址与MAC地址的变化情况"><a href="#数据包转发过程中IP地址与MAC地址的变化情况" class="headerlink" title="数据包转发过程中IP地址与MAC地址的变化情况"></a>数据包转发过程中IP地址与MAC地址的变化情况</h3><p>图上各主机和路由器各接口的IP地址和MAC地址用简单的标识符来表示</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-77c204bc8181b3ed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-f12548de1d3cebe1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>如何从IP地址找出其对应的MAC地址？</p>
+<p>ARP协议</p>
+</blockquote>
+<h2 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h2><p>如何从IP地址找出其对应的MAC地址？</p>
+<p>ARP（地址解析协议）</p>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-5e1fd5537944a420.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>ARP高速缓存表</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-13b5ca5d08126cde.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>当主机B要给主机C发送数据包时，会首先在自己的ARP高速缓存表中查找主机C的IP地址所对应的MAC地址，但未找到，因此，主机B需要发送ARP请求报文，来获取主机C的MAC地址</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-9de96c1c37c62e26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>ARP请求报文有具体的格式，上图的只是简单描述</p>
+<p>ARP请求报文被封装在MAC帧中发送，目的地址为广播地址</p>
+<p>主机B发送封装有ARP请求报文的广播帧，总线上的其他主机都能收到该广播帧</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-97a253fd9b87b3be.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>收到ARP请求报文的主机A和主机C会把ARP请求报文交给上层的ARP进程</p>
+<p>主机A发现所询问的IP地址不是自己的IP地址，因此不用理会</p>
+<p>主机C的发现所询问的IP地址是自己的IP地址，需要进行相应</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-d852b42ef4dbea32.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-87f01b333e4599d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-a3f00154df65aac0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>动态与静态的区别</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-a013636443263063.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>ARP协议只能在一段链路或一个网络上使用，而不能跨网络使用</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-d5847fbcc133c6b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>ARP协议的使用是逐段链路进行的</p>
+</blockquote>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-11cd254f6251a6ad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/624/format/webp" alt="img"></p>
+<blockquote>
+<p>ARP表中的IP地址与MAC地址的对应关系记录，是<strong>会定期自动删除的</strong>，<strong>因为IP地址与MAC地址的对应关系不是永久性的</strong></p>
+</blockquote>
+<hr>
+<h1 id="集线器与交换机的区别"><a href="#集线器与交换机的区别" class="headerlink" title="集线器与交换机的区别"></a>集线器与交换机的区别</h1><h2 id="集线器-在物理层扩展以太网"><a href="#集线器-在物理层扩展以太网" class="headerlink" title="集线器-在物理层扩展以太网"></a>集线器-在物理层扩展以太网</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-dc092bbcb4344cf5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<ul>
+<li><p>传统以太网最初是使用粗同轴电缆，后来演进到使用比较便宜的细同轴电缆，最后发展为使用更便宜和更灵活的双绞线。</p>
+</li>
+<li><p>采用双绞线的以太网采用星形拓扑，在星形的中心则增加了一种可靠性非常高的设备，叫做<strong>集线器</strong> (hub)。</p>
+</li>
+<li><p><strong>集线器</strong>是也可以看做多口中继器，每个端口都可以成为一个中继器，中继器是对减弱的信号进行放大和发送的设备</p>
+</li>
+<li><p><strong>集线器</strong>的以太网在逻辑上仍是个总线网，需要使用CSMA/CD协议来协调各主机争用总线，只能工作在半双工模式，收发帧不能同时进行</p>
+</li>
+</ul>
+</blockquote>
+<h3 id="集线器HUB在物理层扩展以太网"><a href="#集线器HUB在物理层扩展以太网" class="headerlink" title="集线器HUB在物理层扩展以太网"></a>集线器HUB在物理层扩展以太网</h3><p><strong>使用集线器扩展</strong>：将多个以太网段连成更大的、多级星形结构的以太网</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-0f8d87b7f79e94c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<ul>
+<li><strong>优点</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.  使原来属于不同碰撞域的以太网上的计算机能够进行跨碰撞域的通信。</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">2.  扩大了以太网覆盖的地理范围。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>缺点</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.  碰撞域增大了，但总的吞吐量并未提高。</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">2.  如果不同的碰撞域使用不同的数据率，那么就不能用集线器将它们互连起来。</span><br></pre></td></tr></table></figure>
+<p><strong>碰撞域</strong></p>
+</blockquote>
+<ul>
+<li><strong>碰撞域（collision domain）</strong>又称为<strong>冲突域</strong>，是指网络中一个站点发出的帧会与其他站点发出的帧产生碰撞或冲突的那部分网络。</li>
+<li>碰撞域越大，发生碰撞的概率越高。</li>
+</ul>
+<h2 id="以太网交换机-在数据链路层扩展以太网"><a href="#以太网交换机-在数据链路层扩展以太网" class="headerlink" title="以太网交换机-在数据链路层扩展以太网"></a>以太网交换机-在数据链路层扩展以太网</h2><h3 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h3><ul>
+<li>扩展以太网更常用的方法是在数据链路层进行。</li>
+<li>早期使用<strong>网桥</strong>，现在使用<strong>以太网交换机</strong>。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-001d34e299bee061.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/876/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>网桥</strong></p>
+<ul>
+<li><p>网桥工作在数据链路层。</p>
+</li>
+<li><p>它根据 MAC 帧的目的地址对收到的帧进行转发和过滤。</p>
+</li>
+<li><p>当网桥收到一个帧时，并不是向所有的接口转发此帧，而是先检查此帧的目的MAC 地址，然后再确定将该帧转发到哪一个接口，或把它丢弃。</p>
+</li>
+</ul>
+<p><strong>交换机</strong></p>
+<ul>
+<li><p>1990 年问世的交换式集线器 (switching hub) 可明显地提高以太网的性能。</p>
+</li>
+<li><p>交换式集线器常称为<strong>以太网交换机</strong> (switch) 或<strong>第二层交换机</strong> (L2 switch)，强调这种交换机工作在数据链路层。</p>
+</li>
+<li><p>以太网交换机实质上就是一个<strong>多接口的网桥</strong></p>
+</li>
+</ul>
+</blockquote>
+<h3 id="集线器HUB与交换机SWITCH区别"><a href="#集线器HUB与交换机SWITCH区别" class="headerlink" title="集线器HUB与交换机SWITCH区别"></a><strong>集线器HUB与交换机SWITCH区别</strong></h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-a8f68b1ee60923c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>使用<strong>集线器</strong>互连而成的共享总线式以太网上的某个主机，要给另一个主机发送单播帧，该单播帧会通过共享总线传输到<strong>总线上的其他各个主机</strong></p>
+<p>使用交换机互连而成的交换式以太网上的某个主机，要给另一个主机发送单播帧，该单播帧进入交换机后，交换机会将该单播帧转发给目的主机，<strong>而不是网络中的其他各个主机</strong></p>
+<p><strong>这个例子的前提条件是忽略ARP过程，并假设交换机的帧交换表已经学习或配置好了</strong></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-bd7d832dc7f8ffbe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>以太网交换机的交换方式</strong></p>
+<ul>
+<li>存储转发方式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*   把整个数据帧**先缓存**后再进行处理。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>直通 (cut-through) 方式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">*   接收数据帧的同时就**立即按数据帧的目的 MAC 地址决定该帧的转发接口**，因而提高了帧的转发速度。</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">*   **缺点**是它不检查差错就直接将帧转发出去，因此有可能也将一些无效帧转发给其他的站。</span><br></pre></td></tr></table></figure>
+
+<p><strong>这个例子的前提条件是忽略ARP过程，并假设交换机的帧交换表已经学习或配置好了</strong></p>
+</blockquote>
+<p><strong>对比集线器和交换机</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-2e2faba35d2d7852.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/741/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-4638409baba882e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>多台主机同时给另一台主机发送单播帧</p>
+<p>集线器以太网：会产生碰撞，遭遇碰撞的帧会传播到总线上的各主机</p>
+<p>交换机以太网：会将它们缓存起来，然后逐个转发给目的主机，不会产生碰撞</p>
+<p><strong>这个例子的前提条件是忽略ARP过程，并假设交换机的帧交换表已经学习或配置好了</strong></p>
+</blockquote>
+<p><strong>集线器扩展以太网和交换机扩展以太网区别</strong></p>
+<p><strong>单播</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-34c587f82d3a1286.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>广播</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-134f67554e64e22b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>多个单播</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-d80949431bd76379.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-d5c429a2f92149ff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>广播域（broadcast domain）：指这样一部分网络，其中任何一台设备发出的广播通信都能被该部分网络中的所有其他设备所接收。</p>
+<h2 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h2><p><img src="https://upload-images.jianshu.io/upload_images/24878825-25db1be3ca96bc2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-df6859d2396549cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/925/format/webp" alt="img"></p>
+<blockquote>
+<p>工作在数据链路层的以太网交换机，其性能远远超过工作在物理层的集线器，而且价格并不贵，这就使得集线器逐渐被市场淘汰</p>
+</blockquote>
+<hr>
+<h1 id="以太网交换机自学习和转发帧的流程"><a href="#以太网交换机自学习和转发帧的流程" class="headerlink" title="以太网交换机自学习和转发帧的流程"></a>以太网交换机自学习和转发帧的流程</h1><h2 id="概念-2"><a href="#概念-2" class="headerlink" title="概念"></a>概念</h2><p><img src="https://upload-images.jianshu.io/upload_images/24878825-5f9db8088bf224f9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="自学习和转发帧的例子"><a href="#自学习和转发帧的例子" class="headerlink" title="自学习和转发帧的例子"></a>自学习和转发帧的例子</h2><p>以下例子假设各主机知道网络中其他各主机的MAC地址（无需进行ARP）</p>
+<p><strong>A -&gt; B</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-1ef3dc4a6841b1ce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<ol>
+<li>A 先向 B 发送一帧。该帧从接口 1 进入到交换机</li>
+<li>交换机收到帧后，先查找（图中左边）交换表。没有查到应从哪个接口转发这个帧给 B</li>
+<li>交换机把这个帧的源地址 A 和接口 1 写入（图中左边）交换表中</li>
+<li>交换机向除接口 1 以外的所有的接口广播这个帧</li>
+<li>接口 4到接口 2，先查找（图中右边）交换表。没有查到应从哪个接口转发这个帧给 B</li>
+<li>交换机把这个帧的源地址 A 和接口 1 写入（图中右边）交换表中</li>
+<li>除B主机之外与该帧的目的地址不相符，将丢弃该帧</li>
+<li>主机B发现是给自己的帧，接受该帧</li>
+</ol>
+</blockquote>
+<p><strong>B -&gt; A</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-dbe273924b7c8eea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<ol>
+<li><p>B 向 A 发送一帧。该帧从接口 3 进入到交换机</p>
+</li>
+<li><p>交换机收到帧后，先查找（图中左边）交换表。发现（图中左边）交换表中的 MAC 地址有 A，表明要发送给A的帧应从接口1转发出去。于是就把这个帧传送到接口 1 转发给 A。</p>
+</li>
+<li><p>主机 A 发现目的地址是它，就接受该帧</p>
+</li>
+<li><p>交换机把这个帧的源地址 B 和接口 3 写入（图中左边）交换表中</p>
+</li>
+</ol>
+</blockquote>
+<p><strong>E -&gt; A</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-cf46c0c890cfa2a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<ol>
+<li><p>E 向 A发送一帧</p>
+</li>
+<li><p>交换机收到帧后，先查找（图中右边）交换表。发现（图中右边）交换表中的 MAC 地址有 A，表明要发送给A的帧应从接口2转发出去。于是就把这个帧传送到接口 2 转发给 接口 4。</p>
+</li>
+<li><p>交换机把这个帧的源地址 E 和接口 3 写入（图中右边）交换表中</p>
+</li>
+<li><p>接口 4 到 左边的交换机，先查找（图中左边）交换表。发现（图中左边）交换表中的 MAC 地址有 A，表明要发送给A的帧应从接口1转发出去。于是就把这个帧传送到接口 1 转发给 A。</p>
+</li>
+<li><p>交换机把这个帧的源地址 E 和接口 4 写入（图中左边）交换表中</p>
+</li>
+<li><p>主机 A 发现目的地址是它，就接受该帧</p>
+</li>
+</ol>
+</blockquote>
+<p><strong>G -&gt; A</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-4ee1af4bc8187125.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>主机 A、主机 G、交换机 1的接口 1就共享同一条总线（相当于总线式网络，可以想象成用集线器连接了）</p>
+<ol>
+<li>主机 G 发送给 主机 A 一个帧</li>
+<li>主机 A 和 交换机接口 1都能接收到</li>
+<li>主机 A 的网卡收到后，根据帧的目的MAC地址A，就知道是发送给自己的帧，就接受该帧</li>
+<li>交换机 1收到该帧后，首先进行登记工作</li>
+<li>然后交换机 1对该帧进行转发，该帧的MAC地址是A，在（图中左边）交换表查找MAC 地址有 A</li>
+<li>MAC 地址为 A的接口号是1，但是该帧正是从接口 1 进入交换机的，交换机不会再从该接口 1 讲帧转发出去，因为这是没有必要，于是丢弃该帧</li>
+</ol>
+</blockquote>
+<p>随着网络中各主机都发送了帧后，网络中的各交换机就可以学习到各主机的MAC地址，以及它们与自己各接口的对应关系</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-071ec78303db43c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>考虑到可能有时要在交换机的接口更换主机，或者主机要更换其网络适配器，这就需要更改交换表中的项目。为此，在交换表中每个项目都设有一定的<strong>有效时间</strong>。<strong>过期的项目就自动被删除</strong>。</p>
+<p><strong>以太网交换机的这种自学习方法使得以太网交换机能够即插即用，不必人工进行配置，因此非常方便。</strong></p>
+</blockquote>
+<h2 id="总结-3"><a href="#总结-3" class="headerlink" title="总结"></a>总结</h2><p><strong>交换机自学习和转发帧的步骤归纳</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-b39e4a9145068aca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/983/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-3fc4ca18dcbaef03.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<hr>
+<h1 id="以太网交换机的生成树协议STP"><a href="#以太网交换机的生成树协议STP" class="headerlink" title="以太网交换机的生成树协议STP"></a>以太网交换机的生成树协议STP</h1><h2 id="如何提高以太网的可靠性"><a href="#如何提高以太网的可靠性" class="headerlink" title="如何提高以太网的可靠性"></a>如何提高以太网的可靠性</h2><p><img src="https://upload-images.jianshu.io/upload_images/24878825-04211a392a1b4b1c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/983/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-5033bf0f4c26a32b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/850/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-a65d811129786ec6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="生成树协议STP"><a href="#生成树协议STP" class="headerlink" title="生成树协议STP"></a>生成树协议STP</h2><p><img src="https://upload-images.jianshu.io/upload_images/24878825-d43f5c0c9ddbaf93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1133/format/webp" alt="img"></p>
+<blockquote>
+<ul>
+<li><p>IEEE 802.1D 标准制定了一个<strong>生成树协议 STP</strong> (Spanning Tree Protocol)。</p>
+</li>
+<li><p>其<strong>要点</strong>是：<strong>不改变</strong>网络的实际拓扑，但在逻辑上则切断某些链路，使得从一台主机到所有其他主机的路径是<strong>无环路的树状结构</strong>，从而消除了兜圈子现象。</p>
+</li>
+</ul>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-36746a91a09f583c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/895/format/webp" alt="img"></p>
+<hr>
+<h1 id="虚拟局域网VLAN"><a href="#虚拟局域网VLAN" class="headerlink" title="虚拟局域网VLAN"></a>虚拟局域网VLAN</h1><h2 id="为什么要虚拟局域网VLAN"><a href="#为什么要虚拟局域网VLAN" class="headerlink" title="为什么要虚拟局域网VLAN"></a>为什么要虚拟局域网VLAN</h2><p><strong>广播风暴</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-a2a78b40ae5307db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>分割广播域的方法</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-89e9ef3fdfcc530c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>为了分割广播域，所以虚拟局域网VLAN技术应运而生</p>
+</blockquote>
+<h2 id="概念-3"><a href="#概念-3" class="headerlink" title="概念"></a>概念</h2><p><img src="https://upload-images.jianshu.io/upload_images/24878825-3f98534c040b90f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<ul>
+<li><p>利用以太网交换机可以很方便地实现虚拟局域网 VLAN (Virtual LAN)。</p>
+</li>
+<li><p>IEEE 802.1Q 对虚拟局域网 VLAN 的<strong>定义</strong>：  <strong>虚拟局域网 VLAN</strong> 是由一些局域网网段构成的<strong>与物理位置无关的逻辑组</strong>，而这些网段具有某些共同的需求。每一个 VLAN 的帧都有一个明确的标识符，指明发送这个帧的计算机是属于哪一个 VLAN。</p>
+</li>
+<li><p>同一个VLAN内部可以广播通信，不同VLAN不可以广播通信</p>
+</li>
+<li><p><strong>虚拟局域网其实只是局域网给用户提供的一种服务，而并不是一种新型局域网。</strong></p>
+</li>
+<li><p>由于虚拟局域网是用户和网络资源的逻辑组合，因此可按照需要将有关设备和资源非常方便地重新组合，使用户从不同的服务器或数据库中存取所需的资源。</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="虚拟局域网VLAN的实现机制"><a href="#虚拟局域网VLAN的实现机制" class="headerlink" title="虚拟局域网VLAN的实现机制"></a>虚拟局域网VLAN的实现机制</h2><p>虚拟局域网VLAN技术是在交换机上实现的，需要交换机能够实现以下功能</p>
+<ul>
+<li>能够处理带有VLAN标记的帧——IEEE 802.1 Q帧</li>
+<li>交换机的各端口可以支持不同的端口类型，不同端口类型的端口对帧的处理方式有所不同</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-5d3549cc02f9a3b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-6af352f81b800a98.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>Access端口</strong></p>
+<p>交换机与用户计算机之间的互连</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-44a2e259c33ecfd3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/938/format/webp" alt="img"></p>
+<blockquote>
+<p>同一个VLAN内部可以广播通信，不同VLAN不可以广播通信</p>
+</blockquote>
+<p><strong>Truck端口</strong></p>
+<p>交换机之间或交换机与路由器之间的互连</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-a93996aae716c6aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1184/format/webp" alt="img"></p>
+<p><strong>华为交换机私有的Hybrid端口类型</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-653b80a66c3cc5bb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/908/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-239ec8f47d072a9b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1069/format/webp" alt="img"></p>
+<h2 id="总结-4"><a href="#总结-4" class="headerlink" title="总结"></a>总结</h2><p><img src="https://upload-images.jianshu.io/upload_images/24878825-dd58aec183276962.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>虚拟局域网优点</strong></p>
+<p>虚拟局域网（VLAN）技术具有以下主要优点：</p>
+<ol>
+<li><p>改善了性能</p>
+</li>
+<li><p>简化了管理</p>
+</li>
+<li><p>降低了成本</p>
+</li>
+<li><p>改善了安全性</p>
+</li>
+</ol>
+</blockquote>
+
+    </div>
+
+    
+    
+    <div>
+  <div class="end-slogan" style="text-align:center;font-size:22px;letter-spacing:10px;user-seclect:none;color:#bbb">----------- 本文结束啦<i class="fa fa-star"></i>感谢您阅读-----------</div>		
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Rick
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/posts/c9d999de/" title="计算机网络之数据链路层">http://example.com/posts/c9d999de/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/18784b9d/" rel="prev" title="计算机网络之物理层">
+      <i class="fa fa-chevron-left"></i> 计算机网络之物理层
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/bc654c1/" rel="next" title="计算机网络之网络层">
+      计算机网络之网络层 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%A6%82%E8%BF%B0"><span class="nav-text">数据链路层概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E9%87%8D%E8%A6%81%E9%97%AE%E9%A2%98"><span class="nav-text">三个重要问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%81%E8%A3%85%E6%88%90%E5%B8%A7"><span class="nav-text">封装成帧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%8F%E6%98%8E%E4%BC%A0%E8%BE%93"><span class="nav-text">透明传输</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%AE%E9%94%99%E6%A3%80%E6%B5%8B"><span class="nav-text">差错检测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D-1"><span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%87%E5%81%B6%E6%A0%A1%E9%AA%8C"><span class="nav-text">奇偶校验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E5%86%97%E4%BD%99%E6%A0%A1%E9%AA%8CCRC-Cyclic-Redundancy-Check"><span class="nav-text">循环冗余校验CRC(Cyclic Redundancy Check)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93"><span class="nav-text">可靠传输</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E5%8F%AF%E9%9D%A0%E5%8D%8F%E8%AE%AE"><span class="nav-text">三种可靠协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%81%9C%E6%AD%A2-%E7%AD%89%E5%BE%85%E5%8D%8F%E8%AE%AE"><span class="nav-text">停止-等待协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%9C%E6%AD%A2-%E7%AD%89%E5%BE%85%E5%8D%8F%E8%AE%AE%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E5%9B%9B%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="nav-text">停止-等待协议可能遇到的四个问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%9C%E6%AD%A2-%E7%AD%89%E5%BE%85%E5%8D%8F%E8%AE%AE%E7%9A%84%E4%BF%A1%E9%81%93%E5%88%A9%E7%94%A8%E7%8E%87"><span class="nav-text">停止-等待协议的信道利用率</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E9%80%80N%E5%B8%A7%E5%8D%8F%E8%AE%AEGBN"><span class="nav-text">回退N帧协议GBN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%E5%9B%9E%E9%80%80N%E5%B8%A7%E5%8D%8F%E8%AE%AE"><span class="nav-text">为什么用回退N帧协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E5%B7%AE%E9%94%99%E6%83%85%E5%86%B5%E6%B5%81%E7%A8%8B"><span class="nav-text">无差错情况流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%AF%E8%AE%A1%E7%A1%AE%E8%AE%A4"><span class="nav-text">累计确认</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E5%B7%AE%E9%94%99%E6%83%85%E5%86%B5"><span class="nav-text">有差错情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E9%87%8D%E4%BC%A0%E5%8D%8F%E8%AE%AESR"><span class="nav-text">选择重传协议SR</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%B9%E5%AF%B9%E7%82%B9%E5%8D%8F%E8%AE%AEPPP"><span class="nav-text">点对点协议PPP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A7%E6%A0%BC%E5%BC%8F"><span class="nav-text">帧格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%8F%E6%98%8E%E4%BC%A0%E8%BE%93-1"><span class="nav-text">透明传输</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%AE%E9%94%99%E6%A3%80%E6%B5%8B-1"><span class="nav-text">差错检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E7%8A%B6%E6%80%81"><span class="nav-text">工作状态</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AA%92%E4%BD%93%E6%8E%A5%E5%85%A5%E6%8E%A7%E5%88%B6%EF%BC%88%E4%BB%8B%E8%B4%A8%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%EF%BC%89%E2%80%94%E2%80%94%E5%B9%BF%E6%92%AD%E4%BF%A1%E9%81%93"><span class="nav-text">媒体接入控制（介质访问控制）——广播信道</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-1"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%88%92%E5%88%86%E4%BF%A1%E9%81%93"><span class="nav-text">静态划分信道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E6%8E%A5%E5%85%A5%E6%8E%A7%E5%88%B6"><span class="nav-text">动态接入控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%8E%A5%E5%85%A5%EF%BC%88CSMA-CD%E5%8D%8F%E8%AE%AE%EF%BC%89"><span class="nav-text">随机接入（CSMA&#x2F;CD协议）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-2"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%9D%80%E6%8E%A5%E5%85%A5MA"><span class="nav-text">多址接入MA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%BD%E6%B3%A2%E7%9B%91%E5%90%ACCS"><span class="nav-text">载波监听CS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8BCD"><span class="nav-text">碰撞检测CD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSMA-CD-%E5%8D%8F%E8%AE%AE%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-text">CSMA&#x2F;CD 协议工作流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSMA-CD-%E5%8D%8F%E8%AE%AE%E5%B7%A5%E4%BD%9C%E2%80%94%E2%80%94%E4%BA%89%E7%94%A8%E6%9C%9F%EF%BC%88%E7%A2%B0%E6%92%9E%E7%AA%97%E5%8F%A3%EF%BC%89"><span class="nav-text">CSMA&#x2F;CD 协议工作——争用期（碰撞窗口）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSMA-CD-%E5%8D%8F%E8%AE%AE%E5%B7%A5%E4%BD%9C%E2%80%94%E2%80%94%E6%9C%80%E5%B0%8F%E5%B8%A7%E9%95%BF"><span class="nav-text">CSMA&#x2F;CD 协议工作——最小帧长</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSMA-CD-%E5%8D%8F%E8%AE%AE%E5%B7%A5%E4%BD%9C%E2%80%94%E2%80%94%E6%9C%80%E5%A4%A7%E5%B8%A7%E9%95%BF"><span class="nav-text">CSMA&#x2F;CD 协议工作——最大帧长</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSMA-CD-%E5%8D%8F%E8%AE%AE%E5%B7%A5%E4%BD%9C%E2%80%94%E2%80%94%E6%88%AA%E6%96%AD%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%8C%87%E6%95%B0%E9%80%80%E9%81%BF%E7%AE%97%E6%B3%95"><span class="nav-text">CSMA&#x2F;CD 协议工作——截断二进制指数退避算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSMA-CD-%E5%8D%8F%E8%AE%AE%E5%B7%A5%E4%BD%9C%E2%80%94%E2%80%94%E4%BF%A1%E9%81%93%E5%88%A9%E7%94%A8%E7%8E%87"><span class="nav-text">CSMA&#x2F;CD 协议工作——信道利用率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSMA-CD-%E5%8D%8F%E8%AE%AE%E5%B7%A5%E4%BD%9C%E2%80%94%E2%80%94%E5%B8%A7%E6%8E%A5%E6%94%B6%E6%B5%81%E7%A8%8B"><span class="nav-text">CSMA&#x2F;CD 协议工作——帧接收流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSMA-CD-%E5%8D%8F%E8%AE%AE%E7%9A%84%E9%87%8D%E8%A6%81%E7%89%B9%E6%80%A7"><span class="nav-text">CSMA&#x2F;CD 协议的重要特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%8E%A5%E5%85%A5%EF%BC%88CSMA-CA%E5%8D%8F%E8%AE%AE%EF%BC%89"><span class="nav-text">随机接入（CSMA&#x2F;CA协议）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%97%A0%E7%BA%BF%E5%B1%80%E5%9F%9F%E7%BD%91%E8%A6%81%E4%BD%BF%E7%94%A8CSMA-CA%E5%8D%8F%E8%AE%AE"><span class="nav-text">为什么无线局域网要使用CSMA&#x2F;CA协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%A7%E9%97%B4%E9%97%B4%E9%9A%94IFS%EF%BC%88InterFrame-Space%EF%BC%89"><span class="nav-text">帧间间隔IFS（InterFrame Space）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSMA-CA%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">CSMA&#x2F;CA协议的工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSMA-CA%E5%8D%8F%E8%AE%AE%E7%9A%84%E9%80%80%E9%81%BF%E7%AE%97%E6%B3%95"><span class="nav-text">CSMA&#x2F;CA协议的退避算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSMA-CA%E5%8D%8F%E8%AE%AE%E7%9A%84%E4%BF%A1%E9%81%93%E9%A2%84%E7%BA%A6%E5%92%8C%E8%99%9A%E6%8B%9F%E8%BD%BD%E6%B3%A2%E7%9B%91%E5%90%AC"><span class="nav-text">CSMA&#x2F;CA协议的信道预约和虚拟载波监听</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MAC%E5%9C%B0%E5%9D%80%E3%80%81IP%E5%9C%B0%E5%9D%80%E4%BB%A5%E5%8F%8AARP%E5%8D%8F%E8%AE%AE"><span class="nav-text">MAC地址、IP地址以及ARP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MAC%E5%9C%B0%E5%9D%80"><span class="nav-text">MAC地址</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BF%E6%92%AD%E4%BF%A1%E9%81%93%E7%9A%84%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%BF%85%E9%A1%BB%E4%BD%BF%E7%94%A8%E5%9C%B0%E5%9D%80%EF%BC%88MAC%EF%BC%89"><span class="nav-text">广播信道的数据链路层必须使用地址（MAC）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IEEE-802%E5%B1%80%E5%9F%9F%E7%BD%91%E7%9A%84MAC%E5%9C%B0%E5%9D%80%E6%A0%BC%E5%BC%8F"><span class="nav-text">IEEE 802局域网的MAC地址格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IEEE-802%E5%B1%80%E5%9F%9F%E7%BD%91%E7%9A%84MAC%E5%9C%B0%E5%9D%80%E5%8F%91%E9%80%81%E9%A1%BA%E5%BA%8F"><span class="nav-text">IEEE 802局域网的MAC地址发送顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E6%92%ADMAC%E5%9C%B0%E5%9D%80%E4%B8%BE%E4%BE%8B"><span class="nav-text">单播MAC地址举例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BF%E6%92%ADMAC%E5%9C%B0%E5%9D%80%E4%B8%BE%E4%BE%8B"><span class="nav-text">广播MAC地址举例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%92%ADMAC%E5%9C%B0%E5%9D%80%E4%B8%BE%E4%BE%8B"><span class="nav-text">多播MAC地址举例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP%E5%9C%B0%E5%9D%80"><span class="nav-text">IP地址</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-3"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%9C%8BIP%E5%9C%B0%E5%9D%80%E4%B8%8EMAC%E5%9C%B0%E5%9D%80"><span class="nav-text">从网络体系结构看IP地址与MAC地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%85%E8%BD%AC%E5%8F%91%E8%BF%87%E7%A8%8B%E4%B8%ADIP%E5%9C%B0%E5%9D%80%E4%B8%8EMAC%E5%9C%B0%E5%9D%80%E7%9A%84%E5%8F%98%E5%8C%96%E6%83%85%E5%86%B5"><span class="nav-text">数据包转发过程中IP地址与MAC地址的变化情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARP%E5%8D%8F%E8%AE%AE"><span class="nav-text">ARP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-1"><span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%86%E7%BA%BF%E5%99%A8%E4%B8%8E%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">集线器与交换机的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E7%BA%BF%E5%99%A8-%E5%9C%A8%E7%89%A9%E7%90%86%E5%B1%82%E6%89%A9%E5%B1%95%E4%BB%A5%E5%A4%AA%E7%BD%91"><span class="nav-text">集线器-在物理层扩展以太网</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E7%BA%BF%E5%99%A8HUB%E5%9C%A8%E7%89%A9%E7%90%86%E5%B1%82%E6%89%A9%E5%B1%95%E4%BB%A5%E5%A4%AA%E7%BD%91"><span class="nav-text">集线器HUB在物理层扩展以太网</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E7%BD%91%E4%BA%A4%E6%8D%A2%E6%9C%BA-%E5%9C%A8%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%89%A9%E5%B1%95%E4%BB%A5%E5%A4%AA%E7%BD%91"><span class="nav-text">以太网交换机-在数据链路层扩展以太网</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-1"><span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E7%BA%BF%E5%99%A8HUB%E4%B8%8E%E4%BA%A4%E6%8D%A2%E6%9C%BASWITCH%E5%8C%BA%E5%88%AB"><span class="nav-text">集线器HUB与交换机SWITCH区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-2"><span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E7%BD%91%E4%BA%A4%E6%8D%A2%E6%9C%BA%E8%87%AA%E5%AD%A6%E4%B9%A0%E5%92%8C%E8%BD%AC%E5%8F%91%E5%B8%A7%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-text">以太网交换机自学习和转发帧的流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-2"><span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AD%A6%E4%B9%A0%E5%92%8C%E8%BD%AC%E5%8F%91%E5%B8%A7%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-text">自学习和转发帧的例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-3"><span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E7%BD%91%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E7%94%9F%E6%88%90%E6%A0%91%E5%8D%8F%E8%AE%AESTP"><span class="nav-text">以太网交换机的生成树协议STP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E4%BB%A5%E5%A4%AA%E7%BD%91%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-text">如何提高以太网的可靠性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%A0%91%E5%8D%8F%E8%AE%AESTP"><span class="nav-text">生成树协议STP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E5%B1%80%E5%9F%9F%E7%BD%91VLAN"><span class="nav-text">虚拟局域网VLAN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%99%9A%E6%8B%9F%E5%B1%80%E5%9F%9F%E7%BD%91VLAN"><span class="nav-text">为什么要虚拟局域网VLAN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-3"><span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E5%B1%80%E5%9F%9F%E7%BD%91VLAN%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">虚拟局域网VLAN的实现机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-4"><span class="nav-text">总结</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Rick"
+      src="/images/avatar.jpg">
+  </a>
+  <p class="site-author-name" itemprop="name">Rick</p>
+  <div class="site-description" itemprop="description">一个瞎折腾的博客，不知道能坚持几天</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-sun"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rick</span>
+</div>
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+<!-- 不蒜字统计 -->
+<div>
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_uv">
+    访问人数：<span id="busuanzi_value_site_uv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    总访问量：<span id="busuanzi_value_site_pv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <!-- 添加博客全站总字数统计-->
+  <i class="fa fa-pencil"></i>
+  <span class="post-count">博客全站共 356.6k 字</span>
+</div>
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '',
+      clientSecret: '',
+      repo        : '',
+      owner       : '',
+      admin       : [''],
+      id          : '07632f0ab250d8bc1edf1f609dbfd98b',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

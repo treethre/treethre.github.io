@@ -20,36 +20,71 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="article">
+  <meta name="description" content="计算机网络的分层模型概述以及相关概念的介绍">
+<meta property="og:type" content="article">
 <meta property="og:title" content="计算机网络之结构体系">
 <meta property="og:url" content="http://example.com/posts/49f3519/index.html">
 <meta property="og:site_name" content="Rick Blog">
+<meta property="og:description" content="计算机网络的分层模型概述以及相关概念的介绍">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210125175238302.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210125175557264.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L05pbXJvZF9f,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-cb6c0dd7a1f70e3e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210125180108669.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L05pbXJvZF9f,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-332e68bc46bc59ab.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210125180535421.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L05pbXJvZF9f,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210125180623902.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L05pbXJvZF9f,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560423887412-d4d4f5b7-65c7-4642-b8b5-3d41f8c386b8.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424601319-92ba8339-6332-44f8-9e35-dc173f3e7fcf.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424670652-1ca1075f-1a0d-441f-b7c0-fbe6b22b83fe.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424760518-a535ce53-7f19-4d1e-9935-427ab8fc6e3c.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424831012-7bac8dbb-d83f-4897-8117-4c5cb9300b9c.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/230760/1600739086996-dc73c7f1-9c20-48bb-b987-08e953d2e9aa.jpeg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/7dabc067529f515dbc7442fb0669877a.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/4b0677993ef837ac31e0d941592e86d7.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/6489ab250029ecc20796125956c7e5d9.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/bf0041d13e872817776cd222d88c733f.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/b9a31e5b06430df4e6de25b819eba042.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/230760/1586864803617-45707af2-232c-4679-851b-a1188eb1edec.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/230760/1600739147883-3f99f92d-ca09-4475-bc76-7ef1379e2e6e.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/230760/1600739147946-a612b8fe-a825-4e3f-b2dc-d34936f99961.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560427330668-9b9d9b11-a352-4a26-a88c-2844e546be37.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/230760/1586580197983-818334f6-31dc-4ea9-85be-307b4721ce62.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560427485802-52ca725c-98e6-4208-81e3-88d6f2f6627b.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560427641075-02da04fc-e36b-47d7-b489-3f9df61d85be.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/230760/1560427728219-820fbf07-0969-484b-a00c-9b7918753643.jpeg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-cbb94cf7d6bc6f8b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-7ad293b2ca19158b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/672/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-acb87df045723236.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-c57bf61052cb33f0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-e655a213714d1871.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-c56f91f290cbc92b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-4ed63e74d9ced719.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/384/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-f6a1849bcc443935.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/260/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-ca133aaaf8fe8659.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/308/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-d0d30cddc7356396.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/557/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-5f9bf4982c20ad4f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-dd48cf5be5b2a7f7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021012622503898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L05pbXJvZF9f,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/230760/1586578197640-28d8e905-7b3a-4d68-ac5b-66b3e789a9c0.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-b5174af1551d6cee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-f647ab572971d89a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1126/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-6800e214b18c47c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/931/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-82255e6c6d5f29bf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-0274083e0bf0da85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-f55f86e0a78ffe23.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-20174ff3821a739b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-edab6d1f00b0ab15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-96bdae8525215011.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-d29fee34f68a16b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-1cf0ec9780d80019.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-8c5d1b3fdc1b7111.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-ac36f7a9544dde9f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-cc2b73b1736d5809.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-dc02183dcf759d9e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-f8cf8ce4a6bfdb54.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-e7285afa504bce0d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-8ffee68ffe58b8a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-b9824f4625354b9b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/945/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-09a0b27933c9895e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/832/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-6eace5a882cca26d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/697/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-92d182edd57d1054.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/650/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-bc79de20a0c4b57c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/638/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-33d09406bfc433e0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/674/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-28228b60dd019bb5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/740/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-d9f5b6ce408c252b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-b4c748c8f731e416.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-01d621fd0afde0a2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-b3d7eb63257d9914.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-f24a75796ed2c7f6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-f9bd7898a7f2dadd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
 <meta property="article:published_time" content="2021-02-14T07:59:42.000Z">
-<meta property="article:modified_time" content="2021-02-14T08:32:29.011Z">
+<meta property="article:modified_time" content="2021-02-16T02:42:19.515Z">
 <meta property="article:author" content="Rick">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/230760/1560423887412-d4d4f5b7-65c7-4642-b8b5-3d41f8c386b8.png">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210125175238302.png">
 
 <link rel="canonical" href="http://example.com/posts/49f3519/">
 
@@ -229,10 +264,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-02-14 15:59:42 / 修改时间：16:32:29" itemprop="dateCreated datePublished" datetime="2021-02-14T15:59:42+08:00">2021-02-14</time>
+              <time title="创建时间：2021-02-14 15:59:42" itemprop="dateCreated datePublished" datetime="2021-02-14T15:59:42+08:00">2021-02-14</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-16 10:42:19" itemprop="dateModified" datetime="2021-02-16T10:42:19+08:00">2021-02-16</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -264,372 +305,515 @@
         <meta name="referrer" content="no-referrer"/>
 
 <blockquote>
+<p>计算机网络的分层模型概述以及相关概念的介绍</p>
 </blockquote>
 <a id="more"></a>
 
-<h1 id="计算机网络体系概述"><a href="#计算机网络体系概述" class="headerlink" title="计算机网络体系概述"></a>计算机网络体系概述</h1><h2 id="计算机网络的组成"><a href="#计算机网络的组成" class="headerlink" title="计算机网络的组成"></a>计算机网络的组成</h2><h3 id="从组成成分上看"><a href="#从组成成分上看" class="headerlink" title="从组成成分上看"></a><strong>从组成成分上看</strong></h3><p><strong>硬件</strong></p>
-<ul>
-<li>主机</li>
-<li>通信链路（双绞线，光纤）</li>
-<li>交换设备（路由器，交换机）</li>
+<h1 id="计算机网络体系概述"><a href="#计算机网络体系概述" class="headerlink" title="计算机网络体系概述"></a>计算机网络体系概述</h1><h2 id="计算机网络在信息时代的作用"><a href="#计算机网络在信息时代的作用" class="headerlink" title="计算机网络在信息时代的作用"></a>计算机网络在信息时代的作用</h2><ul>
+<li>计算机网络已由一种<strong>通信基础设施</strong>发展成为一种重要的<strong>信息服务基础设施</strong></li>
+<li>计算机网络已经像水，电，煤气这些基础设施一样，成为我们<strong>生活中不可或缺</strong>的一部分</li>
 </ul>
-<p><strong>软件（主要在应用层）</strong></p>
-<p>协议</p>
+<h2 id="因特网概述"><a href="#因特网概述" class="headerlink" title="因特网概述"></a>因特网概述</h2><h3 id="网络、互联网和因特网"><a href="#网络、互联网和因特网" class="headerlink" title="网络、互联网和因特网"></a>网络、互联网和因特网</h3><p>网络：网络由<strong>若干节点和连接这些节点的链路</strong>组成。<br><img src="https://img-blog.csdnimg.cn/20210125175238302.png" alt="网络组成"></p>
+<p>互连网（互联网）：多个网络通过路由器互连起来，这样就构成了一个覆盖范围更大的网络，即互连网（互联网）。因此，互联网又称为“网络的网络（Network of Networks）”。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210125175557264.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L05pbXJvZF9f,size_16,color_FFFFFF,t_70" alt="多个网络形成互联网"></p>
+<p>因特网：因特网（Internet）是世界上最大的互连网络（用户数以亿计，互连的网络数以百万计）。</p>
+<blockquote>
+<p><strong>internet与Internet的区别</strong></p>
 <ul>
-<li>语法：用来规定信息格式;<strong>数据及控制信息的格式</strong>、编码及信号电平等<em>。</em></li>
-<li>语义：控制信息每个部分的含义。<strong>发出何种控制信息，发出何种动作，发出何种响应。</strong></li>
-<li>规则：(时序)定义了何时进行通信，先讲什么，后讲什么，讲话的速度等。 比如是采用同步传输还是异步传输。</li>
+<li><p><strong>internet(互联网或互连网)**是一个通用名词，它泛指</strong>多个计算机网络互连而成的网络**。在这些网络之间的通信协议可以是任意的。</p>
+</li>
+<li><p><strong>Internet（因特网）则是一个专用名词</strong>，它指<strong>当前全球最大的、开放的、由众多网络互连而成的特定计算机网络</strong>，它采用TCP/IP协议族作为通信的规则，其前身是美国的ARPANET。</p>
+</li>
 </ul>
-<h3 id="从工作方式上看"><a href="#从工作方式上看" class="headerlink" title="从工作方式上看"></a><strong>从工作方式上看</strong></h3><p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560423887412-d4d4f5b7-65c7-4642-b8b5-3d41f8c386b8.png" alt="image"></p>
-<p><strong>边缘部分</strong></p>
-<ul>
-<li>实体：主机</li>
-<li>作用：通信和资源共享</li>
-</ul>
-<p><strong>核心部分</strong></p>
-<ul>
-<li>实体：网络和路由器</li>
-<li>作用：连通信和交换服务</li>
-</ul>
-<h3 id="从功能上看"><a href="#从功能上看" class="headerlink" title="从功能上看"></a><strong>从功能上看</strong></h3><p><strong>通信子网</strong></p>
-<p><strong>组成</strong></p>
-<ul>
-<li>传输介质</li>
-<li>通信设备</li>
-<li>网络协议</li>
-</ul>
-<p><strong>作用</strong></p>
-<ul>
-<li>数据传输</li>
-<li>数据交换</li>
-<li>数据控制</li>
-<li>数据存储</li>
-</ul>
-<p><strong>资源子网</strong>：资源共享功能的设备和软件的集合</p>
-<h2 id="计算机网络的功能"><a href="#计算机网络的功能" class="headerlink" title="计算机网络的功能"></a>计算机网络的功能</h2><p><strong>数据通信（最基本，最重要）</strong></p>
-<p><strong>资源共享</strong></p>
+<p><strong>任意把几个计算机网络互连起来（不管采用什么协议），并能够相互通信，这样构成的是一个互连网(internet) ，而不是互联网(Internet)。</strong></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-cb6c0dd7a1f70e3e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h3 id="因特网发展的三个阶段"><a href="#因特网发展的三个阶段" class="headerlink" title="因特网发展的三个阶段"></a>因特网发展的三个阶段</h3><p><img src="https://img-blog.csdnimg.cn/20210125180108669.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L05pbXJvZF9f,size_16,color_FFFFFF,t_70" alt="三个阶段"><br><strong>因特网服务提供者ISP(Internet Service Provider)</strong></p>
+<p>提供给用户IP地址的角色，每个用户通过ISP提供的IP地址使用互联网，没有IP地址不可以使用互联网。</p>
+<p>生活中电信等便是最经典的例子，其中在互联网中每个用户都可以是ISP。<br><img src="https://upload-images.jianshu.io/upload_images/24878825-332e68bc46bc59ab.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>普通用户是如何接入到因特网的呢？</p>
+<p>答：<strong>通过ISP接入因特网</strong></p>
+<p>ISP可以从因特网管理机构申请到成块的IP地址，同时拥有通信线路以及路由器等联网设备。任何机构和个人只需缴纳费用，就可从<strong>ISP的得到所需要的IP地址</strong>。</p>
+<p><strong>因为因特网上的主机都必须有IP地址才能进行通信，这样就可以通过该ISP接入到因特网</strong></p>
+</blockquote>
+<p>基于ISP的三个结构互联网</p>
+<p><img src="https://img-blog.csdnimg.cn/20210125180535421.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L05pbXJvZF9f,size_16,color_FFFFFF,t_70" alt="三层结构"></p>
+<blockquote>
+<p>一旦某个用户能够接入到因特网，那么他也可以成为一个ISP，所需要做的就是购买一些如调制解调器或路由器这样的设备，让其他用户可以和他相连。</p>
+</blockquote>
+<h3 id="因特网的标准化工作"><a href="#因特网的标准化工作" class="headerlink" title="因特网的标准化工作"></a>因特网的标准化工作</h3><p><img src="https://img-blog.csdnimg.cn/20210125180623902.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L05pbXJvZF9f,size_16,color_FFFFFF,t_70" alt="img"></p>
+<h3 id="因特网的组成"><a href="#因特网的组成" class="headerlink" title="因特网的组成"></a>因特网的组成</h3><p>边缘部分：由所有连接在因特网上的<strong>主机</strong>组成（台式电脑，大型服务器，笔记本电脑，平板，智能手机等）。这部分是<strong>用户直接使用</strong>的，用来进行<strong>通信</strong>（传送数据、音频或视频）和<strong>资源共享</strong>。</p>
+<p>核心部分：由<strong>大量网络</strong>和连接这些网络的<strong>路由器</strong>组成。这部分是<strong>为边缘部分提供服务</strong>的（提供连通性和交换）。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560423887412-d4d4f5b7-65c7-4642-b8b5-3d41f8c386b8.png" alt="image"></p>
+<blockquote>
+<p>路由器是一种专用计算机，但我们不称它为主机，路由器是实现分组交换的关键构建，其任务是转发收到的分组，这是网络核心最重要的部分。</p>
+<p>处在互联网边缘的部分就是连接在互联网上的所有的主机。这些主机又称为**端系统 (end system)**。</p>
+<p><strong>端系统在功能上可能有很大的差别：</strong></p>
 <ol>
-<li>软件共享</li>
-<li>数据共享</li>
-<li>硬件共享</li>
+<li>小的端系统可以是一台普通个人电脑，具有上网功能的智能手机，甚至是一个很小的网络摄像头。</li>
+<li>大的端系统则可以是一台非常昂贵的大型计算机。</li>
+<li>端系统的拥有者可以是个人，也可以是单位（如学校、企业、政府机关等），当然也可以是某个ISP。</li>
 </ol>
-<p><strong>分布式处理</strong>：利用<strong>空闲</strong>计算机资源提高<strong>整个系统</strong>的<strong>利用率</strong></p>
-<p><strong>提高可靠性</strong></p>
-<p><strong>负载均衡</strong></p>
-<h2 id="计算机网络的分类"><a href="#计算机网络的分类" class="headerlink" title="计算机网络的分类"></a>计算机网络的分类</h2><h3 id="按分布范围"><a href="#按分布范围" class="headerlink" title="按分布范围"></a><strong>按分布范围</strong></h3><p><strong>广域网（WAN）</strong></p>
-<p>因特网的<strong>核心部分</strong></p>
+</blockquote>
+<h2 id="三种交换方式"><a href="#三种交换方式" class="headerlink" title="三种交换方式"></a>三种交换方式</h2><p>网络核心部分是互联网中最复杂的部分。</p>
+<p>网络中的核心部分要向网络边缘中的大量主机提供连通性，使边缘部分中的任何一个主机都能够向其他主机通信（即传送或接收各种形式的数据）。</p>
+<p>在网络核心部分起特殊作用的是<strong>路由器</strong>(router)。</p>
+<p><strong>路由器</strong>是实现<strong>分组交换</strong> (packet switching) 的关键构件，其任务是<strong>转发</strong>收到的分组，这是网络核心部分最重要的功能。</p>
+<h3 id="电路交换（Circuit-Switching）"><a href="#电路交换（Circuit-Switching）" class="headerlink" title="电路交换（Circuit Switching）"></a>电路交换（Circuit Switching）</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-cbb94cf7d6bc6f8b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>传统两两相连的方式，当电话数量很多时，电话线也很多，就很不方便</p>
+<p>所以要使得每一部电话能够很方便地和另一部电话进行通信，就应该使用一个<strong>中间设备</strong>将这些电话连接起来，这个中间设备就是<strong>电话交换机</strong></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-7ad293b2ca19158b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/672/format/webp" alt="img"></p>
+<ul>
+<li><p>电话交换机接通电话线的方式称为电路交换；</p>
+</li>
+<li><p>从通信资源的分配角度来看，交换（Switching）就是按照某种方式动态地分配传输线路的资源；</p>
+</li>
+<li><p>电路交换的三个步骤：</p>
+<p>  1、建立连接（分配通信资源）</p>
+<p>  2、通话（一直占用通信资源）</p>
+<p>  3、释放连接（归还通信资源）</p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-acb87df045723236.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>当使用电路交换来传送计算机数据时，其线路的传输效率往往很低。</p>
+<p>这是因为计算机数据是突发式地出现在传输线路上的。</p>
+<p>所以计算机通常采用的是<strong>分组交换</strong>，而不是线路交换</p>
+</blockquote>
+<h3 id="分组交换（Packet-Switching）"><a href="#分组交换（Packet-Switching）" class="headerlink" title="分组交换（Packet Switching）"></a>分组交换（Packet Switching）</h3><p><img src="https://upload-images.jianshu.io/upload_images/24878825-c57bf61052cb33f0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>通常我们把表示<strong>该消息的整块数据</strong>成为一个<strong>报文</strong>。</p>
+<p>在发送报文之前，先把较长的报文划分成一个个更小的<strong>等长数据段</strong>，在每一个数据段前面。加上一些由必<strong>要的控制信息组成的首部</strong>后，就构成一个分组，也可简称为“包”，相应地，首部也可称为“包头”。</p>
+<p>首部包含了<strong>分组的目的地址</strong></p>
+<p>分组从源主机到目的主机，可走不同的路径。</p>
+</blockquote>
+<p>发送方</p>
+<ul>
+<li>构造分组</li>
+<li>发送分组</li>
+</ul>
+<p>路由器</p>
+<ul>
+<li>缓存分组</li>
+<li>转发分组</li>
+<li>简称为“分组转发”</li>
+</ul>
+<blockquote>
+<p>在路由器中的输入和输出端口之间没有直接连线。</p>
+<p>路由器处理分组的过程是：</p>
 <ol>
-<li>使用<strong>高速链路</strong>和<strong>大通信容量</strong></li>
-<li>大部分采用<strong>交换技术</strong>；无线和卫星采用<strong>广播方式</strong></li>
-<li><strong>PPP 协议是广域网的典型子协议</strong></li>
+<li><p>把收到的分组先<strong>放入缓存（暂时存储）；</strong></p>
+</li>
+<li><p><strong>查找转发表</strong>，找出到某个目的地址应从哪个端口转发；</p>
+</li>
+<li><p>把分组送到适当的端口<strong>转发</strong>出去。</p>
+</li>
 </ol>
-<p><strong>城域网（MAN）：</strong>采用以太网技术</p>
-<p><strong>局域网（PAN）：</strong>采用广播技术。</p>
-<ol>
-<li>广播式网络是局域网的一种，局域网是工作在<strong>数据链路层</strong>，故不需要网络层</li>
-<li>网络层最重要的是路由和分组，其中路由就是选择线路，比如成都到北京，有很多线路可以选择，路由就通过不同的路由协议，选择符合场景的线路。而局域网，就是范围很小的网络，比如你们家就是一个局域网，在类比，你们家那么大的地方，从卧室到厨房需要路由选择线路吗，肯定是不需要的。</li>
-</ol>
-<p><strong>个域网（PAN）</strong></p>
-<h3 id="按传输技术"><a href="#按传输技术" class="headerlink" title="按传输技术"></a><strong>按传输技术</strong></h3><p><strong>广播式网络</strong></p>
+</blockquote>
+<p>接收方</p>
 <ul>
-<li>共享一个通信信道</li>
-<li>所有计算机监听分组，通过目的地址决定是否接收</li>
+<li>接收分组</li>
+<li>还原报文</li>
 </ul>
-<p><strong>点对点网络</strong></p>
-<h3 id="按拓扑结构"><a href="#按拓扑结构" class="headerlink" title="按拓扑结构"></a><strong>按拓扑结构</strong></h3><p><strong>星形（局域网）</strong></p>
+<h3 id="报文交换（Message-Switching）"><a href="#报文交换（Message-Switching）" class="headerlink" title="报文交换（Message Switching）"></a>报文交换（Message Switching）</h3><p>报文交换中的交换结点也采用存储转发方式，但报文交换对报文的大小没有限制，这就要求交换结点需要较大的缓存空间。报文交换主要用于早期的电报通信网，现在较少使用，<strong>通常被较先进的分组交换方式所取代</strong>。</p>
+<h3 id="三种交换方式的对比"><a href="#三种交换方式的对比" class="headerlink" title="三种交换方式的对比"></a>三种交换方式的对比</h3><blockquote>
+<p>假设A，B，C，D是分组传输路径所要经过的4个结点交换机，纵坐标为时间</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-e655a213714d1871.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>分析：</p>
+<p>电路交换：</p>
 <ul>
-<li>中央设备是交换机</li>
-<li>优点：便于控制和管理</li>
-<li>缺点：中央结点故障敏感</li>
+<li>通信之前首先要建立连接；连接建立好之后，就可以使用已建立好的连接进行数据传送；数据传送后，需释放连接，以归还之前建立连接所占用的通信线路资源。</li>
+<li>一旦建立连接，中间的各结点交换机就是直通形式的，比特流可以直达终点；</li>
 </ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424601319-92ba8339-6332-44f8-9e35-dc173f3e7fcf.png" alt="image.png"></p>
-<p><strong>总线型（局域网）</strong></p>
-<p>优点：容易建网和增减网络容量</p>
-<p>缺点</p>
+<p>报文交换：</p>
 <ul>
-<li>故障敏感</li>
-<li>重负载效率低</li>
+<li>可以随时发送报文，而不需要事先建立连接；整个报文先传送到相邻结点交换机，全部存储下来后进行查表转发，转发到下一个结点交换机。</li>
+<li>整个报文需要在各结点交换机上进行存储转发，由于不限制报文大小，因此需要各结点交换机都具有较大的缓存空间。</li>
 </ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424670652-1ca1075f-1a0d-441f-b7c0-fbe6b22b83fe.png" alt="image.png"></p>
-<p><strong>环型（局域网）</strong></p>
-<p>所有计算机<strong>接口连成环</strong></p>
+<p>分组交换：</p>
 <ul>
-<li>令牌环局域网</li>
+<li>可以随时发送分组，而不需要事先建立连接。构成原始报文的一个个分组，依次在各结点交换机上存储转发。各结点交换机在发送分组的同时，还缓存接收到的分组。</li>
+<li>构成原始报文的一个个分组，在各结点交换机上进行存储转发，相比报文交换，减少了转发时延，还可以避免过长的报文长时间占用链路，同时也有利于进行差错控制。</li>
 </ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424760518-a535ce53-7f19-4d1e-9935-427ab8fc6e3c.png" alt="image.png"></p>
-<p><strong>网状网络</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-c56f91f290cbc92b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="计算机网络的定义和分类"><a href="#计算机网络的定义和分类" class="headerlink" title="计算机网络的定义和分类"></a>计算机网络的定义和分类</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>计算机网络的精确定义并未统一</li>
+<li>计算机网络的最简单的定义是：一些<strong>互</strong>相<strong>连</strong>接的、<strong>自治</strong>的计算机的<strong>集合</strong>。<ul>
+<li>互连：是指计算机之间可以通过有线或无线的方式进行数据通信；</li>
+<li>自治：是指独立的计算机，他有自己的硬件和软件，可以单独运行使用；</li>
+<li>集合：是指至少需要两台计算机；</li>
+</ul>
+</li>
+<li>计算机网络的较好的定义是：计算机网络主要是由一些<strong>通用的，可编程的硬件（一定包含有中央处理机CPU）互连</strong>而成的，而这些硬件并非专门用来实现某一特定目的（例如，传送数据或视频信号）。这些可编程的硬件能够用来<strong>传送多种不同类型的数据</strong>，并能<strong>支持广泛的和日益增长的应用</strong>。<ul>
+<li>计算机网络所连接的硬件，并不限于一般的计算机，而是包括了智能手机等智能硬件。</li>
+<li>计算机网络并非专门用来传送数据，而是能够支持很多种的应用（包括今后可能出现的各种应用）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p><strong>按交换技术分类：</strong></p>
 <ul>
-<li><strong>每个节点至少有两个路径与其他节点连接</strong></li>
-<li>优点：可靠性高</li>
-<li>缺点：控制复杂，成本高</li>
+<li>电路交换网络</li>
+<li>报文交换网络</li>
+<li>分组交换网络</li>
 </ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560424831012-7bac8dbb-d83f-4897-8117-4c5cb9300b9c.png" alt="image.png"></p>
-<p><strong>💡 因特网网络体系结构采用的是树形结构，具有单向依赖和层次性，可以良好扩充</strong></p>
-<h3 id="按使用者"><a href="#按使用者" class="headerlink" title="按使用者"></a><strong>按使用者</strong></h3><ol>
-<li>公共网络</li>
-<li>专用网络</li>
-</ol>
-<h3 id="交换技术"><a href="#交换技术" class="headerlink" title="交换技术"></a><strong>交换技术</strong></h3><h4 id="电路交换（专用）"><a href="#电路交换（专用）" class="headerlink" title="电路交换（专用）"></a>电路交换（专用）</h4><p>三个阶段：<strong>建立连接</strong>，<strong>传输数据</strong>，<strong>断开连接</strong></p>
-<p>适用场景：传统电话网</p>
-<p>优点：直接传送，时延小（不存在存储转发时延），有序传输</p>
-<p>缺点：利用率低，不能进行差错控制</p>
-<p>如果传送数据时间&gt;&gt;连接建立时间，且存在数据量大的传输，可以使用电路交换</p>
-<h4 id="报文交换"><a href="#报文交换" class="headerlink" title="报文交换"></a>报文交换</h4><p>报文格式：<strong>源地址</strong>，<strong>目的地址</strong>，<strong>校验码</strong>，…</p>
+<p><strong>按使用者分类：</strong></p>
 <ul>
-<li>特点：<strong>整个报文传送到相邻结点，**</strong>全部存储在转发**</li>
-<li>优点：充分利用线路，实现不同数据率的转发，可以进行差错控制</li>
-<li>缺点：增大了资源开销，增加了时延</li>
+<li>公用网</li>
+<li>专用网</li>
 </ul>
-<p><strong>分组交换（包交换）：</strong>（除了报文交换的优点）将大的报文分片成小的分组，更加易于管理；且时延比报文交换小</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/230760/1600739086996-dc73c7f1-9c20-48bb-b987-08e953d2e9aa.jpeg" alt="image"></p>
-<h3 id="按传输介质"><a href="#按传输介质" class="headerlink" title="按传输介质"></a><strong>按传输介质</strong></h3><ol>
+<p><strong>按传输介质分类：</strong></p>
+<ul>
 <li>有线网络</li>
 <li>无线网络</li>
-</ol>
-<h2 id="计算机网络的性能指标"><a href="#计算机网络的性能指标" class="headerlink" title="计算机网络的性能指标"></a>计算机网络的性能指标</h2><h3 id="带宽"><a href="#带宽" class="headerlink" title="带宽"></a>带宽</h3><ul>
-<li>通信中表示信号的频带</li>
-<li>网络通信线路传送数据的能力，<strong>最高链路数据率</strong></li>
-<li>单位：bit/s</li>
 </ul>
-<h3 id="时延"><a href="#时延" class="headerlink" title="时延"></a>时延</h3><p><strong>发送时延（传输时延）：从结点到链路</strong></p>
+<p><strong>按覆盖范围分类：</strong></p>
 <ul>
-<li>从第一比特出发，到最后一个比特发出结束的时间</li>
-<li>发送时延 = <img src="https://cdn.nlark.com/yuque/__latex/7dabc067529f515dbc7442fb0669877a.svg" alt="img"></li>
+<li><p>广域网WAN（Wide Area Network）:作用范围通常为几十到几千公里，因而有时也称为远程网（long haul network）。广域网是互联网的核心部分，其任务是通过长距离（例如，跨越不同的国家）运送主机所发送的数据。</p>
+</li>
+<li><p>城域网MAN:作用范围一般是一个城市，可跨越几个街区甚至整个城市</p>
+</li>
+<li><p>局域网LAN:一般用微型计算机或工作站通过高速通信线路相连（速率通常在 10 Mbit/s 以上），但地理上范围较小（1 km 左右）</p>
+</li>
+<li><p>个域网PAN:就是在个人工作的地方把个人使用的电子设备用无线技术连接起来的网络。</p>
+</li>
 </ul>
-<p><strong>note</strong></p>
-<ol>
-<li>在计算发送时延的时候，如果遇上分组，那么一定是算分组后，也就是每个分组加上了控制信息后的长度作为总长度。</li>
-<li><strong>这里的信道宽度就是信道的带宽，也就是数据率</strong></li>
-<li><strong>这里的分组长度是指整个分组的长度。如，报文总长 L，分组组成h位和p位的首部和数据部分，那么整个分组成都就是</strong><img src="https://cdn.nlark.com/yuque/__latex/4b0677993ef837ac31e0d941592e86d7.svg" alt="img"></li>
-</ol>
-<p><strong>传播时延：在链路上</strong></p>
-<ol>
-<li><p>从 A 节点到 B 节点的时间</p>
-<p> 传播时延 = <img src="https://cdn.nlark.com/yuque/__latex/6489ab250029ecc20796125956c7e5d9.svg" alt="img"></p>
-</li>
-<li><p>处理时延</p>
-<p> 排队时延</p>
-</li>
-</ol>
-<p><strong>往返时延：</strong>包括了<strong>处理</strong>，<strong>排队</strong>和<strong>转发数据的**</strong>发送时延**</p>
-<p><strong>时延带宽积</strong></p>
+<p><strong>按拓扑结构分类：</strong></p>
 <ul>
-<li><p><strong>第一个发出的比特到达终点时，发送端发送的比特数</strong></p>
-</li>
-<li><p><img src="https://cdn.nlark.com/yuque/__latex/bf0041d13e872817776cd222d88c733f.svg" alt="img"></p>
-</li>
-<li><p>表示比特容量</p>
-</li>
+<li>总线型网络</li>
 </ul>
-<h3 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h3><ul>
-<li>单位时间通过的数据量</li>
-<li><strong>受网络带宽和网络额定速率的限制</strong></li>
-</ul>
-<h3 id="速率"><a href="#速率" class="headerlink" title="速率"></a>速率</h3><p>数据率（比特率）</p>
-<p>最高数据率 = 带宽</p>
-<p><strong>PS：高速链路是指数据发送速率快</strong></p>
-<p><strong>信道利用率：</strong>指发送周期里，发送数据占用信道的时间。<img src="https://cdn.nlark.com/yuque/__latex/b9a31e5b06430df4e6de25b819eba042.svg" alt="img"></p>
-<p><strong>note：</strong></p>
-<p><strong>求时延，第一个总结点（主机）的发送时延+中间结点发送时延+最后一个分组（比特）传播时延</strong></p>
-<h1 id="计算机网络体系结构与参考模型"><a href="#计算机网络体系结构与参考模型" class="headerlink" title="计算机网络体系结构与参考模型"></a>计算机网络体系结构与参考模型</h1><h2 id="计算机网络分层结构"><a href="#计算机网络分层结构" class="headerlink" title="计算机网络分层结构"></a>计算机网络分层结构</h2><p>网络的体系结构 = <strong>各层及协议的集合</strong></p>
-<p>不同机器上的同一层：对等层</p>
-<p>通信时，对等层逻辑上直连</p>
-<p>同一层的实体，对等实体</p>
-<p>n 层（服务提供者）实体为 n+1 层提供服务</p>
-<p><strong>报文部分</strong></p>
-<ol>
-<li><p>服务数据单元（SDU-Service Data Unite）：为完成用户需求的功能传送的数据</p>
-<p> 协议控制信息（PCI-Protocol Control Information）：控制协议操作的信息</p>
-<p> 协议数据单元（PDU-Protocol Data Unite）</p>
-</li>
-<li><p>等于 SDU + PCI</p>
-<p> 对等层之间传送的数据单位</p>
-<p> <img src="https://cdn.nlark.com/yuque/0/2020/png/230760/1586864803617-45707af2-232c-4679-851b-a1188eb1edec.png" alt="image.png"></p>
-</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/230760/1600739147883-3f99f92d-ca09-4475-bc76-7ef1379e2e6e.png" alt="img"></p>
-<p><strong>PS：n+1 层的 PDU = n 层的 SDU</strong></p>
-<p><strong>网络分层的目的</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-4ed63e74d9ced719.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/384/format/webp" alt="img"></p>
 <ul>
-<li>提供标准语言</li>
-<li>定义标准界面</li>
-<li>增加功能独立性</li>
-<li>降低网络设计的复杂性</li>
-<li>便于对网络进行研究，实现和维护</li>
+<li>星型网络</li>
 </ul>
-<p><strong>服务访问点</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-f6a1849bcc443935.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/260/format/webp" alt="img"></p>
 <ul>
-<li>物理层：网卡接口</li>
-<li>数据链路层：MAC 地址</li>
-<li>网络层：IP 地址</li>
-<li>传输层：端口号</li>
-<li>应用层：用户界面</li>
+<li>环形网络</li>
 </ul>
-<p><strong>分层的好处</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-ca133aaaf8fe8659.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/308/format/webp" alt="img"></p>
 <ul>
-<li>各层独立</li>
-<li>灵活</li>
-<li>易于实现和维护</li>
-<li>标准化</li>
+<li>网状型网络</li>
 </ul>
-<h2 id="计算机网络协议，接口和服务的概念"><a href="#计算机网络协议，接口和服务的概念" class="headerlink" title="计算机网络协议，接口和服务的概念"></a>计算机网络协议，接口和服务的概念</h2><h3 id="协议"><a href="#协议" class="headerlink" title="协议"></a><strong>协议</strong></h3><ul>
-<li>规则的集合</li>
-<li>规定了交换数据的格式和步骤</li>
-<li>协议是<strong>水平的</strong>，<strong>对等的</strong></li>
-</ul>
-<p><strong>组成</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-d0d30cddc7356396.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/557/format/webp" alt="img"></p>
+<h2 id="计算机网络的性能指标"><a href="#计算机网络的性能指标" class="headerlink" title="计算机网络的性能指标"></a>计算机网络的性能指标</h2><p>性能指标可以从不同的方面来度量计算机网络的性能。</p>
+<p>常用的性能指标有8个 ⬇</p>
+<h3 id="速率"><a href="#速率" class="headerlink" title="速率"></a>速率</h3><p>首先先了解比特：</p>
+<p>比特：计算机中<strong>数据量的单位</strong>，也是信息论中信息量的单位。一个比特就是二进制数字中的一个1或0。</p>
+<p>基本单位：bit(b) 比特<br>常用单位：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">8 bit = 1 Byte</span><br><span class="line"></span><br><span class="line">         KB = 2^10B</span><br><span class="line">           </span><br><span class="line">         MB = K KB = 2^20 B</span><br><span class="line">           </span><br><span class="line">         GB = K MB = 2^30 B</span><br><span class="line">           </span><br><span class="line">         TB = K GB = 2^40 B</span><br></pre></td></tr></table></figure>
+<p>速率就是<strong>连接在计算机网络上的主机在数字信道上传送比特的速率</strong>，也称为<strong>比特率或数据率</strong>。</p>
+<p>基本单位：bit/s(b/s，bps)</p>
+<p>常用单位：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">kb/s = 10^3b/s</span><br><span class="line"></span><br><span class="line">         Mb/s = K Kb/s = 10^6 b/s</span><br><span class="line">         </span><br><span class="line">         Gb/s = k Mb/s = 10^9 b/s</span><br><span class="line">         </span><br><span class="line">         Tb/s = k Gb/s = 10^12 b/s</span><br></pre></td></tr></table></figure>
+<p>注意！！</p>
+<p><strong>数据单位bit中K = 2^10B</strong></p>
+<p><strong>数据单位bit中K = 10^3B</strong></p>
+<p>所以在计算过程中二者存在一定差距，不要弄错了。</p>
+<h3 id="带宽"><a href="#带宽" class="headerlink" title="带宽"></a>带宽</h3><p>带宽在<strong>模拟信号系统</strong>中表示的是信号所包含的各种不同频率成分所占据的频率范围，也就是<strong>传输过程中最大频率与最小频率的范围</strong>。</p>
+<p>带宽中计算机网络中的意义：</p>
+<p>用来表示<strong>网络的通信线路所能传送数据的能力</strong>，因此网络带宽表示在<strong>单位时间内从网络中的某一点到另一个点所能通过的“最高数据率。</strong></p>
+<p>单位：b/s(kb/s, Mb/s, Gb/s, Tb/s)，与速率相同。</p>
+<p>在日常生活中的宽带带宽除以8，一般就是平时使用中的最高传输速率。（1B = 8bit）</p>
+<p>是一个很重要的计算机网络性能指标。直接关系网络的应用体验。</p>
+<h3 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h3><p>吞吐量表示<strong>在单位时间内通过某个网络（或信道、接口）的数据量。</strong></p>
+<p>吞吐量被经常用于对现实世界中的网络的一种测量，以便知道实际上到底<strong>有多少数据量能够通过网络</strong>。</p>
+<p>吞吐量受网络的<strong>带宽或额定速率</strong>的限制。</p>
+<blockquote>
+<p>带宽1 Gb/s的以太网，代表其额定速率是1 Gb/s，这个数值也是该以太网的<strong>吞吐量的绝对上限值</strong>。因此，对于带宽1 Gb/s的以太网，可能实际吞吐量只有 700 Mb/s，甚至更低。</p>
+<p>注意：吞吐量还可以用每秒传送的字节数或帧数表示</p>
+</blockquote>
+<h3 id="时延"><a href="#时延" class="headerlink" title="时延"></a>时延</h3><p>时延时指数据（一个报文或分组，甚至比特）从网络（或链路）的一端传送到另一端所需的时间。</p>
+<p>网络时延由几部分组成：</p>
 <ul>
-<li>语法：数据传递的数据结构和格式</li>
-<li>语义：何种功能和控制信息，何种动作，何种响应</li>
-<li>同步：顺序</li>
-</ul>
-<p><strong>接口</strong></p>
-<ul>
-<li>相邻两层交换信息的连接点；如，服务访问点，SAP</li>
-</ul>
-<h3 id="服务"><a href="#服务" class="headerlink" title="服务"></a><strong>服务</strong></h3><ul>
-<li><p>服务是<strong>垂直的</strong></p>
+<li><p>发送时延：主机或路由器发送数据帧所需要的时间，也就是从发送数据帧的第一个比特算起，到该帧的最后一个比特发送完毕所需的时间。</p>
 </li>
-<li><p>服务原语</p>
+<li><p>传播时延：电磁波在信道中传播一定的距离需要花费的时间。</p>
 </li>
-<li><p>提供的服务</p>
-<ul>
-<li><p>是否连接</p>
-<ul>
-<li><p>连接</p>
-<ul>
-<li><p>连接建立</p>
+<li><p>处理时延：主机或路由器在收到分组时要花费一定时间进行处理</p>
 </li>
-<li><p>数据传输</p>
-</li>
-<li><p>连接释放</p>
+<li><p>排队时延：分组在进过网络传输时，要经过许多路由器。但分组在进入路由器后要先在输入队列中排队等待处理。</p>
 </li>
 </ul>
-</li>
-<li><p>无连接：尽最大努力交付</p>
-<p>是否可靠：可靠又差错控制和重传等机制组成</p>
-<p>有无应答：是否有响应</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><strong>💡 服务与协议的关系：要实现本层的协议需要下层的服务，而实现了本层的协议确保了为上层提供服务</strong></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/230760/1600739147946-a612b8fe-a825-4e3f-b2dc-d34936f99961.png" alt="img"></p>
-<p><strong>PS：</strong></p>
-<p><strong>有应答包含前四个，无应答只有前两个</strong></p>
-<p><strong>实现本层协议需要下层提供服务</strong></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560427330668-9b9d9b11-a352-4a26-a88c-2844e546be37.png" alt="image.png"></p>
-<ol>
-<li><img src="https://cdn.nlark.com/yuque/0/2020/png/230760/1586580197983-818334f6-31dc-4ea9-85be-307b4721ce62.png" alt="image.png"></li>
-</ol>
-<h2 id="ISO-OSI-参考模型和-TCP-参考模型"><a href="#ISO-OSI-参考模型和-TCP-参考模型" class="headerlink" title="ISO/OSI 参考模型和 TCP 参考模型"></a>ISO/OSI 参考模型和 TCP 参考模型</h2><p><strong>ISO/OSI 参考模型</strong></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560427485802-52ca725c-98e6-4208-81e3-88d6f2f6627b.png" alt="image.png"></p>
-<p>各层实现的功能</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>物理层</th>
-<th>数据链路层</th>
-<th>网络层</th>
-<th>传输层</th>
-<th>会话层</th>
-<th>表示层</th>
-<th>应用层</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>单位</td>
-<td>比特</td>
-<td>帧</td>
-<td>数据报 or 分组</td>
-<td>报文段（TCP）用户数据报（UDP）</td>
-<td>报文</td>
-<td>报文</td>
-<td>报文</td>
-</tr>
-<tr>
-<td>功能</td>
-<td>1.接口参数2.信号意义3.电器特征4.透明传输比特流5.提供了电缆的定义</td>
-<td>1.IP 数据报组装成帧（目的，源，控制信息）2.差错控制（确保了数据的正确，顺序的无错，因为物理层存在外界噪声的干扰）3.流量控制（协调两个点之间的发送，接收速率）4.点到点通信5.组帧（数据格式）</td>
-<td>1.路由2.流量控制：控制发送速率3.差错控制4.拥塞控制</td>
-<td>1.端到端的进程通信2.流量控制3.差错控制4.可靠性：面向连接5.【拥塞控制】-4层结构</td>
-<td>1.会话管理2.同步，插入同步点</td>
-<td>处理信息交换方式 具体来说，不同的机器采用了不同的编码模式，数据结构等，需要利用表示层在交换数据的时候进行转换，统一。 此外加密解密，数据压缩也是表示层做的事情</td>
-<td>用户和网络的界面</td>
-</tr>
-<tr>
-<td>其他</td>
-<td><strong>物理媒介（如，双绞线，光缆，无线信道等）是第0层</strong></td>
-<td>1.ppp协议，帧中继2.点到点通信3.广播式网络还要处理如何空指共享信道访问的问题，这个由其子层–介质访问子层实现</td>
-<td>1.IP协议</td>
-<td>1.TCP，UDP协议</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<p><strong>补充</strong></p>
-<ol>
-<li><strong>会话层实现了管理和同步，支持断点重传</strong></li>
-<li><strong>表示层实现了数据的加密，解密，格式的转换和压缩</strong></li>
-<li><strong>传输层中的复用和分用是指，一台主机可以运行不同的程序。复用就是多个应用层程序可以使用同一个传输层的服务，分用相反</strong></li>
-</ol>
-<p><strong>TCP/IP 模型</strong></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/230760/1560427641075-02da04fc-e36b-47d7-b489-3f9df61d85be.png" alt="image.png"></p>
-<p>各层主要的协议</p>
-<p>网际层：IP</p>
-<p>传输层</p>
+<blockquote>
+<p>有时会把排队时延看成<strong>处理时延 一部分</strong></p>
+<p>总时延 = 发送时延 + 传播时延 + 处理时延 （处理时延 + 排队时延）</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-5f9bf4982c20ad4f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-dd48cf5be5b2a7f7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>当处理时延忽略不计时，发送时延 和 传播时延谁占主导，要具体情况具体分析</p>
+</blockquote>
+<h3 id="时延带宽积"><a href="#时延带宽积" class="headerlink" title="时延带宽积"></a>时延带宽积</h3><p>时延带宽积 = 传播时延 * 带宽</p>
+<p>若发送端连续发送数据，则在所发送的第一个比特即将到达终点时，发送端就已经发送了时延带宽积个比特。</p>
+<p>实际上就是<strong>一个比特到达终点的单位时间内传输的比特个数</strong>。</p>
+<p>链路的时延带宽积又称为以比特为单位的链路长度。</p>
+<h3 id="往返时间"><a href="#往返时间" class="headerlink" title="往返时间"></a>往返时间</h3><p>互联网上的信息不仅仅单方向传输而是双向交互的。因此，我们有时很需要知道<strong>双向交互一次所需的时间</strong>。</p>
+<p>一个网络请求双向交互一次所需的时间。</p>
+<p>往返时间RTT也是一个重要的性能指标</p>
+<p>可以更好的了解到网络的情况</p>
+<h3 id="利用率"><a href="#利用率" class="headerlink" title="利用率"></a>利用率</h3><p>利用率有<strong>信道利用率</strong>和<strong>网络利用率</strong>两种。</p>
+<p><strong>信道利用率</strong>：用来表示某信道有百分之几的时间是被利用的（有数据通过）。</p>
+<p><strong>网络利用率</strong>是全网络的信道利用率的加权平均。</p>
+<p>根据排队论，当某信道的利用率增大时，该信道引起的时延也会迅速增大。如图所示：</p>
+<p><img src="https://img-blog.csdnimg.cn/2021012622503898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L05pbXJvZF9f,size_16,color_FFFFFF,t_70" alt="时延与利用率关系"><br>当网络利用率达到50％时，时延就要加倍。</p>
+<p>当网络利用率超过50％时，时延就急剧增大。</p>
+<p>当网络利用率接近100％时，时延趋于无穷大。</p>
+<p>因此要控制信道利用率不超过50％，否则就要准备扩容。</p>
+<h4 id="丢包率："><a href="#丢包率：" class="headerlink" title="丢包率："></a>丢包率：</h4><p>丢包率即<strong>分组丢失率</strong>，是指在一定的时间范围内，传输过程中<strong>丢失的分组数量与总分组数量的比率。</strong></p>
+<p>丢包率具体可分为接口丢包率、结点丢包率、链路丢包率、路径丢包率、网络丢包率等。</p>
+<p>分组在传输过程中出现<strong>误码</strong>，被结点丢弃。</p>
+<p>分组<strong>到达一台队列已满的分组交换机时被丢弃</strong>，在通信量较大时就可能造成网络拥塞。</p>
+<p>丢包率反映了网络的拥塞情况。</p>
+<p>无拥塞时丢包率为0</p>
+<p>轻度拥塞时丢包率为1％—4％</p>
+<p>严重拥塞时丢包率为5％-15％</p>
+<h2 id="计算机网络体系结构"><a href="#计算机网络体系结构" class="headerlink" title="计算机网络体系结构"></a>计算机网络体系结构</h2><h3 id="常见的计算机网络体系结构"><a href="#常见的计算机网络体系结构" class="headerlink" title="常见的计算机网络体系结构"></a>常见的计算机网络体系结构</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/png/230760/1586578197640-28d8e905-7b3a-4d68-ac5b-66b3e789a9c0.png" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-b5174af1551d6cee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>如今用的最多的是TCP/IP体系结构，现今规模最大的、覆盖全球的、基于TCP/IP的互联网并未使用OSI标准。</p>
+<p>TCP/IP体系结构相当于将OSI体系结构的<strong>物理层</strong>和<strong>数据链路层</strong>合并为了<strong>网络接口层</strong>，并去掉了<strong>会话层</strong>和<strong>表示层</strong>。</p>
+<p>TCP/IP在网络层使用的协议是IP协议，IP协议的意思是网际协议，因此<strong>TCP/IP体系结构的网络层称为网际层</strong></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-f647ab572971d89a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1126/format/webp" alt="img"></p>
+<blockquote>
+<p>在用户主机的操作系统中，通常都带有符合TCP/IP体系结构标准的TCP/IP协议族。</p>
+<p>而用于网络互连的路由器中，也带有符合TCP/IP体系结构标准的TCP/IP协议族。</p>
+<p>只不过路由器一般只包含网络接口层和网际层。</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-6800e214b18c47c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/931/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>网络接口层</strong>：并没有规定具体内容，这样做的目的是可以互连全世界各种不同的网络接口，例如：有线的以太网接口，无线局域网的WIFI接口等。</p>
+<p>所以实际上TCP/IP协议只有三层：网际层、运输层、应用层。</p>
+<p>其中：</p>
+<p><strong>网际层核心协议是IP协议。</strong></p>
+<p><strong>运输层的两个重要协议：TCP(可靠传输)、UDP(不可靠传输)。</strong></p>
+<p><strong>应用层有大量的应用协议：HTTP、SMTP等等。</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>IP协议（网际层）</strong>可以将不同的<strong>网络接口（网络接口层）</strong>进行互连，并向其上的<strong>TCP协议和UDP协议（运输层）</strong>提供网络互连服务</p>
+<p>而<strong>TCP协议</strong>在享受IP协议提供的网络互连服务的基础上，可向<strong>应用层的相应协议</strong>提供<strong>可靠</strong>的传输服务。</p>
+<p><strong>UDP协议</strong>在享受IP协议提供的网络互连服务的基础上，可向<strong>应用层的相应协议</strong>提供<strong>不可靠</strong>的传输服务。</p>
+</blockquote>
+<blockquote>
+<p>TCP/IP体系结构中最重要的是<strong>IP协议</strong>和<strong>TCP协议</strong>，因此用TCP和IP来表示整个协议大家族。</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-82255e6c6d5f29bf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>教学时把TCP/IP体系结构的<strong>网络接口层</strong>分成了<strong>物理层</strong>和<strong>数据链路层</strong></p>
+</blockquote>
+<h1 id="计算机网络体系结构分层的必要性"><a href="#计算机网络体系结构分层的必要性" class="headerlink" title="计算机网络体系结构分层的必要性"></a>计算机网络体系结构分层的必要性</h1><p>1、计算机网络是个非常复杂的系统</p>
+<p>2、“分层”可将庞大而复杂的问题，转化为若干较小的局部问题</p>
+<p>基于以上原因选择对计算机网络进行分层。</p>
+<p>其中各层的主要解决问题：</p>
+<p>物理层：</p>
 <ul>
-<li>TCP</li>
-<li>UDP</li>
+<li>采用怎样的传输媒体（介质）？</li>
+<li>采用怎样的物理接口？</li>
+<li>使用怎样的信号表示比特0和1？</li>
 </ul>
-<p><strong>两大模型的比较</strong></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/230760/1560427728219-820fbf07-0969-484b-a00c-9b7918753643.jpeg" alt="image.jpeg"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/230760/1586578197640-28d8e905-7b3a-4d68-ac5b-66b3e789a9c0.png" alt="image.png"></p>
-<h5 id="TCP-IP-模型各层的功能"><a href="#TCP-IP-模型各层的功能" class="headerlink" title="TCP/IP 模型各层的功能"></a>TCP/IP 模型各层的功能</h5><table>
-<thead>
-<tr>
-<th>网络接口层</th>
-<th>类似于 OSI 的物理层和数据链路层</th>
-<th>指出主机必须使用某种协议与网络连接</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>网际层</td>
-<td></td>
-<td>将分组发往任何网络，独立选择路由，各分组有序到达由高层负责</td>
-</tr>
-<tr>
-<td>传输层</td>
-<td></td>
-<td>使得发送端，目的端上的对等实体进行会话</td>
-</tr>
-<tr>
-<td>应用层</td>
-<td></td>
-<td>包含所有高层协议</td>
-</tr>
-</tbody></table>
-<p><strong>相似</strong></p>
+<p><strong>解决以上问题后就可以实现01信号在计算机之间的传输。</strong></p>
+<p><strong>物理层问题</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-0274083e0bf0da85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>这图说明</p>
 <ul>
-<li>分层结构</li>
-<li>独立的协议栈</li>
-<li>解决异构网络的互连</li>
+<li><p>第一，严格来说，传输媒体并不属于物理层</p>
+</li>
+<li><p>计算机传输的信号，并不是图示的方波信号</p>
+</li>
 </ul>
-<p><strong>区别</strong></p>
+<p>这样举例只是让初学者容易理解</p>
+</blockquote>
+<p><strong>数据链路层问题</strong></p>
 <ul>
-<li>OSI 精确定义了服务，协议和接口</li>
-<li>OSI 的<strong>是否连接在网络层</strong>，TCP/IP 的<strong>是否连接在传输层</strong></li>
+<li>如何标识网络中的各主机（主机编址问题，例如MAC地址）？</li>
+<li>如何从信号所表示的一连串比特流中区分出地址和数据？</li>
+<li>如何协调各主机通信（例如，各主机争用总线，交换机的实现原理）？</li>
 </ul>
-<p><strong>note</strong></p>
-<ol>
-<li><strong>封装高层针对一下层，但物理层没有下一层，所以没有封装。</strong></li>
-<li><strong>物理寻址是在**</strong>数据链路层**<strong>，因为其还是逻辑上的功能，物理层就是实实在在的物理功能</strong></li>
-<li><strong>在 ISO/OSI 模型中，网络层提供面向连接和无连接的方式，而 TCP/IP 中，是传输层提供，这是易错点。</strong></li>
-</ol>
+<p><strong>解决此问题后可以实现分组在一个网络上传输。</strong></p>
+<p><strong>网络层问题</strong></p>
+<ul>
+<li>如何标识各网络以及网络中的各主机（网络和主机共同编址的问题，例如IP地址）？</li>
+<li>路由器如何转发分组，如何进行路由选择?</li>
+</ul>
+<p><strong>解决此问题后可以实现分组在网络间传输。</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-f55f86e0a78ffe23.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>运输层问题</strong></p>
+<ul>
+<li>如何解决进程之间基于网络的通信？</li>
+<li>出现传输错误时如何处理？</li>
+</ul>
+<p><strong>解决此问题后可以实现进程之间基于网络的通信。</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-20174ff3821a739b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>如何标识与网络通信相关的应用进程：一个分组到来，我们应该交给哪个进程处理呢？浏览器进程还是QQ进程</p>
+</blockquote>
+<p><strong>应用层问题</strong></p>
+<ul>
+<li>通过应用进程间的交互来完成特定的网络应用。</li>
+</ul>
+<p><strong>解决此问题后可以实现计算机网络所解决的所有问题。</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-edab6d1f00b0ab15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>应用层该用什么方法（应用层协议）去解析数据</p>
+</blockquote>
+<p><strong>总结</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-96bdae8525215011.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-d29fee34f68a16b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-1cf0ec9780d80019.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="3、计算机网络体系结构分层思想举例"><a href="#3、计算机网络体系结构分层思想举例" class="headerlink" title="3、计算机网络体系结构分层思想举例"></a>3、计算机网络体系结构分层思想举例</h2><p><strong>解析：</strong></p>
+<p>主机和Web服务器之间基于网络的通信，实际上是主机中的<strong>浏览器应用进程</strong>与Web服务器中的<strong>Web服务器应用进程</strong>之间基于<strong>网络的通信</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-8c5d1b3fdc1b7111.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>体系结构的各层在整个过程中起到怎样的作用？</strong></p>
+<p><strong>1、发送方发送</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-ac36f7a9544dde9f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>第一步：</p>
+<ul>
+<li><p><strong>应用层</strong>按照HTTP协议的规定构建一个<strong>HTTP请求报文</strong></p>
+</li>
+<li><p>应用层将<strong>HTTP请求报文</strong>交付给<strong>运输层</strong>处理</p>
+</li>
+</ul>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-cc2b73b1736d5809.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>第二步：</p>
+<ul>
+<li><p><strong>运输层</strong>给<strong>HTTP请求报文</strong>添加一个<strong>TCP首部</strong>，使之成为<strong>TCP报文段</strong></p>
+</li>
+<li><p><strong>TCP报文段的首部格式</strong>作用是区分应用进程以及实现可靠传输</p>
+</li>
+<li><p><strong>运输层</strong>将T<strong>CP报文段</strong>交付给<strong>网络层</strong>处理</p>
+</li>
+</ul>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-dc02183dcf759d9e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>第三步：</p>
+<ul>
+<li><p><strong>网络层</strong>给<strong>TCP报文段</strong>添加一个<strong>IP首部</strong>，使之成为<strong>IP数据报</strong></p>
+</li>
+<li><p><strong>IP数据报的首部格式</strong>作用是使<strong>IP数据报</strong>可以在互联网传输，也就是被路由器转发</p>
+</li>
+<li><p><strong>网络层</strong>将<strong>IP数据报</strong>交付给<strong>数据链路层</strong>处理</p>
+</li>
+</ul>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-f8cf8ce4a6bfdb54.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>第四步：</p>
+<ul>
+<li><p><strong>数据链路层</strong>给<strong>IP数据报</strong>添加一个<strong>首部</strong>和一个<strong>尾部</strong>，使之成为<strong>帧</strong> （图示右边为首部，左边为尾部）</p>
+</li>
+<li><p>该<strong>首部</strong>的作用主要是为了让<strong>帧</strong>能够在一段链路上或一个网络上传输，能够被相应的目的主机接收</p>
+</li>
+<li><p>该<strong>尾部</strong>的作用是让目的主机检查所接收到的<strong>帧</strong>是否有误码</p>
+</li>
+<li><p><strong>数据链路层</strong>将<strong>帧</strong>交付给<strong>物理层</strong></p>
+</li>
+</ul>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-e7285afa504bce0d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>第五步：</p>
+<ul>
+<li><p><strong>物理层</strong>先将<strong>帧</strong>看做是<strong>比特流</strong>，这里的网络N1假设是以太网，所以<strong>物理层</strong>还会给该<strong>比特流</strong>前面添加<strong>前导码</strong></p>
+</li>
+<li><p><strong>前导码</strong>的作用是为了让目的主机做好接收帧的准备</p>
+</li>
+<li><p><strong>物理层</strong>将装有<strong>前导码</strong>的<strong>比特流</strong>变换成相应的<strong>信号</strong>发送给传输媒体</p>
+</li>
+</ul>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-8ffee68ffe58b8a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>第六步：</p>
+<ul>
+<li><strong>信号</strong>通过<strong>传输媒体</strong>到达<strong>路由器</strong></li>
+</ul>
+</blockquote>
+<p><strong>2、路由器转发</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-b9824f4625354b9b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/945/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-09a0b27933c9895e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/832/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-6eace5a882cca26d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/697/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-92d182edd57d1054.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/650/format/webp" alt="img"></p>
+<blockquote>
+<p>在路由器中</p>
+<ul>
+<li><p><strong>物理层</strong>将<strong>信号</strong>变为<strong>比特流</strong>，然后去掉<strong>前导码</strong>后，将其交付给<strong>数据链路层</strong></p>
+</li>
+<li><p><strong>数据链路层</strong>将<strong>帧</strong>的<strong>首部</strong>和<strong>尾部</strong>去掉后，将其交付给<strong>网络层</strong>，这实际交付的是<strong>IP数据报</strong></p>
+</li>
+<li><p><strong>网络层</strong>解析<strong>IP数据报</strong>的<strong>首部</strong>，从中提取<strong>目的网络地址</strong></p>
+</li>
+</ul>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-bc79de20a0c4b57c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/638/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-33d09406bfc433e0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/674/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-28228b60dd019bb5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/740/format/webp" alt="img"></p>
+<blockquote>
+<p>在路由器中</p>
+<ul>
+<li><p>提取<strong>目的网络地址</strong>后查找<strong>自身路由表</strong>。确定<strong>转发端口</strong>， 以便进行转发</p>
+</li>
+<li><p><strong>网络层</strong>将<strong>IP数据报</strong>交付给<strong>数据链路层</strong></p>
+</li>
+<li><p><strong>数据链路层</strong>给<strong>IP数据报</strong>添加一个<strong>首部</strong>和一个<strong>尾部</strong>，使之成为<strong>帧</strong></p>
+</li>
+<li><p><strong>数据链路层</strong>将帧交付给<strong>物理层</strong></p>
+</li>
+<li><p><strong>物理层</strong>先将<strong>帧</strong>看成<strong>比特流</strong>，这里的网络N2假设是以太网，所以<strong>物理层</strong>还会给该<strong>比特流</strong>前面添加<strong>前导码</strong></p>
+</li>
+<li><p>物理层将装有<strong>前导码</strong>的<strong>比特流</strong>变换成相应的<strong>信号</strong>发送给传输媒体，信号通过传输媒体到达<strong>Web服务器</strong></p>
+</li>
+</ul>
+</blockquote>
+<p><strong>3、接收方接收</strong></p>
+<blockquote>
+<p>和发送方（主机）发送过程的封装正好是反着来</p>
+<p>在Web 服务器上</p>
+<ul>
+<li><p><strong>物理层</strong>将<strong>信号</strong>变换为<strong>比特流</strong>，然后去掉<strong>前导码</strong>后成为<strong>帧</strong>，交付给<strong>数据链路层</strong></p>
+</li>
+<li><p><strong>数据链路层</strong>将<strong>帧</strong>的<strong>首部</strong>和<strong>尾部</strong>去掉后成为<strong>IP数据报</strong>，将其交付给<strong>网络层</strong></p>
+</li>
+<li><p><strong>网络层</strong>将<strong>IP数据报</strong>的<strong>首部</strong>去掉后成为<strong>TCP报文段</strong>，将其交付给<strong>运输层</strong></p>
+</li>
+<li><p><strong>运输层</strong>将<strong>TCP报文段</strong>的<strong>首部</strong>去掉后成为<strong>HTTP请求报文</strong>，将其交付给<strong>应用层</strong></p>
+</li>
+<li><p><strong>应用层</strong>对<strong>HTTP请求报文</strong>进行<strong>解析</strong>，然后给主机发回<strong>响应报文</strong></p>
+</li>
+</ul>
+<p><strong>发回响应报文的步骤和之前过程类似</strong></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-d9f5b6ce408c252b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="计算机网络体系结构中的专用术语"><a href="#计算机网络体系结构中的专用术语" class="headerlink" title="计算机网络体系结构中的专用术语"></a>计算机网络体系结构中的专用术语</h2><p>以下介绍的专用术语来源于OSI的七层协议体系结构，但也适用于TCP/IP的四层体系结构和五层协议体系结构</p>
+<p><strong>实体：</strong></p>
+<p>实体是指<strong>任何可发送或接收信息的硬件或软件进程。</strong></p>
+<p>对等实体是指<strong>通信双方相同层次中的实体</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-b4c748c8f731e416.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>协议</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-01d621fd0afde0a2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>协议：控制两个对等实体进行逻辑通信的规则的集合</p>
+<p>协议三要素：</p>
+<ul>
+<li><p>语法：定义所交换信息的格式</p>
+</li>
+<li><p>语义：定义收发双方所要完成的操作</p>
+</li>
+<li><p>同步：定义收发双发的时序关系</p>
+</li>
+</ul>
+</blockquote>
+<p><strong>服务</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-b3d7eb63257d9914.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-f24a75796ed2c7f6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-f9bd7898a7f2dadd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
 
     </div>
 
@@ -667,7 +851,10 @@
     <a href="/posts/d6843d0f/" rel="prev" title="计算机科学技术之计算机安全">
       <i class="fa fa-chevron-left"></i> 计算机科学技术之计算机安全
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/posts/18784b9d/" rel="next" title="计算机网络之物理层">
+      计算机网络之物理层 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -727,7 +914,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E6%A6%82%E8%BF%B0"><span class="nav-text">计算机网络体系概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E7%BB%84%E6%88%90"><span class="nav-text">计算机网络的组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E7%BB%84%E6%88%90%E6%88%90%E5%88%86%E4%B8%8A%E7%9C%8B"><span class="nav-text">从组成成分上看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F%E4%B8%8A%E7%9C%8B"><span class="nav-text">从工作方式上看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E5%8A%9F%E8%83%BD%E4%B8%8A%E7%9C%8B"><span class="nav-text">从功能上看</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-text">计算机网络的功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-text">计算机网络的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E5%88%86%E5%B8%83%E8%8C%83%E5%9B%B4"><span class="nav-text">按分布范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E4%BC%A0%E8%BE%93%E6%8A%80%E6%9C%AF"><span class="nav-text">按传输技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E6%8B%93%E6%89%91%E7%BB%93%E6%9E%84"><span class="nav-text">按拓扑结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E4%BD%BF%E7%94%A8%E8%80%85"><span class="nav-text">按使用者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E6%8D%A2%E6%8A%80%E6%9C%AF"><span class="nav-text">交换技术</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%B5%E8%B7%AF%E4%BA%A4%E6%8D%A2%EF%BC%88%E4%B8%93%E7%94%A8%EF%BC%89"><span class="nav-text">电路交换（专用）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%A5%E6%96%87%E4%BA%A4%E6%8D%A2"><span class="nav-text">报文交换</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E4%BC%A0%E8%BE%93%E4%BB%8B%E8%B4%A8"><span class="nav-text">按传输介质</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="nav-text">计算机网络的性能指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%A6%E5%AE%BD"><span class="nav-text">带宽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E5%BB%B6"><span class="nav-text">时延</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%9E%E5%90%90%E9%87%8F"><span class="nav-text">吞吐量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9F%E7%8E%87"><span class="nav-text">速率</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">计算机网络体系结构与参考模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84"><span class="nav-text">计算机网络分层结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%EF%BC%8C%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-text">计算机网络协议，接口和服务的概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E8%AE%AE"><span class="nav-text">协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1"><span class="nav-text">服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ISO-OSI-%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B%E5%92%8C-TCP-%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">ISO&#x2F;OSI 参考模型和 TCP 参考模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#TCP-IP-%E6%A8%A1%E5%9E%8B%E5%90%84%E5%B1%82%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-text">TCP&#x2F;IP 模型各层的功能</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E6%A6%82%E8%BF%B0"><span class="nav-text">计算机网络体系概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9C%A8%E4%BF%A1%E6%81%AF%E6%97%B6%E4%BB%A3%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-text">计算机网络在信息时代的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%A0%E7%89%B9%E7%BD%91%E6%A6%82%E8%BF%B0"><span class="nav-text">因特网概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E3%80%81%E4%BA%92%E8%81%94%E7%BD%91%E5%92%8C%E5%9B%A0%E7%89%B9%E7%BD%91"><span class="nav-text">网络、互联网和因特网</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%A0%E7%89%B9%E7%BD%91%E5%8F%91%E5%B1%95%E7%9A%84%E4%B8%89%E4%B8%AA%E9%98%B6%E6%AE%B5"><span class="nav-text">因特网发展的三个阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%A0%E7%89%B9%E7%BD%91%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96%E5%B7%A5%E4%BD%9C"><span class="nav-text">因特网的标准化工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%A0%E7%89%B9%E7%BD%91%E7%9A%84%E7%BB%84%E6%88%90"><span class="nav-text">因特网的组成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E4%BA%A4%E6%8D%A2%E6%96%B9%E5%BC%8F"><span class="nav-text">三种交换方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%B5%E8%B7%AF%E4%BA%A4%E6%8D%A2%EF%BC%88Circuit-Switching%EF%BC%89"><span class="nav-text">电路交换（Circuit Switching）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%BB%84%E4%BA%A4%E6%8D%A2%EF%BC%88Packet-Switching%EF%BC%89"><span class="nav-text">分组交换（Packet Switching）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%A5%E6%96%87%E4%BA%A4%E6%8D%A2%EF%BC%88Message-Switching%EF%BC%89"><span class="nav-text">报文交换（Message Switching）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E4%BA%A4%E6%8D%A2%E6%96%B9%E5%BC%8F%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-text">三种交换方式的对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E5%88%86%E7%B1%BB"><span class="nav-text">计算机网络的定义和分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-text">分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="nav-text">计算机网络的性能指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9F%E7%8E%87"><span class="nav-text">速率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%A6%E5%AE%BD"><span class="nav-text">带宽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%9E%E5%90%90%E9%87%8F"><span class="nav-text">吞吐量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E5%BB%B6"><span class="nav-text">时延</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E5%BB%B6%E5%B8%A6%E5%AE%BD%E7%A7%AF"><span class="nav-text">时延带宽积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%80%E8%BF%94%E6%97%B6%E9%97%B4"><span class="nav-text">往返时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E7%8E%87"><span class="nav-text">利用率</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%A2%E5%8C%85%E7%8E%87%EF%BC%9A"><span class="nav-text">丢包率：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="nav-text">计算机网络体系结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="nav-text">常见的计算机网络体系结构</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%88%86%E5%B1%82%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7"><span class="nav-text">计算机网络体系结构分层的必要性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%88%86%E5%B1%82%E6%80%9D%E6%83%B3%E4%B8%BE%E4%BE%8B"><span class="nav-text">3、计算机网络体系结构分层思想举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%AD%E7%9A%84%E4%B8%93%E7%94%A8%E6%9C%AF%E8%AF%AD"><span class="nav-text">计算机网络体系结构中的专用术语</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -745,7 +932,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1093,7 +1280,7 @@ setInterval("createtime()",250);
   
   <!-- 添加博客全站总字数统计-->
   <i class="fa fa-pencil"></i>
-  <span class="post-count">博客全站共 324.3k 字</span>
+  <span class="post-count">博客全站共 356.6k 字</span>
 </div>
   
 

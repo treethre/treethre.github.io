@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络之物理层">
+<meta property="og:url" content="http://example.com/posts/18784b9d/index.html">
+<meta property="og:site_name" content="Rick Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-50d3acc8eff03935.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-692dde0bbbc49a1d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-fc85597b91c2cd7a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-060d940d8451692e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-2c23cb1d18aa345c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1175/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-8432039f51003722.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-d2a8692970355b05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-357bc29ed7591006.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-f042b478ef808a1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-95eac658ca822ab2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-e1bc3e93ff50114b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-54b03a1b4fd3cdd8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/787/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-15060e3d8de110ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-19cfd094ecef0538.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-5b07729ff4cd3411.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-e0f90a502a95d1b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-68977b7eeac3b7f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-acc59055804f0890.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-ded8a3e566f7687b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/715/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-414f829a7df390e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/893/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-d3b3583526407c45.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/827/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-2f6b70fef84339ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-0732d0edc74846b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-8aa838a116fdafb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-2fa351ff35477f1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/723/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-a34a686a9d052e9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-9a758474e374329a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-de92dd43d328b4f7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-7ce461637de91b6e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-8fec8ccb7ff3ea77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/680/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-30e70220d4127135.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/642/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-1cb6de826ba63b70.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-600f7802e1eaa18a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-1e2617434d904ce4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-0a9bbf5bcd5e8226.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-b90918937a54faa6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-57e105e5df793b93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-5ce50e745950c8eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-8503f147c44d220f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-bcb9321a6a8a3d7a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/425/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-cb9a20b7ce00d497.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-c1ef02caf1f2cfda.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-7f0b54d1c14702ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24878825-039cdf67599ebe3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="article:published_time" content="2021-02-16T02:43:23.000Z">
+<meta property="article:modified_time" content="2021-02-16T03:58:55.574Z">
+<meta property="article:author" content="Rick">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/24878825-50d3acc8eff03935.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+
+<link rel="canonical" href="http://example.com/posts/18784b9d/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>计算机网络之物理层 | Rick Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Rick Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/18784b9d/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Rick">
+      <meta itemprop="description" content="一个瞎折腾的博客，不知道能坚持几天">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rick Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机网络之物理层
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-16 10:43:23 / 修改时间：11:58:55" itemprop="dateCreated datePublished" datetime="2021-02-16T10:43:23+08:00">2021-02-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="物理层的基本概念"><a href="#物理层的基本概念" class="headerlink" title="物理层的基本概念"></a>物理层的基本概念</h1><p>物理层是计算机网络的第一层，是整个计算机网络系统的基础，为数据传输提供可靠的环境。</p>
+<p>物理层要解决的<strong>基本问题</strong>：<strong>如何在各种传输媒体上传输比特0和1</strong>的问题。进而给数据链路层提供透明传输比特流的服务。</p>
+<p>物理层为数据链路层屏蔽了各种传输媒体的差异，使数据链路层只需要考虑如何完成本层的协议和服务，而不必考虑网络具体的传输媒体是什么。</p>
+<h4 id="物理层协议的主要任务"><a href="#物理层协议的主要任务" class="headerlink" title="物理层协议的主要任务"></a>物理层协议的主要任务</h4><p>定义物理层的四个特性：</p>
+<ul>
+<li><strong>机器特性</strong>：指明接口所用接线器的形状和尺寸、引脚数目和排列、固定和锁定装置。</li>
+<li><strong>电器特性</strong>：指明在接口电缆的各条线上出现的电压的范围。</li>
+<li><strong>功能特性</strong>：指明某条线上出现的某一电平的电压表示何种意义。</li>
+<li><strong>过程特性</strong>：指明对于不同功能的各种可能事件的出现顺序。</li>
+</ul>
+<p>由于传输媒体种类众多（双绞线、光纤等），物理连接方式也很多（点对点连接、广播连接等），因此物理协议有很多种，但是<strong>每一种都需要包括以上四个特性。</strong></p>
+<hr>
+<h1 id="物理层下面的传输媒体"><a href="#物理层下面的传输媒体" class="headerlink" title="物理层下面的传输媒体"></a>物理层下面的传输媒体</h1><p><strong>传输媒体</strong>也称为传输介质或传输媒介，他就是数据传输系统中在发送器和接收器之间的物理通路。<strong>传输媒体</strong>课分为两大类，即<strong>导引型传输媒体</strong>和<strong>非导引型传输媒体</strong></p>
+<p>传输媒体不属于计算机网络体系结构的任何一层。如果非要将它添加到体系结构中，那只能将其放置到物理层之下。</p>
+<h2 id="导引型传输媒体"><a href="#导引型传输媒体" class="headerlink" title="导引型传输媒体"></a>导引型传输媒体</h2><p>在导引型传输媒体中，电磁波被导引沿着固体媒体传播。</p>
+<p><strong>同轴电缆</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-50d3acc8eff03935.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>双绞线</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-692dde0bbbc49a1d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>光纤</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-fc85597b91c2cd7a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-060d940d8451692e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>多模光纤</strong></p>
+<ul>
+<li>可以存在多条不同角度入射的光线在一条光纤中传输。这种光纤就称为<strong>多模光纤</strong>。</li>
+</ul>
+<p><strong>单模光纤</strong></p>
+<ul>
+<li>若光纤的直径减小到只有一个光的波长，则光纤就像一根波导那样，它可使光线一直向前传播，而不会产生多次反射。这样的光纤称为<strong>单模光纤</strong>。</li>
+</ul>
+</blockquote>
+<p><strong>电力线</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-2c23cb1d18aa345c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1175/format/webp" alt="img"></p>
+<h2 id="非导引型传输媒体"><a href="#非导引型传输媒体" class="headerlink" title="非导引型传输媒体"></a>非导引型传输媒体</h2><p>非导引型传输媒体是指自由空间。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-8432039f51003722.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-d2a8692970355b05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>无线电波</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-357bc29ed7591006.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>微波</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-f042b478ef808a1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>红外线</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-95eac658ca822ab2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>可见光</strong></p>
+<p><a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=https://baike.baidu.com/item/%E5%8F%AF%E8%A7%81%E5%85%89%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1/16268518?fromtitle=LiFi&fromid=5675729&fr=aladdin">LIFI</a></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-e1bc3e93ff50114b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<hr>
+<h1 id="传输方式"><a href="#传输方式" class="headerlink" title="传输方式"></a>传输方式</h1><h2 id="串行传输和并行传输"><a href="#串行传输和并行传输" class="headerlink" title="串行传输和并行传输"></a>串行传输和并行传输</h2><p><img src="https://upload-images.jianshu.io/upload_images/24878825-54b03a1b4fd3cdd8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/787/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>串行传输</strong>：</p>
+<ul>
+<li>数据是一个比特一个比特依次发送的，因此在发送端与接收端之间，只需要一条数据传输线路即可</li>
+</ul>
+<p><strong>并行传输</strong>：</p>
+<ul>
+<li><p>一次发送n个比特，因此，在发送端和接收端之间需要有n条传输线路</p>
+</li>
+<li><p>并行传输的优点是比串行传输的速度n倍，但成本高</p>
+</li>
+</ul>
+<p>数据在传输线路上的传输采用是<strong>串行传输</strong>，计算机内部的数据传输常用<strong>并行传输</strong></p>
+</blockquote>
+<h2 id="同步传输和异步传输"><a href="#同步传输和异步传输" class="headerlink" title="同步传输和异步传输"></a>同步传输和异步传输</h2><p><img src="https://upload-images.jianshu.io/upload_images/24878825-15060e3d8de110ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>同步传输</strong>：</p>
+<ul>
+<li><p>数据块以稳定的比特流的形式传输。字节之间没有间隔</p>
+</li>
+<li><p>接收端在每个比特信号的中间时刻进行检测，以判别接收到的是比特0还是比特1</p>
+</li>
+<li><p>由于不同设备的时钟频率存在一定差异，不可能做到完全相同，在传输大量数据的过程中，所产生的判别时刻的累计误差，会导致接收端对比特信号的判别错位</p>
+</li>
+</ul>
+<p>所以要使收发双发时钟保持同步</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-19cfd094ecef0538.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>异步传输</strong>：</p>
+<ul>
+<li><p>以字节为独立的传输单位，字节之间的时间间隔不是固定</p>
+</li>
+<li><p>接收端仅在每个字节的起始处对字节内的比特实现同步</p>
+</li>
+<li><p>通常在每个字节前后分别加上起始位和结束位</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="单向通信（单工）、双向交替通信（半双工）和双向同时通信（全双工）"><a href="#单向通信（单工）、双向交替通信（半双工）和双向同时通信（全双工）" class="headerlink" title="单向通信（单工）、双向交替通信（半双工）和双向同时通信（全双工）"></a>单向通信（单工）、双向交替通信（半双工）和双向同时通信（全双工）</h2><p>在许多情况下，我们要使用“<strong>信道（channel）</strong>”这一名词。信道和电路并不等同。信道一般都是用来表示向某一个方向传送信息的媒体。因此，一条通信电路往往包含一条发送信道和一条接收信道。</p>
+<p>从通信的双方信息交互的方式来看，可以有以下三种基本方式：</p>
+<p><strong>单向通信</strong>：</p>
+<p>又称为<strong>单工通信</strong>，即只能有一个方向的通信而没有反方向的交互。无线电广播或有线电以及电视广播就属于这种类型</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-5b07729ff4cd3411.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>双向交替通信</strong>：</p>
+<p>又称为<strong>半双工通信</strong>，即通信的双方可以发送信息，但不能双方同时发送（当然也就不能同时接收）。这种通信方式使一方发送另一方接收，过一段时间后可以再反过来</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-e0f90a502a95d1b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>双向同时通信</strong>：</p>
+<p>又称为<strong>全双工通信</strong>，即通信的双发可以同时发送和接收信息。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-68977b7eeac3b7f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>单向通信</strong>只需要一条信道，而<strong>双向交替通信</strong>或<strong>双向同时通信</strong>则需要两条信道（每个方向各一条）</p>
+<p><strong>双向同时通信</strong>的传输效率最高</p>
+</blockquote>
+<h1 id="编码与调制"><a href="#编码与调制" class="headerlink" title="编码与调制"></a>编码与调制</h1><p><img src="https://upload-images.jianshu.io/upload_images/24878825-acc59055804f0890.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>常用术语</strong></p>
+<ul>
+<li><p><strong>数据 (data)</strong> —— 运送消息的实体。</p>
+</li>
+<li><p><strong>信号 (signal)</strong> —— 数据的电气的或电磁的表现。</p>
+</li>
+<li><p><strong>模拟信号 (analogous signal)</strong> —— 代表消息的参数的取值是连续的。</p>
+</li>
+<li><p><strong>数字信号 (digital signal)</strong> —— 代表消息的参数的取值是离散的。</p>
+</li>
+<li><p><strong>码元 (code)</strong> —— 在使用时间域（或简称为时域）的波形表示数字信号时，代表不同离散数值的基本波形。</p>
+</li>
+<li><p><strong>基带信号</strong>（即基本频带信号）—— 来自信源的信号。像计算机输出的代表各种文字或图像文件的数据信号都属于基带信号。</p>
+</li>
+<li><p>基带信号往往包含有较多的低频成分，甚至有直流成分，而许多信道并不能传输这种低频分量或直流分量。因此必须对基带信号进行<strong>调制</strong> (modulation)。</p>
+</li>
+</ul>
+</blockquote>
+<p>在计算机网络中，常见的是将数字基带信号通过编码或调制的方法在相应信道进行传输</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-ded8a3e566f7687b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/715/format/webp" alt="img"></p>
+<h2 id="传输媒体与信道的关系"><a href="#传输媒体与信道的关系" class="headerlink" title="传输媒体与信道的关系"></a><strong>传输媒体与信道的关系</strong></h2><blockquote>
+<p><strong>信道的几个基本概念</strong></p>
+<ul>
+<li><p><strong>信道</strong> —— 一般用来表示向某一个方向传送信息的媒体。</p>
+</li>
+<li><p><strong>单向通信（单工通信）</strong>——只能有一个方向的通信而没有反方向的交互。</p>
+</li>
+<li><p><strong>双向交替通信（半双工通信）</strong>——通信的双方都可以发送信息，但不能双方同时发送(当然也就不能同时接收)。</p>
+</li>
+<li><p><strong>双向同时通信（全双工通信）</strong>——通信的双方可以同时发送和接收信息。</p>
+</li>
+</ul>
+</blockquote>
+<p>严格来说，传输媒体不能和信道划等号</p>
+<p>对于单工传输，传输媒体只包含一个信道，要么是发送信道，要么是接收信道</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-414f829a7df390e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/893/format/webp" alt="img"></p>
+<p>对于半双工和全双工，传输媒体中要包含两个信道，一个发送信道，另一个是接收信道</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-d3b3583526407c45.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/827/format/webp" alt="img"></p>
+<blockquote>
+<p>如果使用信道复用技术，一条传输媒体还可以包含多个信道</p>
+</blockquote>
+<h2 id="常用编码"><a href="#常用编码" class="headerlink" title="常用编码"></a>常用编码</h2><p><strong>不归零编码</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-2f6b70fef84339ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<ul>
+<li><p>正电平表示比特1/0</p>
+</li>
+<li><p>负电平表示比特0/1</p>
+</li>
+</ul>
+<p>中间的虚线是零电平，所谓不归零编码，就是指在整个码元时间内，电平不会出现零电平</p>
+<p><strong>实际比特1和比特0的表示要看现实怎么规定</strong></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-0732d0edc74846b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>这需要发送方的发送与接收方的接收做到严格的同步</p>
+<ul>
+<li><p>需要<strong>额外一根传输线来传输时钟信号</strong>，使发送方和接收方同步，接收方按时钟信号的节拍来逐个接收码元</p>
+</li>
+<li><p><strong>但是</strong>对于计算机网络，<strong>宁愿利用这根传输线传输数据信号</strong>，而不是传输时钟信号</p>
+</li>
+</ul>
+<p>由于<strong>不归零编码</strong>存在<strong>同步问题</strong>，因此计算机网络中的数据传输不采用这类编码！</p>
+</blockquote>
+<p><strong>归零编码</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-8aa838a116fdafb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-2fa351ff35477f1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/723/format/webp" alt="img"></p>
+<blockquote>
+<p><strong>归零编码</strong>虽然<strong>自同步</strong>，但<strong>编码效率低</strong></p>
+</blockquote>
+<p><strong>曼彻斯特编码</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-a34a686a9d052e9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>在每个码元时间的中间时刻，信号都会发生跳变</p>
+<ul>
+<li><p>负跳变表示比特1/0</p>
+</li>
+<li><p>正跳变表示比特0/1</p>
+</li>
+<li><p>码元中间时刻的跳变即表示时钟，又表示数据</p>
+</li>
+</ul>
+<p><strong>实际比特1和比特0的表示要看现实怎么规定</strong></p>
+<p>传统以太网使用的就是曼切斯特编码</p>
+</blockquote>
+<p><strong>差分曼彻斯特编码</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-9a758474e374329a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>在每个码元时间的中间时刻，信号都会发送跳变，但与<strong>曼彻斯特不同</strong></p>
+<ul>
+<li><p><strong>跳变仅表示时钟</strong></p>
+</li>
+<li><p><strong>码元开始处电平是否变换表示数据</strong></p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">*   变化表示比特1&#x2F;0</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">*   不变化表示比特0&#x2F;1</span><br></pre></td></tr></table></figure>
+
+<p><strong>实际比特1和比特0的表示要看现实怎么规定</strong></p>
+<p>比曼彻斯特编码变化少，更适合较高的传输速率</p>
+</blockquote>
+<p><strong>总结</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-de92dd43d328b4f7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="调制"><a href="#调制" class="headerlink" title="调制"></a>调制</h2><p>数字信号转换为模拟信号，在模拟信道中传输，例如WiFi，采用补码键控CCK/直接序列扩频DSSS/正交频分复用OFDM等<strong>调制</strong>方式。</p>
+<p>模拟信号转换为另一种模拟信号，在模拟信道中传输，例如，语音数据加载到模拟的载波信号中传输。频分复用FDM技术，充分利用带宽资源。</p>
+<p><strong>基本调制方法</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-7ce461637de91b6e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<ul>
+<li><p><strong>调幅AM</strong>：所调制的信号由两种不同振幅的基本波形构成。每个基本波形只能表示1比特信息量。</p>
+</li>
+<li><p><strong>调频FM</strong>：所调制的信号由两种不同频率的基本波形构成。每个基本波形只能表示1比特信息量。</p>
+</li>
+<li><p><strong>调相PM</strong>：所调制的信号由两种不同初相位的基本波形构成。每个基本波形只能表示1比特信息量。</p>
+</li>
+</ul>
+<p>但是使用基本调制方法，1个码元只能包含1个比特信息</p>
+</blockquote>
+<p><strong>混合调制</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-8fec8ccb7ff3ea77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/680/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-30e70220d4127135.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/642/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-1cb6de826ba63b70.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-600f7802e1eaa18a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<blockquote>
+<p>上图码元所对应的4个比特是错误的，码元不能随便对应4个比特</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-1e2617434d904ce4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="码元"><a href="#码元" class="headerlink" title="码元"></a>码元</h2><p>在使用时间域的波形表示数字信号时，代表不同离散数值的基本波形。</p>
+<h1 id="信道的极限容量"><a href="#信道的极限容量" class="headerlink" title="信道的极限容量"></a>信道的极限容量</h1><ul>
+<li>任何实际的信道都不是理想的，在传输信号时会产生各种失真以及带来多种干扰。</li>
+<li>码元传输的速率越高，或信号传输的距离越远，或传输媒体质量越差，在信道的输出端的波形的失真就越严重。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-0a9bbf5bcd5e8226.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>失真的原因：</p>
+<ul>
+<li>码元传输的速率越高</li>
+<li>信号传输的距离越远</li>
+<li>噪声干扰越大</li>
+<li>传输媒体质量越差</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-b90918937a54faa6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-57e105e5df793b93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>奈氏准则和香农公式对比：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-5ce50e745950c8eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h1 id="补充：信道复用技术"><a href="#补充：信道复用技术" class="headerlink" title="补充：信道复用技术"></a>补充：信道复用技术</h1><p>本节内容视频未讲到，是《计算机网络（第7版）谢希仁》物理层的内容</p>
+<h2 id="频分复用、时分复用和统计时分复用"><a href="#频分复用、时分复用和统计时分复用" class="headerlink" title="频分复用、时分复用和统计时分复用"></a>频分复用、时分复用和统计时分复用</h2><p>复用 (multiplexing) 是通信技术中的基本概念。</p>
+<p>它允许用户使用一个共享信道进行通信，降低成本，提高利用率。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-8503f147c44d220f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>频分复用 FDM (Frequency Division Multiplexing)</strong></p>
+<ul>
+<li>将整个带宽分为多份，用户在分配到一定的频带后，在通信过程中自始至终都占用这个频带。</li>
+<li><strong>频分复用</strong>的所有用户在同样的时间<strong>占用不同的带宽资源</strong>（请注意，这里的“带宽”是频率带宽而不是数据的发送速率）。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-bcb9321a6a8a3d7a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/425/format/webp" alt="img"></p>
+<p><strong>时分复用TDM (Time Division Multiplexing)</strong></p>
+<ul>
+<li><strong>时分复用</strong>则是将时间划分为一段段等长的<strong>时分复用帧（TDM帧）</strong>。每一个时分复用的用户在每一个 TDM 帧中占用固定序号的时隙。</li>
+<li>每一个用户所占用的时隙是<strong>周期性地出现</strong>（其周期就是TDM帧的长度）的。</li>
+<li>TDM 信号也称为<strong>等时</strong> (isochronous) 信号。</li>
+<li><strong>时分复用的所有用户在不同的时间占用同样的频带宽度。</strong></li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-cb9a20b7ce00d497.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<ul>
+<li><strong>时分复用可能会造成线路资源的浪费</strong><ul>
+<li>使用时分复用系统传送计算机数据时，由于计算机数据的突发性质，用户对分配到的子信道的利用率一般是不高的。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-c1ef02caf1f2cfda.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p><strong>统计时分复用 STDM (Statistic TDM)</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-7f0b54d1c14702ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="波分复用"><a href="#波分复用" class="headerlink" title="波分复用"></a>波分复用</h2><p>波分复用 WDM(Wavelength Division Multiplexing)</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/24878825-039cdf67599ebe3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h2 id="码分复用"><a href="#码分复用" class="headerlink" title="码分复用"></a>码分复用</h2><p>码分复用 CDM (Code Division Multiplexing)</p>
+<ul>
+<li>常用的名词是<strong>码分多址</strong> CDMA (Code Division Multiple Access)。</li>
+<li>各用户使用经过特殊挑选的不同码型，因此彼此不会造成干扰。</li>
+<li>这种系统发送的信号有很强的抗干扰能力，其频谱类似于白噪声，不易被敌人发现。</li>
+</ul>
+
+    </div>
+
+    
+    
+    <div>
+  <div class="end-slogan" style="text-align:center;font-size:22px;letter-spacing:10px;user-seclect:none;color:#bbb">----------- 本文结束啦<i class="fa fa-star"></i>感谢您阅读-----------</div>		
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Rick
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/posts/18784b9d/" title="计算机网络之物理层">http://example.com/posts/18784b9d/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/49f3519/" rel="prev" title="计算机网络之结构体系">
+      <i class="fa fa-chevron-left"></i> 计算机网络之结构体系
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/c9d999de/" rel="next" title="计算机网络之数据链路层">
+      计算机网络之数据链路层 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%B1%82%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">物理层的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%B1%82%E5%8D%8F%E8%AE%AE%E7%9A%84%E4%B8%BB%E8%A6%81%E4%BB%BB%E5%8A%A1"><span class="nav-text">物理层协议的主要任务</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%B1%82%E4%B8%8B%E9%9D%A2%E7%9A%84%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93"><span class="nav-text">物理层下面的传输媒体</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BC%E5%BC%95%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93"><span class="nav-text">导引型传输媒体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E5%AF%BC%E5%BC%95%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93"><span class="nav-text">非导引型传输媒体</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E6%96%B9%E5%BC%8F"><span class="nav-text">传输方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%B2%E8%A1%8C%E4%BC%A0%E8%BE%93%E5%92%8C%E5%B9%B6%E8%A1%8C%E4%BC%A0%E8%BE%93"><span class="nav-text">串行传输和并行传输</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E4%BC%A0%E8%BE%93%E5%92%8C%E5%BC%82%E6%AD%A5%E4%BC%A0%E8%BE%93"><span class="nav-text">同步传输和异步传输</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%90%91%E9%80%9A%E4%BF%A1%EF%BC%88%E5%8D%95%E5%B7%A5%EF%BC%89%E3%80%81%E5%8F%8C%E5%90%91%E4%BA%A4%E6%9B%BF%E9%80%9A%E4%BF%A1%EF%BC%88%E5%8D%8A%E5%8F%8C%E5%B7%A5%EF%BC%89%E5%92%8C%E5%8F%8C%E5%90%91%E5%90%8C%E6%97%B6%E9%80%9A%E4%BF%A1%EF%BC%88%E5%85%A8%E5%8F%8C%E5%B7%A5%EF%BC%89"><span class="nav-text">单向通信（单工）、双向交替通信（半双工）和双向同时通信（全双工）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E4%B8%8E%E8%B0%83%E5%88%B6"><span class="nav-text">编码与调制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93%E4%B8%8E%E4%BF%A1%E9%81%93%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-text">传输媒体与信道的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%BC%96%E7%A0%81"><span class="nav-text">常用编码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E5%88%B6"><span class="nav-text">调制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%81%E5%85%83"><span class="nav-text">码元</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E9%81%93%E7%9A%84%E6%9E%81%E9%99%90%E5%AE%B9%E9%87%8F"><span class="nav-text">信道的极限容量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%EF%BC%9A%E4%BF%A1%E9%81%93%E5%A4%8D%E7%94%A8%E6%8A%80%E6%9C%AF"><span class="nav-text">补充：信道复用技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%91%E5%88%86%E5%A4%8D%E7%94%A8%E3%80%81%E6%97%B6%E5%88%86%E5%A4%8D%E7%94%A8%E5%92%8C%E7%BB%9F%E8%AE%A1%E6%97%B6%E5%88%86%E5%A4%8D%E7%94%A8"><span class="nav-text">频分复用、时分复用和统计时分复用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A2%E5%88%86%E5%A4%8D%E7%94%A8"><span class="nav-text">波分复用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%81%E5%88%86%E5%A4%8D%E7%94%A8"><span class="nav-text">码分复用</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Rick"
+      src="/images/avatar.jpg">
+  </a>
+  <p class="site-author-name" itemprop="name">Rick</p>
+  <div class="site-description" itemprop="description">一个瞎折腾的博客，不知道能坚持几天</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-sun"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rick</span>
+</div>
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+<!-- 不蒜字统计 -->
+<div>
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_uv">
+    访问人数：<span id="busuanzi_value_site_uv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    总访问量：<span id="busuanzi_value_site_pv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <!-- 添加博客全站总字数统计-->
+  <i class="fa fa-pencil"></i>
+  <span class="post-count">博客全站共 356.6k 字</span>
+</div>
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '',
+      clientSecret: '',
+      repo        : '',
+      owner       : '',
+      admin       : [''],
+      id          : 'bb2c91cfdda34aff2079d679d141bc52',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
