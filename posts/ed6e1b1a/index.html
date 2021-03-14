@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="操作系统之调度">
+<meta property="og:url" content="http://example.com/posts/ed6e1b1a/index.html">
+<meta property="og:site_name" content="Rick Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-1.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-2.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-3.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-4.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-5.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-6.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-7.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-8.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-9.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-9.1.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-11.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-12.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-13.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-14.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-15.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-16.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-17.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-18.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-19.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-20.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-21.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-22.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-23.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-24.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-25.png">
+<meta property="og:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-000.png">
+<meta property="article:published_time" content="2021-03-14T09:30:18.000Z">
+<meta property="article:modified_time" content="2021-03-14T09:31:58.381Z">
+<meta property="article:author" content="Rick">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-1.png">
+
+<link rel="canonical" href="http://example.com/posts/ed6e1b1a/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>操作系统之调度 | Rick Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Rick Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/ed6e1b1a/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Rick">
+      <meta itemprop="description" content="一个瞎折腾的博客，不知道能坚持几天">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rick Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          操作系统之调度
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-14 17:30:18 / 修改时间：17:31:58" itemprop="dateCreated datePublished" datetime="2021-03-14T17:30:18+08:00">2021-03-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <meta name="referrer" content="no-referrer"/>
+
+<blockquote>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="处理机调度"><a href="#处理机调度" class="headerlink" title="处理机调度"></a>处理机调度</h2><h3 id="①-定义"><a href="#①-定义" class="headerlink" title="① 定义"></a>① 定义</h3><p>调度研究的问题是：面对有限的资源，如何处理任务执行的先后顺序。对于处理机调度来说，这个资源就是有限的处理机，而任务就是多个进程。故处理机调度研究的问题是：面对有限的处理机，如何从就绪队列中按照一定的算法选择一个进程并将处理机分配给它运行，从而实现进程的并发执行。处理机调度共有三个层次，这三个层次也是一个作业<strong>从提交开始到完成</strong>所经历的三个阶段。</p>
+<h3 id="②-三个层次"><a href="#②-三个层次" class="headerlink" title="② 三个层次"></a>② 三个层次</h3><p><strong>作业调度：</strong></p>
+<p>作业调度也即高级调度，这个阶段可以看作是准备阶段。主要任务是按照一定的规则从外存上处于后备队列的作业中挑选一个或多个作业，为其分配内存，建立 PCB（进程） 等，使它们具备竞争处理机的能力。</p>
+<p>这个阶段进程的状态变化是：无 –&gt; 创建态 –&gt; 就绪态</p>
+<p><strong>内存调度：</strong></p>
+<p>内存调度也即中级调度，这个阶段可以看作是优化阶段。主要任务是将暂时不能运行的进程对换到外存中，使它们挂起；而当挂起的进程具备运行条件时，它们会被重新对换回内存，得到激活。这个阶段的主要目的是提高内存利用率和系统吞吐量。</p>
+<p>这个阶段进程的状态变化是： 静止就绪态 –&gt; 活动就绪态，静止阻塞态 –&gt; 活动阻塞态</p>
+<p><strong>进程调度：</strong></p>
+<p>进程调度即低级调度，这个阶段让进程真正运行起来。主要任务是按照某种算法，从就绪队列中选取一个进程，分配处理机给它。进程调度是最基本、次数最频繁的阶段。</p>
+<p>这个阶段进程的状态变化是： 就绪态 –&gt; 活动态</p>
+<h2 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h2><p>我们把重点放在处理机调度中的进程调度阶段。</p>
+<h3 id="①-时机"><a href="#①-时机" class="headerlink" title="① 时机"></a>① 时机</h3><p>进程调度的时机是什么呢？也就是说，什么时候会从就绪队列中选取一个进程，分配处理机给它呢？分为两种情况：<strong>当前进程主动放弃处理机</strong> 以及 <strong>当前进程被动放弃处理机</strong>。</p>
+<ul>
+<li>当前进程主动放弃处理机：比如进程正常终止、运行过程中发生异常而终止、进程主动请求阻塞（如等待 I/O）</li>
+</ul>
+<ul>
+<li>当前进程被动放弃处理机：比如进程的时间片用完、有更紧急的事需要处理（如 I/O 中断）、有更高优先级的进程进入就绪队列</li>
+</ul>
+<h3 id="②-方式"><a href="#②-方式" class="headerlink" title="② 方式"></a>② 方式</h3><p>根据进程运行的过程中，处理机能否被其它进程抢占，将调度分为两种方式：</p>
+<p><strong>非抢占式：</strong>“非抢占”即“不能抢占”。一旦把处理机分配给某个进程后，除非该进程终止或者主动要求进入阻塞态，否则会一直运行下去，不允许其它进程抢占自己占有的处理机。</p>
+<p><strong>抢占式：</strong>把处理机分配给某个进程 A 后，如果有一个更重要、更紧急的进程 B 需要用到处理机，那么进程 A 会立即暂停，把处理机交给进程 B。</p>
+<h3 id="③-补充"><a href="#③-补充" class="headerlink" title="③ 补充"></a>③ 补充</h3><p>以下情况不会发生进程调度：</p>
+<ul>
+<li>处理中断的时候：由于中断处理过程复杂，与硬件密切相关，很难做到在中断处理过程中进行进程切换。</li>
+<li>进程在<strong>操作系统内核程序临界区</strong>的时候：注意是内核程序的临界区。普通临界区依然是有可能发生进程调度的。</li>
+<li>进行原子操作的时候</li>
+</ul>
+<h2 id="调度算法"><a href="#调度算法" class="headerlink" title="调度算法"></a>调度算法</h2><h3 id="评价指标"><a href="#评价指标" class="headerlink" title="评价指标"></a>评价指标</h3><ul>
+<li><strong>CPU 利用率：</strong><code>忙碌的时间 / 总时间</code></li>
+</ul>
+<ul>
+<li><strong>系统吞吐量：</strong><code>完成作业量 / 总时间</code></li>
+</ul>
+<ul>
+<li><strong>周转时间：</strong><code>作业完成时间 - 作业提交时间 = 作业实际运行的时间 + 等待时间</code></li>
+</ul>
+<ul>
+<li><strong>平均周转时间：</strong> <code>各作业周转时间之和 / 作业数</code></li>
+</ul>
+<ul>
+<li><strong>带权周转时间：</strong><code>周转时间 / 作业实际运行的时间</code></li>
+</ul>
+<ul>
+<li><strong>平均带权周转时间：</strong><code>各作业带权周转时间之和 / 作业数</code></li>
+</ul>
+<ul>
+<li><p><strong>等待时间：</strong>进程或者作业处于等待处理机状态的时间之和，即 <code>周转时间 - 作业实际运行的时间</code></p>
+<ul>
+<li>对于进程来说，等待时间指的是进程建立后等待被服务的时间之和（由于等待 I/O 完成的期间也属于被服务时间，所以这个时间不计入等待时间）</li>
+<li>对于作业来说，除了进程建立后的等待时间，还包括作业在外存后备队列中等待的时间</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>平均等待时间：</strong>各作业等待时间之和 / 作业数</p>
+</li>
+<li><p><strong>响应时间：</strong>从用户提交请求到首次产生响应所用的时间</p>
+</li>
+</ul>
+<h3 id="早期批处理系统的调度算法"><a href="#早期批处理系统的调度算法" class="headerlink" title="早期批处理系统的调度算法"></a>早期批处理系统的调度算法</h3><h4 id="①-FCFS-算法"><a href="#①-FCFS-算法" class="headerlink" title="① FCFS 算法"></a>① FCFS 算法</h4><p>FCFS 算法即“先来先服务”算法，类似于我们生活中的排队，谁先来，谁就先享受服务。对于作业调度，它指的是谁先到达后备队列，谁就先出队，进而先被执行；对于进程调度，它指的是谁先到达就绪队列，谁就先出队，进而先被执行。</p>
+<p>看下面的例子：</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-1.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-1.png" alt="img"></a></p>
+<p>这个就是很自然的谁先到达，谁就先享受服务，所以顺序上就是从 P1 到 P4。注意这里的到达时间，就是前面说过的提交时间。这里不考虑等待 I/O 的情况，否则计算等待时间的时候还需要减去等待 I/O 的时间。</p>
+<ul>
+<li>FCFS 算法是非抢占式的算法，不存在某个进程在执行的时候被其它进程抢占处理机的情况。</li>
+<li>它的优点是公平、算法实现简单，并且不会导致饥饿（不管等多久，所有进程最后都会运行，不存在某个进程永远得不到处理机的情况）</li>
+<li>缺点是对长作业有利、对短作业不利 —— 对于长作业，如果它先到，那么它自然无需做过多的等待，而即使是后到，它等待短作业的时间也是不足挂齿的，所以长作业怎么都不亏；对于短作业，如果它先到，自然也无需做过多等待，但是如果它后到，那么它不得不花很长的时间去等待长作业完成，然而它自己运行所需的时间却是很短的，所以说这个算法对短作业不利。在这种情况下，短作业的带权周转时间会很大，也即周转时间远远大于实际运行时间，表示有大量时间用于等待。</li>
+<li>有时候也说 FCFS 算法对 CPU 繁忙型作业有利，对 I/O 繁忙型作业不利。这是因为 CPU 繁忙型作业的特点是需要大量的 CPU 时间进行计算，而很少请求 I/O 操作，通常视作长作业。</li>
+</ul>
+<h4 id="②-SJF-算法"><a href="#②-SJF-算法" class="headerlink" title="② SJF 算法"></a>② SJF 算法</h4><p>SJF 算法即“短作业优先”算法，前面的算法问题在于对短作业不利，所以 SJF 算法优先顾及短作业，让<strong>当前已到达并且运行时间最短</strong>的进程先执行。SJF 算法有非抢占式（默认）版本和抢占式版本，抢占式版本也叫做 SRTN 算法，即最短剩余时间优先算法。</p>
+<p>先看非抢占式版本的例子：</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-2.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-2.png" alt="img"></a></p>
+<p>运行顺序的说明：</p>
+<p>注意这里虽然 P1 不是运行时间最短的，但是它是 <strong>当前最先到达且运行时间最短</strong> 的进程，所以它首先运行，并且在运行过程中，P2，P3，P4 陆续到达就绪队列。在 P1 运行完之后就需要调度了，这时候，就绪队列中满足“当前已到达且运行时间最短”的进程是 P3，所以 P3 运行；P3 运行完之后继续调度其它进程，P2 和 P4 运行时间都一样，不过 P2 首先到达，所以 P2 运行，最后再轮到 P4 运行。</p>
+<p>另外，由于这是非抢占式版本，所以除非进程终止或者其它原因，否则其它进程是无法与当前进程竞争处理机的。</p>
+<p>接着看抢占式版本的例子：</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-3.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-3.png" alt="img"></a></p>
+<p>多了一个调度条件：</p>
+<p>由于这是抢占式版本，所以存在着进程之间对于处理机的竞争。也就是说，除了进程正常终止会发生调度之外，每次有新进程进入就绪队列的时候，也可能发生调度。而具体谁会被调度并夺得处理机，则是比较<strong>新到达进程的剩余时间</strong>与<strong>正在运行进程的剩余时间</strong>，前者如果更短，那么它将夺得处理机。</p>
+<p>下面是抢占式版本的相关指标计算：</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-4.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-4.png" alt="img"></a></p>
+<p><strong>注意：</strong></p>
+<p>一般可以认为，SJF 算法的平均等待时间、平均周转时间都是最少的（相比于其它算法），但是更准确地说，其实它的抢占式版本，也即 SRTN 算法，各项指标要比 SJF 算法更低。</p>
+<ul>
+<li>SJF 算法的优点在于，它拥有“最短的”平均等待时间和平均周转时间</li>
+<li>缺点在于，虽然这次顾及了短作业，但是没有顾及长作业，对长作业是不利的。因为一旦短作业源源不断进入，那么它们就会不断跑在长作业前面，导致长作业永远无法运行，产生“饥饿”甚至“饿死”现象。</li>
+<li>另外一个缺点是，在实际实现中，要做到真正意义上的短作业优先，具有一定难度</li>
+</ul>
+<h4 id="③-HRRN-算法"><a href="#③-HRRN-算法" class="headerlink" title="③ HRRN 算法"></a>③ HRRN 算法</h4><p>HRRN 算法即高响应比优先算法，它优先调度响应比高的进程。</p>
+<blockquote>
+<p>响应比 = （ 等待时间+实际运行时间 ）/ 实际运行时间 = 等待时间 / 实际运行时间 + 1</p>
+</blockquote>
+<p>可以说它同时综合了 FCFS 算法和 SJF 算法的优点。为什么优先调度响应比高的进程？因为当两个进程的等待时间一样时，响应比越高的进程，它的实际运行时间越短，这一点类似于 SJF 算法，优先顾及运行时间短的进程；而当两个进程的实际运行时间一样时，响应比越高的进程，它的等待时间越长，等待时间越长说明该进程越先到达，这一点类似于 FCFS 算法，优先顾及先到达的进程。</p>
+<p>HRRN 是非抢占式的算法，因此只有当前运行进程正常放弃处理机的时候，才会计算哪个进程的响应比高，然后进行调度。</p>
+<p>看下面的例子：</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-5.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-5.png" alt="img"></a></p>
+<p>注意这里“要求服务的时间”就是实际需要运行的时间，等待时间则是从进程到达就绪队列的那一刻起，到发生进程调度这一段所花费的时间。</p>
+<p>HRRN 算法的优点是综合考虑了等待时间和实际运行时间，而且也不会导致长作业饥饿的问题（因为长作业等待时间变长之后，它的响应比也会变高，增加了可以被调度的机会）。</p>
+<h4 id="④-总结"><a href="#④-总结" class="headerlink" title="④ 总结"></a>④ 总结</h4><p>上面这几种算法主要关注对用户的公平性、平均周转时间、平均等待时间等评价系统整体性能的指标，但<br>是不关心“响应时间”，也并不区分任务的紧急程度，因此对于用户来说，交互性很糟糕。因此它们<strong>一般适合用于早期的批处理系统</strong>。下面介绍的算法则适合用于交互式系统。</p>
+<h3 id="交互式系统的调度算法"><a href="#交互式系统的调度算法" class="headerlink" title="交互式系统的调度算法"></a>交互式系统的调度算法</h3><h4 id="①-RR算法"><a href="#①-RR算法" class="headerlink" title="① RR算法"></a>① <strong>RR</strong>算法</h4><p>RR 算法即时间片轮转算法。像前面的算法的话，通常都是非抢占式的，也就是说，一个进程正常运行完，另一个进程才有机会被调度，整体呈现出“顺序”的特点；而 RR 算法的特点则在于“公平分配”，按照进程到达就绪队列的顺序，轮流让每个进程执行一个相等长度的时间片，若在自己的时间片内没有执行完，则进程自动进入就绪队列队尾，并调度队头进程运行。整体呈现出“交替”的特点。因为进程即使没运行完也会发生调度，所以这是一个抢占式的算法。</p>
+<p>看下面的例子：</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-6.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-6.png" alt="img"></a></p>
+<p>先来看时间片为2的情况：</p>
+<p><strong>0 时刻：</strong>此时就绪队列为 <code>P1(5)</code>，P1 上处理机运行</p>
+<p><strong>2 时刻：</strong>P2 到达就绪队列队头，同时 P1 时间片用完，到达就绪队列队尾。此时就绪队列为 <code>P2(4) —— P1(3)</code>，P2 被调度，上处理机运行。</p>
+<p><strong>4 时刻：</strong>P3 到达就绪队列队尾，同时 P2 时间片用完，进入就绪队列，紧挨在 P3 后面。此时就绪队列为 <code>P1(3) —— P3(1) ——P2(2)</code>，P1 被调度，上处理机运行。</p>
+<p><strong>5 时刻：</strong>P4 到达就绪队列队尾，P1 时间片还没用完，仍然在运行。此时就绪队列为 <code>P3(1) —— P2(2)——P4(6)</code></p>
+<p><strong>6 时刻：</strong>P1 时间片用完，进入就绪队列队尾，此时就绪队列为 <code>P3(1) —— P2(2) —— P4(6) —— P1(1)</code>。P3 被调度，上处理机运行。</p>
+<p><strong>7 时刻：</strong>虽然 P3 有 2 个单位的时间片可用，但是它实际上只需要用到一个单位，所以 7 时刻的时候它正常运行完，轮到 P2 被调度。此时就绪队列为 <code>P4(6) —— P1(1)</code>。</p>
+<p><strong>9 时刻：</strong>P2 时间片用完，同时也正常运行结束。P4 被调度，上处理机运行。此时就绪队列为 <code>P1(1)</code>。</p>
+<p><strong>11 时刻：</strong>P4 时间片用完，到达就绪队列队尾。此时就绪队列为 <code>P1(1) —— P4(4)</code>。P1 被调度，上处理机运行。</p>
+<p><strong>12 时刻：</strong>在 12 时刻的时候，P1 就已经运行结束。此时再次调度 P4 上处理机运行</p>
+<p><strong>14 时刻：</strong>P4 时间片用完，由于就绪队列中没有其它进程可供调度，所以让 P4 接着运行一个时间片</p>
+<p><strong>16 时刻：</strong>P4 正常运行结束。</p>
+<p>整个过程如下图所示：</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-7.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-7.png" alt="img"></a></p>
+<p>再来看时间片为 5 的情况：</p>
+<p><strong>0 时刻：</strong>此时就绪队列为 <code>P1(5)</code>，P1 上处理机运行</p>
+<p><strong>2 时刻：</strong>P2 到达就绪队列队头，P1 仍在运行</p>
+<p><strong>4 时刻：</strong>P3 到达就绪队列队尾，P1 仍在运行</p>
+<p><strong>5 时刻：</strong>P4 到达就绪队列队尾。P1 正常运行结束，时间片刚好用完。此时就绪队列是 <code>P2(4)——P3(1)——P4(6)</code>，所以 P2 被调度上处理机</p>
+<p><strong>9 时刻：</strong>尽管时间片没有用完，但是 P2 正常运行结束，所以 P3 会被调度上处理机</p>
+<p><strong>10 时刻：</strong>P3 正常运行结束，同样调度 P4</p>
+<p><strong>15 时刻：</strong>P4 时间片用完，但是就绪队列没有可供调度的进程，所以 P4 还得继续运行</p>
+<p><strong>16 时刻：</strong>P4 正常运行结束</p>
+<p>整个过程如下图所示：</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-8.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-8.png" alt="img"></a></p>
+<p>这里会发现，效果和使用 FCFS 算法是差不多的。实际上，如果时间片太大，那么 RR 算法会退化成 FCFS 算法，而且会增加进程响应时间，所以时间片应该设置得小一点；另一方面，时间片也不能设置得太小，否则进程切换会过于频繁，导致更多的时间用于切换而不是有效执行进程。</p>
+<p>总的来说，RR 算法的优点是公平、响应快，适用于分时操作系统；缺点则是进程切换频率相比其他算法会高一点，因此有一定的开销。另外它不区分任务的紧急程度，再紧急的任务，如果某个运行进程的时间片还没用完，这个任务也不会被调度。</p>
+<p>RR 算法不会导致饥饿，因为时间片一到自然就会切换到其它进程，不存在某个进程永远无法被调度的情况。</p>
+<h4 id="②-优先级算法"><a href="#②-优先级算法" class="headerlink" title="② 优先级算法"></a>② 优先级算法</h4><p>优先级算法在某种程度上和 HRRN 算法很像，两者可以联系起来进行理解。<strong>前面我们所讲的算法都无法区分进程紧急程度，而优先级算法弥补了这个问题</strong>。它会给每个进程一个优先级，调度时会选择当前已到达并且优先级最高的进程。和 HRRN 算法一样，它也有非抢占式和抢占式两个版本。</p>
+<p><strong>先看非抢占式版本：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-9.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-9.png" alt="img"></a></p>
+<p>这里和 HRRN 算法是很像的，进程会正常运行，直到结束之后才发生调度，在调度的时候会选择队列中优先级最高的进程。</p>
+<p><strong>再看抢占式版本：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-9.1.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-9.1.png" alt="img"></a></p>
+<p>这里同样和 HRRN 算法很像。除了正常运行结束会发生调度之外，每次就绪队列有新的进程到达时还会做一次检查，如果新到达进程优先级高于正在运行进程的优先级，那么新到达进程会抢占处理机。</p>
+<p>PS：在优先级算法中，就绪队列可能不止有一个，可以按照不同优先级分成很多种队列。另外还要注意，有的地方规定优先数越小，优先级越高，具体看题目要求。</p>
+<p><strong>静态优先级和动态优先级：</strong></p>
+<p>优先级还包括静态优先级和动态优先级。上面所讲的属于静态优先级，指的是进程的优先级在它创建的时候就确定了，此后一直不会改变；动态优先级则相对灵活很多，它会根据具体情况动态调整进程的优先级。</p>
+<ul>
+<li>对于静态优先级，一般认为系统进程优先级要高于用户进程优先级；前台进程优先级高于后台进程优先级；I/O 型进程优先级会比较高。</li>
+<li>对于动态优先级，会尽量遵循公平的原则。也就是说，如果某个进程实在等得太久，那么不妨提高它的优先级，让他有机会被调度；反之，如果某个进程占用处理机时间过长，那么就要考虑降低它的优先级，不要让他一直“霸占”处理机了。另外，之前说过 I/O 型进程的优先级会很高，所以如果某个进程频繁进行 I/O 操作，也可以考虑提高它的优先级。</li>
+</ul>
+<p>总的来说，优先级算法的优点在于区分了各个进程的紧急程度，比较紧急重要的进程会优先得到处理，因此它适用于实时操作系统。另外，由于动态优先级的存在，使得它对进程的调度相对灵活很多。缺点则是，如果源源不断进来了一些高优先级的进程，那么优先级相对较低的进程可能一直无法执行，进而导致饥饿现象的发生。这点和 HRRN 算法也是很像的。（其实也可以把 HRRN 算法看作优先级算法的一种特殊情况，将响应比作为优先级评判的标准）</p>
+<h4 id="③-多级反馈队列算法"><a href="#③-多级反馈队列算法" class="headerlink" title="③ 多级反馈队列算法"></a>③ 多级反馈队列算法</h4><p>多级反馈队列算法是对其他调度算法的折中权衡，它的分析过程会复杂很多。下面我们先给定多级反馈队列算法的几个规则，再结合图片文字理一理具体的过程。</p>
+<ul>
+<li>有多个级别的就绪队列，各级队列优先级从高到低，时间片从小到大</li>
+<li>每次有新进程到达，都会首先进入第一级队列，并按 FCFS 算法被分配时间片。如果时间片用完了而进程还没执行完，那么该进程将被送到下一级队列队尾。如果当前已经是最后一级，则重新放回当前队列队尾</li>
+<li>当且仅当上层级别的队列为空时，下一级队列的进程才有机会被调度</li>
+<li>关于抢占：如果某个进程运行的时候，比它所在队列级别更高的队列中有新进程到达，则那个新进程会抢占处理机，而当前正在运行的进程会被送到当前队列队尾</li>
+</ul>
+<p>下面我们结合图片来进行理解。</p>
+<p>在 0 时刻，P1 首先到达第一级就绪队列</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-11.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-11.png" alt="img"></a></p>
+<p>然后，它被调度，来到了处理机这里</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-12.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-12.png" alt="img"></a></p>
+<p>在 1 时刻，P1 时间片已经用完，但是进程还没执行完，所以这时候 P1 “降级”进入第二级就绪队列。同时，P2 作为新进程进入第一级就绪队列</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-13.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-13.png" alt="img"></a></p>
+<p>P2 被调度进入处理机</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-14.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-14.png" alt="img"></a></p>
+<p>在 2 时刻，P2 时间片已经用完，但是进程还没执行完，所以这时候 P2 也“降级”进入第二级就绪队列</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-15.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-15.png" alt="img"></a></p>
+<p>像前面所说的，“当且仅当上层级别的队列为空时，下一级队列的进程才有机会被调度”，此时第一级队列为空，所以开始调度第二级队列的进程。队头进程 P1 进入处理机</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-16.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-16.png" alt="img"></a></p>
+<p>在 3 时刻，P1 时间片没用完，所以继续执行；在 4 时刻，P1 时间片用完，进程却还没执行完，所以再次“降级”来到第三级就绪队列。</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-17.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-17.png" alt="img"></a></p>
+<p>此时，由于 P2 位于优先级更高的队列，所以 P2 被调度，来到处理机</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-18.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-18.png" alt="img"></a></p>
+<p>在 5 时刻，P2 时间片还没用完，所以还在正常执行。<strong>但是</strong>，P3 作为新进程到达了第一级就绪队列</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-19.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-19.png" alt="img"></a></p>
+<p>根据前面说的，“如果某个进程运行的时候，比它所在队列级别更高的队列中有新进程到达，则那个新进程会抢占处理机，而当前正在运行的进程会被送到当前队列队尾”，所以这时候 P3 抢占了处理机</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-20.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-20.png" alt="img"></a></p>
+<p>在 6 时刻，P3 时间片用完，且刚好进程也执行完了，所以这时候没有 P3 什么事了。由于 P2 所在队列优先级更高，所以此时 P2 被调度，来到处理机</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-21.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-21.png" alt="img"></a></p>
+<p>在 7 时刻，P2 时间片没用完，所以继续执行；在 8 时刻，P2 时间片用完了，且刚好进程也执行完了，所以这时候没有 P2 什么事了。此时还没完事的就剩下 P1 了，所以 P1 被调度</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-22.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-22.png" alt="img"></a></p>
+<p>从 7 时刻被调度，一直到 10 时刻，P1 时间片用完了，但是进程还没执行完（剩下两个单位的时间），根据前面说的，“如果当前已经是最后一级，则重新放回当前队列队尾”，所以 P1 重新被送到第三级队列。</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-23.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-23.png" alt="img"></a></p>
+<p>P1 作为唯一的进程再次被调度，来到处理机</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-24.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-24.png" alt="img"></a></p>
+<p>从 10 时刻被调度到 12 时刻，P1 终于执行完毕</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-25.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-25.png" alt="img"></a></p>
+<p><strong>最后再做一下总结：</strong></p>
+<ul>
+<li><p>优点：</p>
+<ul>
+<li>对各类型进程相对公平（FCFS 的优点）：谁先进来，谁就会处于高级队列，优先得到服务</li>
+</ul>
+</li>
+</ul>
+<pre><code>- 每个新到达的进程都可以很快就得到响应（RR 的优点）：新到达的进程首先在高级队列，可以很快得到响应
+
+
+
+- 短进程只用较少的时间就可完成（SPF 的优点）：不需要经历过多的队列
+
+
+
+- 可灵活地调整对各类进程的偏好程度，比如 CPU 密集型进程、I/O 密集型进程（拓展：可以将因 I/O 而阻塞的进程重新放回原队列，这样 I/O 型进程就可以保持较高优先级）
+
+
+
+- 对各类型用户友好。
+
+    对于**终端型用户**来说，他们提交的大多属于较小的交互型作业，系统只要能使这些作业在第一队列所规定的时间片内完成，便可使终端型作业用户都感到满意；对**短批处理作业用户**来说，只需在第一队列中执行一个时间片，或至多在第二和第三队列中各执行一个时间片即可完成；对**长批处理作业用户**来说，只要让作业依次在第 1, 2，…. n 个队列中运行，然后再按轮转方式运行，用户不必担心其作业长期得不到处理。</code></pre>
+<ul>
+<li>缺点：可能会导致饥饿。若有源源不断的短进程到达第一队列，那么这些进程会持续被调度，使得下面一级的那些进程一直得不到调度，导致饥饿现象的发生。</li>
+</ul>
+<h4 id="④-总结-1"><a href="#④-总结-1" class="headerlink" title="④ 总结"></a>④ 总结</h4><p>比起早期的批处理操作系统来说，由于计算机造价大幅降低，因此之后出现的交互式操作系统（包括<br>分时操作系统、实时操作系统等）更注重<strong>系统的响应时间、公平性、平衡性</strong>等指标。而以上这三种算法恰好也<br>能较好地满足交互式系统的需求。因此这三种算法适合用于交互式系统。( 比如 UNIX 使用的就是多级反馈<br>队列调度算法）</p>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><p>已知有一个两道批处理系统，作业调度采用短作业优先算法，进程调度采用优先级算法（抢占式版本）。如下表所示，有 ABCD 四个作业，作业优先数即为对应进程的优先数，且优先数越小优先级越高。</p>
+<p><a target="_blank" rel="noopener" href="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-000.png"><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6/OS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E8%B0%83%E5%BA%A6-000.png" alt="img"></a></p>
+<p>求：</p>
+<p>（1）ABCD 四个作业进入内存的时间和运行结束的时间</p>
+<p>（2）平均周转时间</p>
+<p>我们前面讨论的都是单道批处理系统，并且实际上没有讨论作业，而是讨论进程。但是本例题是两道作业的批处理系统，既要讨论作业，也要讨论进程。需要注意：</p>
+<ul>
+<li>只有作业首先被调度到内存中，它对应的进程才可能被处理机调度。进程的调度，考虑优先级。</li>
+<li>两道作业批处理系统，一次只能调度两个作业进入内存。作业的调度，考虑运行时长</li>
+</ul>
+<p><strong>10:00 时刻：</strong>A 作业到达，被调度进入内存，A 进程再被处理机调度运行</p>
+<p><strong>10:20 时刻：</strong>B 作业到达，被调度进入内存。因为 B 进程优先级高于 A 进程，所以抢占处理机，B 进程运行</p>
+<p><strong>10:30 时刻：</strong>C 作业到达，系统中已有两道作业，C 作业暂时只能在外面等待。B 进程继续执行</p>
+<p><strong>10:50 时刻：</strong>B 进程运行结束，系统中少了一道作业。D 作业到达，由于 D 作业运行时长比 C 作业短，所以 D 作业被调度进入内存。由于 D 进程优先级不如 A 进程，A 进程继续运行</p>
+<p><strong>11:10 时刻：</strong>A 进程运行结束，系统中少了一道作业。C 作业被调度进入内存，由于 C 进程优先级高于 D 进程，所以 C 进程运行</p>
+<p><strong>12:00 时刻：</strong>C 进程运行结束。最后剩下的 D 进程运行。</p>
+<p><strong>12:20 时刻：</strong>D 进程运行结束。</p>
+
+    </div>
+
+    
+    
+    <div>
+  <div class="end-slogan" style="text-align:center;font-size:22px;letter-spacing:10px;user-seclect:none;color:#bbb">----------- 本文结束啦<i class="fa fa-star"></i>感谢您阅读-----------</div>		
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Rick
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/posts/ed6e1b1a/" title="操作系统之调度">http://example.com/posts/ed6e1b1a/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/d2da0ebf/" rel="prev" title="操作系统之线程">
+      <i class="fa fa-chevron-left"></i> 操作系统之线程
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E6%9C%BA%E8%B0%83%E5%BA%A6"><span class="nav-text">处理机调度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A0-%E5%AE%9A%E4%B9%89"><span class="nav-text">① 定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A1-%E4%B8%89%E4%B8%AA%E5%B1%82%E6%AC%A1"><span class="nav-text">② 三个层次</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="nav-text">进程调度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A0-%E6%97%B6%E6%9C%BA"><span class="nav-text">① 时机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A1-%E6%96%B9%E5%BC%8F"><span class="nav-text">② 方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A2-%E8%A1%A5%E5%85%85"><span class="nav-text">③ 补充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="nav-text">调度算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87"><span class="nav-text">评价指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A9%E6%9C%9F%E6%89%B9%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="nav-text">早期批处理系统的调度算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A0-FCFS-%E7%AE%97%E6%B3%95"><span class="nav-text">① FCFS 算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A1-SJF-%E7%AE%97%E6%B3%95"><span class="nav-text">② SJF 算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A2-HRRN-%E7%AE%97%E6%B3%95"><span class="nav-text">③ HRRN 算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A3-%E6%80%BB%E7%BB%93"><span class="nav-text">④ 总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="nav-text">交互式系统的调度算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A0-RR%E7%AE%97%E6%B3%95"><span class="nav-text">① RR算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A1-%E4%BC%98%E5%85%88%E7%BA%A7%E7%AE%97%E6%B3%95"><span class="nav-text">② 优先级算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A2-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97%E7%AE%97%E6%B3%95"><span class="nav-text">③ 多级反馈队列算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A3-%E6%80%BB%E7%BB%93-1"><span class="nav-text">④ 总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%E9%A2%98"><span class="nav-text">例题</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Rick"
+      src="/images/avatar.jpg">
+  </a>
+  <p class="site-author-name" itemprop="name">Rick</p>
+  <div class="site-description" itemprop="description">一个瞎折腾的博客，不知道能坚持几天</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">73</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-sun"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rick</span>
+</div>
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+<!-- 不蒜字统计 -->
+<div>
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_uv">
+    访问人数：<span id="busuanzi_value_site_uv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    总访问量：<span id="busuanzi_value_site_pv"></span>
+  </span>&nbsp;|&nbsp;
+  
+  <!-- 添加博客全站总字数统计-->
+  <i class="fa fa-pencil"></i>
+  <span class="post-count">博客全站共 395.4k 字</span>
+</div>
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '',
+      clientSecret: '',
+      repo        : '',
+      owner       : '',
+      admin       : [''],
+      id          : '6d5a1f15b23c43c35ae9bd18375c1d37',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
